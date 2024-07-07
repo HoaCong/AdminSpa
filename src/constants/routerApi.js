@@ -1,0 +1,30 @@
+export const ENDPOINT = {
+  LOGIN: "/api/login",
+  REGISTER: "/register",
+  // ======factory======
+  LIST_FACTORY: "/api/factory",
+  ADD_FACTORY: "/api/factory/create",
+  EDIT_FACTORY: "/api/factory/",
+  DELETE_FACTORY: "/api/factory/",
+  // ======/api/employee======
+  LIST_EMPLOYEE: "/api/employee/search",
+  ADD_EMPLOYEE: "/api/employee/create",
+  EDIT_EMPLOYEE: "/api/employee/",
+  ACTIVE_EMPLOYEE: "/api/employee/active/",
+  DETAIL_EMPLOYEE: "/api/employee/",
+  UPDATE_DETAIL_EMPLOYEE: "/api/employee/detail/",
+  // ======/api/product======
+  LIST_PRODUCT: "/api/product/search",
+  ADD_PRODUCT: "/api/product/create",
+  EDIT_PRODUCT: "/api/product/",
+  ACTIVE_PRODUCT: "/api/product/active/",
+  DETAIL_PRODUCT: "/api/product/",
+  UPDATE_DETAIL_PRODUCT: "/api/product/detail/",
+  // ======/api/customer======
+  LIST_CUSTOMER: "/api/customer/search",
+  ADD_CUSTOMER: "/api/customer/create",
+  EDIT_CUSTOMER: "/api/customer/",
+  ACTIVE_CUSTOMER: "/api/customer/active/",
+  DETAIL_CUSTOMER: "/api/customer/",
+  UPDATE_DETAIL_CUSTOMER: "/api/customer/detail/",
+};

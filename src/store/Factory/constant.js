@@ -1,0 +1,17 @@
+export const LIST = "LIST_FACTORY";
+export const LIST_SUCCESS = "LIST_FACTORY_SUCCESS";
+export const LIST_FAILED = "LIST_FACTORY_FAILED";
+
+export const ADD = "ADD_FACTORY";
+export const ADD_SUCCESS = "ADD_FACTORY_SUCCESS";
+export const ADD_FAILED = "ADD_FACTORY_FAILED";
+
+export const EDIT = "EDIT_FACTORY";
+export const EDIT_SUCCESS = "EDIT_FACTORY_SUCCESS";
+export const EDIT_FAILED = "EDIT_FACTORY_FAILED";
+
+export const DELETE = "DELETE_FACTORY";
+export const DELETE_SUCCESS = "DELETE_FACTORY_SUCCESS";
+export const DELETE_FAILED = "DELETE_FACTORY_FAILED";
+
+export const RESET_DATA = "RESET_DATA_FACTORY";
