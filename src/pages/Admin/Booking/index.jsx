@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import ActionTable from "components/common/ActionTable";
+import CustomPagination from "components/common/CustomPagination";
 import CustomTooltip from "components/common/CustomTooltip";
 import TemplateContent from "components/layout/TemplateContent";
 import _map from "lodash/map";
@@ -10,11 +11,11 @@ import { Button, Form, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { actionDelete, actionGetList, resetData } from "store/Booking/action";
 import FormBooking from "./FormBooking";
-const initialData = { query: "", category: 0 };
-const categories = [
+const initialData = { query: "", timedate: "", timehour: "" };
+const STATUS = [
   { id: 0, name: "Tất cả" },
-  { id: "TRIET_LONG", name: "Triệt lông" },
-  { id: "CHAM_DA", name: "Chăm sóc da" },
+  { id: "IN_PROCESS", name: "Chưa duyệt" },
+  { id: "APPROVED", name: "Đã duyệt" },
 ];
 function Booking(props) {
   const {
@@ -22,6 +23,7 @@ function Booking(props) {
     actionStatus: { isLoading: actionLoading, isSuccess: actionSuccess },
     list,
     params,
+    meta,
   } = useSelector((state) => state.bookingReducer);
 
   const dispatch = useDispatch();
@@ -40,6 +42,7 @@ function Booking(props) {
     info: null,
   });
   const [data, setData] = useState(initialData);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     if (!isLoading) onGetListBooking(params);
@@ -60,6 +63,11 @@ function Booking(props) {
     });
   };
 
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    onGetListBooking({ ...params, page });
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setData((prevData) => ({ ...prevData, [name]: value }));
@@ -67,9 +75,13 @@ function Booking(props) {
 
   const handleSearch = (type) => {
     const query = !data.query || type === "reset" ? null : data.query.trim();
-    const category = !data.category || type === "reset" ? null : data.category;
+    const timedate =
+      !data.timedate || type === "reset" ? null : data.timedate.trim();
+    const timehour =
+      !data.timehour || type === "reset" ? null : data.timehour.trim();
+    const status = !data.status || type === "reset" ? null : data.status;
     const newParams = _omit(params, ["query"]);
-    onGetListBooking({ ...newParams, query, category });
+    onGetListBooking({ ...newParams, query, status, timedate, timehour });
     if (type === "reset") setData(initialData);
   };
 
@@ -78,47 +90,73 @@ function Booking(props) {
       <TemplateContent
         title="Danh sách đặt lịch"
         filter={
-          <div className="d-flex align-items-end gap-2">
-            <div style={{ width: "100%", maxWidth: 250 }}>
-              <Form.Label htmlFor="search">Tìm kiếm</Form.Label>
-              <Form.Control
-                id="search"
-                aria-label="Tìm kiếm"
-                placeholder="Tìm kiếm"
-                name="query"
-                value={data.query}
-                onChange={handleChange}
-              ></Form.Control>
+          <div>
+            <div className="row">
+              <div className="col-6 col-md-3">
+                <Form.Label htmlFor="search">Tìm kiếm</Form.Label>
+                <Form.Control
+                  id="search"
+                  aria-label="Tìm kiếm"
+                  placeholder="Tìm kiếm"
+                  name="query"
+                  value={data.query}
+                  onChange={handleChange}
+                ></Form.Control>
+              </div>
+              <div className="col-6 col-md-3">
+                <Form.Label htmlFor="search">Ngày</Form.Label>
+                <Form.Control
+                  id="search"
+                  aria-label="Ngày"
+                  placeholder="Ngày"
+                  name="timedate"
+                  value={data.timedate}
+                  onChange={handleChange}
+                ></Form.Control>
+              </div>
+              <div className="col-6 col-md-3">
+                <Form.Label htmlFor="search">Giờ</Form.Label>
+                <Form.Control
+                  id="search"
+                  aria-label="Giờ"
+                  placeholder="Giờ"
+                  name="timehour"
+                  value={data.timehour}
+                  onChange={handleChange}
+                ></Form.Control>
+              </div>
+              <div className="col-6 col-md-3">
+                <Form.Label htmlFor="status">Trạng thái</Form.Label>
+                <Form.Select
+                  id="status"
+                  aria-label="Trạng thái"
+                  name="status"
+                  value={data.status}
+                  onChange={handleChange}
+                >
+                  {_map(STATUS, (item) => (
+                    <option key={item.id} value={item.id}>
+                      {item.name}
+                    </option>
+                  ))}
+                </Form.Select>
+              </div>
             </div>
-            {/* <div className="ms-2" style={{ width: "100%", maxWidth: 250 }}>
-              <Form.Label htmlFor="category">Danh mục</Form.Label>
-              <Form.Select
-                id="category"
-                aria-label="Danh mục"
-                name="category"
-                value={data.category}
-                onChange={handleChange}
+            <div className="d-flex justify-content-center gap-3 mt-3">
+              <Button
+                onClick={() => handleSearch("filter")}
+                disabled={isLoading && _size(list) > 0}
               >
-                {_map(categories, (item) => (
-                  <option key={item.id} value={item.id}>
-                    {item.name}
-                  </option>
-                ))}
-              </Form.Select>
-            </div> */}
-            <Button
-              onClick={() => handleSearch("filter")}
-              disabled={isLoading && _size(list) > 0}
-            >
-              Tìm kiếm
-            </Button>
-            <Button
-              variant="outline-secondary"
-              disabled={isLoading && _size(list) > 0}
-              onClick={() => handleSearch("reset")}
-            >
-              Đặt lại
-            </Button>
+                Tìm kiếm
+              </Button>
+              <Button
+                variant="outline-secondary"
+                disabled={isLoading && _size(list) > 0}
+                onClick={() => handleSearch("reset")}
+              >
+                Đặt lại
+              </Button>
+            </div>
           </div>
         }
       >
@@ -192,6 +230,13 @@ function Booking(props) {
             ))}
           </tbody>
         </table>
+        <CustomPagination
+          loading={isLoading}
+          totalItems={meta.total}
+          perPage={params.limit}
+          onPageChange={handlePageChange}
+          currentPage={currentPage}
+        />
       </TemplateContent>
       <FormBooking
         data={detail}
