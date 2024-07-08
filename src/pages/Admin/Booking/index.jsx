@@ -2,12 +2,14 @@
 import ActionTable from "components/common/ActionTable";
 import CustomPagination from "components/common/CustomPagination";
 import CustomTooltip from "components/common/CustomTooltip";
+import LazyLoadImage from "components/common/LazyLoadImage";
 import TemplateContent from "components/layout/TemplateContent";
+import { formatCurrency } from "helper/functions";
 import _map from "lodash/map";
 import _omit from "lodash/omit";
 import _size from "lodash/size";
-import { useEffect, useState } from "react";
-import { Button, Form, Spinner } from "react-bootstrap";
+import { Fragment, useEffect, useState } from "react";
+import { Button, Card, Collapse, Form, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { actionDelete, actionGetList, resetData } from "store/Booking/action";
 import FormBooking from "./FormBooking";
@@ -15,7 +17,8 @@ const initialData = { query: "", timedate: "", timehour: "" };
 const STATUS = [
   { id: 0, name: "Tất cả" },
   { id: "IN_PROCESS", name: "Chưa duyệt" },
-  { id: "APPROVED", name: "Đã duyệt" },
+  { id: "COMPLETED", name: "Đã duyệt" },
+  { id: "DESTROYED", name: "Đã hủy" },
 ];
 function Booking(props) {
   const {
@@ -43,6 +46,7 @@ function Booking(props) {
   });
   const [data, setData] = useState(initialData);
   const [currentPage, setCurrentPage] = useState(1);
+  const [expandedRows, setExpandedRows] = useState(-1);
 
   useEffect(() => {
     if (!isLoading) onGetListBooking(params);
@@ -85,6 +89,12 @@ function Booking(props) {
     if (type === "reset") setData(initialData);
   };
 
+  const handleExpandCollapse = (index) => {
+    setExpandedRows((prev) => {
+      if (prev === index) return -1;
+      return index;
+    });
+  };
   return (
     <div className="mb-5">
       <TemplateContent
@@ -160,9 +170,10 @@ function Booking(props) {
           </div>
         }
       >
-        <table className="table table-hover table-striped">
+        <table className="table table-hover">
           <thead>
             <tr>
+              <th scope="col" className="align-middle"></th>
               <th scope="col" className="align-middle">
                 #
               </th>
@@ -205,28 +216,104 @@ function Booking(props) {
               </tr>
             )}
             {list.map((item, index) => (
-              <tr key={item.updatedAt + index}>
-                <th scope="row" className="align-middle">
-                  {index + 1}
-                </th>
-                <td className="align-middle">
-                  {item.customer.fullName || "_"}
-                </td>
-                <td className="align-middle">{item.phone}</td>
-                <td className="align-middle">{`${item.timedate} ${item.timehour}`}</td>
-                <td className="align-middle">{item?.factory?.name || "_"}</td>
-                <td className="align-middle">{item.note || "_"}</td>
-                <td className="align-middle">
-                  {item.status === "IN_PROCESS" ? "Chưa duyệt" : "Đã duyệt"}
-                </td>
-                <td className="align-middle">
-                  <ActionTable
-                    onDetail={() =>
-                      setDetail({ info: item, visible: true, type: "detail" })
-                    }
-                  />
-                </td>
-              </tr>
+              <Fragment key={item.updatedAt + index}>
+                <tr onClick={() => handleExpandCollapse(index)}>
+                  <th scope="row" className="align-middle">
+                    <div style={{ width: 16 }}>
+                      {expandedRows === index ? (
+                        <i className="fas fa-chevron-down text-secondary"></i>
+                      ) : (
+                        <i className="fas fa-chevron-right text-secondary"></i>
+                      )}
+                    </div>
+                  </th>
+                  <th scope="row" className="align-middle">
+                    {index + 1}
+                  </th>
+                  <td className="align-middle">
+                    {item.customer.fullName || "_"}
+                  </td>
+                  <td className="align-middle">{item.phone}</td>
+                  <td className="align-middle">
+                    {`${item.timedate} ${item.timehour}`}
+                  </td>
+                  <td className="align-middle">{item?.factory?.name || "_"}</td>
+                  <td className="align-middle">{item.note || "_"}</td>
+                  <td className="align-middle">
+                    {item.status === "IN_PROCESS" ? "Chưa duyệt" : "Đã duyệt"}
+                  </td>
+                  <td className="align-middle">
+                    <ActionTable
+                      onDetail={() =>
+                        setDetail({ info: item, visible: true, type: "detail" })
+                      }
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td colSpan="9" className="p-0">
+                    <Collapse in={expandedRows === index}>
+                      <div className="p-2">
+                        <table className="table table-hover table-striped mb-0">
+                          <thead>
+                            <tr>
+                              <th scope="col" className="align-middle">
+                                #
+                              </th>
+                              <th scope="col" className="align-middle">
+                                Hình ảnh
+                              </th>
+                              <th scope="col" className="align-middle">
+                                Tên dịch vụ
+                              </th>
+                              <th scope="col" className="align-middle">
+                                Số buổi
+                              </th>
+                              <th scope="col" className="align-middle">
+                                Giá
+                              </th>
+                              <th scope="col" className="align-middle">
+                                Thời gian
+                              </th>
+                              <th scope="col" className="align-middle">
+                                Danh mục
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {item.listService.map((item, index) => (
+                              <tr key={item.updatedAt + index}>
+                                <th scope="row" className="align-middle">
+                                  {index + 1}
+                                </th>
+                                <td className="align-middle">
+                                  <LazyLoadImage
+                                    src={item.image}
+                                    alt={item.name}
+                                    witdh={50}
+                                    height={50}
+                                  />
+                                </td>
+                                <td className="align-middle">{item.name}</td>
+                                <td className="align-middle">
+                                  {item.numbersesion} buổi
+                                </td>
+                                <td className="align-middle">
+                                  {formatCurrency(item.price)}
+                                </td>
+                                <td className="align-middle">{item.time}</td>
+                                <td className="align-middle">
+                                  {item.category}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </Collapse>
+                  </td>
+                </tr>
+              </Fragment>
             ))}
           </tbody>
         </table>
