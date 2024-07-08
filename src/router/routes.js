@@ -1,5 +1,6 @@
 import AdminLayout from "components/layout/AdminLayout";
 import { ROUTES } from "constants/routerWeb";
+import AdminBooking from "pages/Admin/Booking";
 import AdminCustomer from "pages/Admin/Customer";
 import AdminDashboard from "pages/Admin/Dashboard";
 import AdminEmployee from "pages/Admin/Employee";
@@ -25,6 +26,11 @@ export const managerRoutes = [
         path: ROUTES.ADMIN_DASHBOARD,
         name: "Dashboard Page",
         element: <AdminDashboard />,
+      },
+      {
+        path: ROUTES.ADMIN_BOOKING,
+        name: "Booking",
+        element: <AdminBooking />,
       },
       {
         path: ROUTES.ADMIN_FACTORY,

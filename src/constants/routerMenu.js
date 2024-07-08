@@ -7,6 +7,12 @@ export const MENU_MANAGER = [
     icon: <i className="fas fa-home"></i>,
   },
   {
+    label: "Booking",
+    active: false,
+    src: ROUTES.ADMIN_BOOKING,
+    icon: <i className="fas fa-home"></i>,
+  },
+  {
     label: "Factory",
     active: false,
     src: ROUTES.ADMIN_FACTORY,

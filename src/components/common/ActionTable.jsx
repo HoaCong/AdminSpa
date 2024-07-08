@@ -18,14 +18,16 @@ function ActionTable({
       >
         <i className="far fa-eye"></i>
       </button>
-      <button
-        className="btn btn-outline-warning rounded-circle d-flex justify-content-center align-items-center"
-        style={{ width: 30, height: 30 }}
-        onClick={onEdit}
-        {...propsEdit}
-      >
-        <i className="fas fa-pencil-alt"></i>
-      </button>
+      {onEdit && (
+        <button
+          className="btn btn-outline-warning rounded-circle d-flex justify-content-center align-items-center"
+          style={{ width: 30, height: 30 }}
+          onClick={onEdit}
+          {...propsEdit}
+        >
+          <i className="fas fa-pencil-alt"></i>
+        </button>
+      )}
       {onDelete && (
         <button
           className="btn btn-outline-danger rounded-circle d-flex justify-content-center align-items-center"

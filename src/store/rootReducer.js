@@ -1,6 +1,7 @@
 /* quy phạm khai báo rootReducer */
 import { combineReducers } from "redux";
 
+import bookingReducer from "./Booking/reducer";
 import customerReducer from "./Customer/reducer";
 import dashboardReducer from "./Dashboard/reducer";
 import employeeReducer from "./Employee/reducer";
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   factoryReducer,
   productReducer,
   customerReducer,
+  bookingReducer,
 });
 
 export default rootReducer;

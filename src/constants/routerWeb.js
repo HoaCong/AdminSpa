@@ -9,5 +9,6 @@ export const ROUTES = {
   ADMIN_EMPLOYEE: "/admin/employee",
   ADMIN_PRODUCT: "/admin/product",
   ADMIN_CUSTOMER: "/admin/customer",
+  ADMIN_BOOKING: "/admin/booking",
   ADMIN_SIGNOUT: "/admin/singout",
 };

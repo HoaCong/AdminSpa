@@ -27,4 +27,11 @@ export const ENDPOINT = {
   ACTIVE_CUSTOMER: "/api/customer/active/",
   DETAIL_CUSTOMER: "/api/customer/",
   UPDATE_DETAIL_CUSTOMER: "/api/customer/detail/",
+  // ======/api/booking======
+  LIST_BOOKING: "/api/booking/search",
+  ADD_BOOKING: "/api/booking/create",
+  EDIT_BOOKING: "/api/booking/",
+  ACTIVE_BOOKING: "/api/booking/active/",
+  DETAIL_BOOKING: "/api/booking/",
+  UPDATE_DETAIL_BOOKING: "/api/booking/detail/",
 };

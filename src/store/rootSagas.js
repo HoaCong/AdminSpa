@@ -1,6 +1,7 @@
 /* quy phạm khai báo Saga */
 import { all, fork } from "redux-saga/effects";
 
+import bookingSaga from "./Booking/saga";
 import customerSaga from "./Customer/saga";
 import dashboardSaga from "./Dashboard/saga";
 import employeeSaga from "./Employee/saga";
@@ -16,5 +17,6 @@ export default function* rootSaga() {
     fork(dashboardSaga),
     fork(factorySaga),
     fork(customerSaga),
+    fork(bookingSaga),
   ]);
 }

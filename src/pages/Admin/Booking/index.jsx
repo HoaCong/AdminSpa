@@ -1,32 +1,34 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import ActionTable from "components/common/ActionTable";
-import CustomPagination from "components/common/CustomPagination";
 import CustomTooltip from "components/common/CustomTooltip";
-import LazyLoadImage from "components/common/LazyLoadImage";
-import ToggleSwitch from "components/common/ToggleSwitch";
 import TemplateContent from "components/layout/TemplateContent";
+import _map from "lodash/map";
+import _omit from "lodash/omit";
 import _size from "lodash/size";
 import { useEffect, useState } from "react";
 import { Button, Form, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { actionDelete, actionGetList, resetData } from "store/Customer/action";
-import FormCustomer from "./FormCustomer";
-
-function Customer(props) {
+import { actionDelete, actionGetList, resetData } from "store/Booking/action";
+import FormBooking from "./FormBooking";
+const initialData = { query: "", category: 0 };
+const categories = [
+  { id: 0, name: "Tất cả" },
+  { id: "TRIET_LONG", name: "Triệt lông" },
+  { id: "CHAM_DA", name: "Chăm sóc da" },
+];
+function Booking(props) {
   const {
     listStatus: { isLoading },
     actionStatus: { isLoading: actionLoading, isSuccess: actionSuccess },
     list,
     params,
-    meta,
-  } = useSelector((state) => state.customerReducer);
+  } = useSelector((state) => state.bookingReducer);
 
   const dispatch = useDispatch();
-  const onGetListCustomer = (body) => dispatch(actionGetList(body));
-  const onDeleteCustomer = (body) => dispatch(actionDelete(body));
+  const onGetListBooking = (body) => dispatch(actionGetList(body));
+  const onDeleteBooking = (body) => dispatch(actionDelete(body));
   const onResetData = () => dispatch(resetData());
 
-  const [currentPage, setCurrentPage] = useState(1);
   const [detail, setDetail] = useState({
     info: {},
     visible: false,
@@ -37,10 +39,10 @@ function Customer(props) {
     visible: false,
     info: null,
   });
-  const [query, setQuery] = useState("");
+  const [data, setData] = useState(initialData);
 
   useEffect(() => {
-    if (!isLoading) onGetListCustomer(params);
+    if (!isLoading) onGetListBooking(params);
     return () => {
       onResetData();
     };
@@ -50,11 +52,6 @@ function Customer(props) {
     if (actionSuccess) onCloseTooltip();
   }, [actionSuccess]);
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-    onGetListCustomer({ ...params, page });
-  };
-
   const onCloseTooltip = () => {
     setTooltip({
       visible: false,
@@ -63,22 +60,23 @@ function Customer(props) {
     });
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
   const handleSearch = (type) => {
-    const tmpQuery = !query || type === "reset" ? null : query.trim();
-    onGetListCustomer({ ...params, page: 1, query: tmpQuery });
-    setCurrentPage(1);
-    if (type === "reset") setQuery("");
+    const query = !data.query || type === "reset" ? null : data.query.trim();
+    const category = !data.category || type === "reset" ? null : data.category;
+    const newParams = _omit(params, ["query"]);
+    onGetListBooking({ ...newParams, query, category });
+    if (type === "reset") setData(initialData);
   };
 
   return (
     <div className="mb-5">
       <TemplateContent
-        title="Danh sách nhân viên"
-        showNew
-        btnProps={{
-          onClick: () =>
-            setDetail((prev) => ({ ...prev, visible: true, type: "create" })),
-        }}
+        title="Danh sách đặt lịch"
         filter={
           <div className="d-flex align-items-end gap-2">
             <div style={{ width: "100%", maxWidth: 250 }}>
@@ -88,12 +86,26 @@ function Customer(props) {
                 aria-label="Tìm kiếm"
                 placeholder="Tìm kiếm"
                 name="query"
-                value={query}
-                onChange={(e) => {
-                  setQuery(e.target.value);
-                }}
+                value={data.query}
+                onChange={handleChange}
               ></Form.Control>
             </div>
+            {/* <div className="ms-2" style={{ width: "100%", maxWidth: 250 }}>
+              <Form.Label htmlFor="category">Danh mục</Form.Label>
+              <Form.Select
+                id="category"
+                aria-label="Danh mục"
+                name="category"
+                value={data.category}
+                onChange={handleChange}
+              >
+                {_map(categories, (item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.name}
+                  </option>
+                ))}
+              </Form.Select>
+            </div> */}
             <Button
               onClick={() => handleSearch("filter")}
               disabled={isLoading && _size(list) > 0}
@@ -117,27 +129,25 @@ function Customer(props) {
                 #
               </th>
               <th scope="col" className="align-middle">
-                Hình ảnh
-              </th>
-              <th scope="col" className="align-middle">
-                Tên khách hàng
-              </th>
-
-              <th scope="col" className="align-middle">
-                Email
+                Khách hàng
               </th>
               <th scope="col" className="align-middle">
                 Số điện thoại
               </th>
               <th scope="col" className="align-middle">
-                Mật khẩu
-              </th>
-
-              <th scope="col" className="align-middle">
-                Trạng thái
+                Thời gian
               </th>
               <th scope="col" className="align-middle">
-                Hành động
+                Cơ sở
+              </th>
+              <th scope="col" className="align-middle">
+                Ghi chú
+              </th>
+              <th scope="col" className="align-middle">
+                Trạng thái{" "}
+              </th>
+              <th scope="col" className="align-middle">
+                Hành động{" "}
               </th>
             </tr>
           </thead>
@@ -162,39 +172,19 @@ function Customer(props) {
                   {index + 1}
                 </th>
                 <td className="align-middle">
-                  <LazyLoadImage
-                    src={item.image}
-                    alt={item.name}
-                    witdh={50}
-                    height={50}
-                  />
+                  {item.customer.fullName || "_"}
                 </td>
-                <td className="align-middle">{item.fullname || "_"}</td>
-                <td className="align-middle">{item.email || "_"}</td>
                 <td className="align-middle">{item.phone}</td>
-                <td className="align-middle">******</td>
+                <td className="align-middle">{`${item.timedate} ${item.timehour}`}</td>
+                <td className="align-middle">{item?.factory?.name || "_"}</td>
+                <td className="align-middle">{item.note || "_"}</td>
                 <td className="align-middle">
-                  <ToggleSwitch
-                    status={item.active}
-                    callback={(e) =>
-                      setTooltip((prev) => {
-                        return {
-                          visible:
-                            prev.target === e.target ? !tooltip.visible : true,
-                          target: e.target,
-                          info: item,
-                        };
-                      })
-                    }
-                  />
+                  {item.status === "IN_PROCESS" ? "Chưa duyệt" : "Đã duyệt"}
                 </td>
                 <td className="align-middle">
                   <ActionTable
                     onDetail={() =>
                       setDetail({ info: item, visible: true, type: "detail" })
-                    }
-                    onEdit={() =>
-                      setDetail({ info: item, visible: true, type: "edit" })
                     }
                   />
                 </td>
@@ -202,30 +192,22 @@ function Customer(props) {
             ))}
           </tbody>
         </table>
-        <CustomPagination
-          loading={isLoading}
-          totalItems={meta.total}
-          perPage={params.limit}
-          onPageChange={handlePageChange}
-          currentPage={currentPage}
-        />
       </TemplateContent>
-      <FormCustomer
+      <FormBooking
         data={detail}
         onClear={() => setDetail({ info: {}, visible: false, type: "" })}
       />
-
       <CustomTooltip
         content={`Bạn có chắc muốn ${
           tooltip.info?.active ? "hủy " : ""
-        }kích hoạt nhân viên này không?`}
+        }kích hoạt dịch vụ này không?`}
         tooltip={tooltip}
         loading={actionLoading}
         onClose={onCloseTooltip}
-        onDelete={() => onDeleteCustomer(tooltip.info.id)}
+        onDelete={() => onDeleteBooking(tooltip.info.id)}
       />
     </div>
   );
 }
 
-export default Customer;
+export default Booking;
