@@ -91,9 +91,9 @@ function FormCustomer({ data: { type, visible, info }, onClear }) {
   };
 
   const getTitle = {
-    detail: "Thông tin tài khoản",
-    edit: "Chỉnh sửa tài khoản",
-    create: "Thêm mới tài khoản",
+    detail: "Thông tin khách hàng",
+    edit: "Chỉnh sửa khách hàng",
+    create: "Thêm mới khách hàng",
   };
 
   return (

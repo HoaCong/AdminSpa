@@ -73,7 +73,7 @@ function Customer(props) {
   return (
     <div className="mb-5">
       <TemplateContent
-        title="Danh sách nhân viên"
+        title="Danh sách khách hàng"
         showNew
         btnProps={{
           onClick: () =>
