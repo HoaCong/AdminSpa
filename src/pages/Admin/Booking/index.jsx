@@ -2,6 +2,7 @@
 import CustomPagination from "components/common/CustomPagination";
 import CustomTooltip from "components/common/CustomTooltip";
 import LazyLoadImage from "components/common/LazyLoadImage";
+import LinearProgress from "components/common/LinearProgress";
 import TemplateContent from "components/layout/TemplateContent";
 import { ROUTES } from "constants/routerWeb";
 import { formatCurrency, parserRouter } from "helper/functions";
@@ -10,6 +11,7 @@ import _omit from "lodash/omit";
 import _size from "lodash/size";
 import { Fragment, useEffect, useState } from "react";
 import { Badge, Button, Collapse, Form, Spinner } from "react-bootstrap";
+import DatePicker from "react-datepicker";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
@@ -36,6 +38,26 @@ const TYPE_LABEL = {
   TRIET_LONG: "Triệt lông",
   CHAM_DA: "Chăm da",
 };
+
+const time = [
+  "11:00",
+  "11:30",
+  "12:00",
+  "13:00",
+  "13:30",
+  "14:00",
+  "14:30",
+  "15:00",
+  "15:30",
+  "16:00",
+  "16:30",
+  "17:00",
+  "17:30",
+  "18:00",
+  "18:30",
+  "19:00",
+  "19:30",
+];
 function Booking(props) {
   const {
     listStatus: { isLoading },
@@ -148,29 +170,44 @@ function Booking(props) {
                   onChange={handleChange}
                 ></Form.Control>
               </div>
-              <div className="col-6 col-md-3">
-                <Form.Label htmlFor="search">Ngày</Form.Label>
-                <Form.Control
-                  id="search"
-                  aria-label="Ngày"
-                  placeholder="Ngày"
-                  name="timedate"
-                  value={data.timedate}
-                  onChange={handleChange}
-                ></Form.Control>
+              <div className="col-auto">
+                <Form.Label htmlFor="search">Ngày - Giờ</Form.Label>
+                <div className="d-flex gap-2 align-items-center">
+                  <div style={{ width: 150 }}>
+                    <DatePicker
+                      placeholderText="Ngày"
+                      selected={data.timedate}
+                      dateFormat="dd/MM/yyyy" // Định dạng ngày
+                      className="form-control"
+                      name="timedate"
+                      onChange={(timedate) => {
+                        setData((prevData) => ({ ...prevData, timedate }));
+                      }}
+                    />
+                  </div>
+                  <span>-</span>
+                  <Form.Select
+                    id="time"
+                    aria-label="Giờ"
+                    name="timehour"
+                    placeholder="Giờ"
+                    value={data.timehour}
+                    style={{ maxWidth: 100 }}
+                    onChange={handleChange}
+                  >
+                    <option value="" disabled hidden>
+                      Giờ
+                    </option>
+                    {_map(time, (item) => (
+                      <option key={item} value={item}>
+                        {item}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </div>
               </div>
-              <div className="col-6 col-md-3">
-                <Form.Label htmlFor="search">Giờ</Form.Label>
-                <Form.Control
-                  id="search"
-                  aria-label="Giờ"
-                  placeholder="Giờ"
-                  name="timehour"
-                  value={data.timehour}
-                  onChange={handleChange}
-                ></Form.Control>
-              </div>
-              <div className="col-6 col-md-3">
+
+              <div className="col-auto">
                 <Form.Label htmlFor="status">Trạng thái</Form.Label>
                 <Form.Select
                   id="status"
@@ -186,21 +223,23 @@ function Booking(props) {
                   ))}
                 </Form.Select>
               </div>
-            </div>
-            <div className="d-flex justify-content-center gap-3 mt-3">
-              <Button
-                onClick={() => handleSearch("filter")}
-                disabled={isLoading && _size(list) > 0}
-              >
-                Tìm kiếm
-              </Button>
-              <Button
-                variant="outline-secondary"
-                disabled={isLoading && _size(list) > 0}
-                onClick={() => handleSearch("reset")}
-              >
-                Đặt lại
-              </Button>
+              <div className="col-auto">
+                <div className="d-flex gap-2 h-100 align-items-end">
+                  <Button
+                    onClick={() => handleSearch("filter")}
+                    disabled={isLoading && _size(list) > 0}
+                  >
+                    Tìm kiếm
+                  </Button>
+                  <Button
+                    variant="outline-secondary"
+                    disabled={isLoading && _size(list) > 0}
+                    onClick={() => handleSearch("reset")}
+                  >
+                    Đặt lại
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         }
@@ -405,6 +444,11 @@ function Booking(props) {
             ))}
           </tbody>
         </table>
+        {isLoading && _size(list) > 0 && (
+          <div className="mb-2">
+            <LinearProgress />
+          </div>
+        )}
         <CustomPagination
           loading={isLoading}
           totalItems={meta.total}

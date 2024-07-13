@@ -2,6 +2,7 @@
 import ActionTable from "components/common/ActionTable";
 import CustomTooltip from "components/common/CustomTooltip";
 import LazyLoadImage from "components/common/LazyLoadImage";
+import LinearProgress from "components/common/LinearProgress";
 import ToggleSwitch from "components/common/ToggleSwitch";
 import TemplateContent from "components/layout/TemplateContent";
 import { formatCurrency } from "helper/functions";
@@ -224,6 +225,11 @@ function Product(props) {
             ))}
           </tbody>
         </table>
+        {isLoading && _size(list) > 0 && (
+          <div className="mb-2">
+            <LinearProgress />
+          </div>
+        )}
       </TemplateContent>
       <FormProduct
         data={detail}

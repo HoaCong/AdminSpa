@@ -3,6 +3,7 @@ import ActionTable from "components/common/ActionTable";
 import CustomPagination from "components/common/CustomPagination";
 import CustomTooltip from "components/common/CustomTooltip";
 import LazyLoadImage from "components/common/LazyLoadImage";
+import LinearProgress from "components/common/LinearProgress";
 import ToggleSwitch from "components/common/ToggleSwitch";
 import TemplateContent from "components/layout/TemplateContent";
 import _size from "lodash/size";
@@ -202,6 +203,11 @@ function Customer(props) {
             ))}
           </tbody>
         </table>
+        {isLoading && _size(list) > 0 && (
+          <div className="mb-2">
+            <LinearProgress />
+          </div>
+        )}
         <CustomPagination
           loading={isLoading}
           totalItems={meta.total}

@@ -1,6 +1,5 @@
 import React from "react";
 import Pagination from "react-bootstrap/Pagination";
-import LinearProgress from "./LinearProgress";
 
 function CustomPagination({
   totalItems,
@@ -40,12 +39,6 @@ function CustomPagination({
   return (
     totalPages > 1 && (
       <div>
-        {loading && (
-          <div className="mb-2">
-            <LinearProgress />
-          </div>
-        )}
-
         <div className="d-flex justify-content-center">
           <Pagination>
             <Pagination.First onClick={() => onPageChange(1)} />

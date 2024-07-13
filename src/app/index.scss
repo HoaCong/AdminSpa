@@ -60,7 +60,7 @@ body {
 }
 
 .min-w-150px {
-  min-width: 150px;
+  min-width: 150px !important;
 }
 
 .min-w-100px {
@@ -81,6 +81,7 @@ body {
 .w-0 {
   width: 0;
 }
+
 .cursor-pointer {
   cursor: pointer;
 }

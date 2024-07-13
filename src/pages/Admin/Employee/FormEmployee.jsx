@@ -100,9 +100,12 @@ function FormEmployee({ data: { type, visible, info }, onClear }) {
       onSave={handleSubmit}
       hideSave={type === "detail"}
       loading={isLoading}
+      propsModal={{
+        size: "lg",
+      }}
     >
-      <form>
-        <div>
+      <form className="row">
+        <div className="col-6">
           <Form.Label htmlFor="Employeename">
             Tên tài khoản <span className="required">*</span>
           </Form.Label>
@@ -125,7 +128,7 @@ function FormEmployee({ data: { type, visible, info }, onClear }) {
             </Form.Text>
           )}
         </div>
-        <div className="mt-3">
+        <div className="col-6">
           <Form.Label htmlFor="Name">
             Email <span className="required">*</span>
           </Form.Label>
@@ -148,8 +151,7 @@ function FormEmployee({ data: { type, visible, info }, onClear }) {
             </Form.Text>
           )}
         </div>
-
-        <div className="mt-3">
+        <div className="col-6 mt-3">
           <Form.Label htmlFor="Name">
             Số điện thoại <span className="required">*</span>
           </Form.Label>
@@ -172,8 +174,7 @@ function FormEmployee({ data: { type, visible, info }, onClear }) {
             </Form.Text>
           )}
         </div>
-
-        <div className="mt-3">
+        <div className="col-6 mt-3">
           <Form.Label htmlFor="Name">
             Mật khẩu <span className="required">*</span>
           </Form.Label>
@@ -197,7 +198,7 @@ function FormEmployee({ data: { type, visible, info }, onClear }) {
           )}
         </div>
 
-        <div className="mt-3">
+        <div className="col-6 mt-3">
           <Form.Label htmlFor="Role">
             Quyền <span className="required">*</span>
           </Form.Label>
@@ -215,7 +216,7 @@ function FormEmployee({ data: { type, visible, info }, onClear }) {
             ))}
           </Form.Select>
         </div>
-        <div className="mt-3">
+        <div className="col-6 mt-3">
           <Form.Label htmlFor="Image">
             Hình ảnh <span className="required">*</span>
           </Form.Label>

@@ -89,9 +89,12 @@ function FormProduct({ data: { type, visible, info }, onClear }) {
       onSave={handleSubmit}
       hideSave={type === "detail"}
       loading={isLoading}
+      propsModal={{
+        size: "lg",
+      }}
     >
-      <form>
-        <div>
+      <form className="row">
+        <div className="col-6">
           <Form.Label htmlFor="Name">
             Tên dịch vụ <span className="required">*</span>
           </Form.Label>
@@ -114,7 +117,7 @@ function FormProduct({ data: { type, visible, info }, onClear }) {
             </Form.Text>
           )}
         </div>
-        <div className="mt-3">
+        <div className="col-6">
           <Form.Label htmlFor="Time">
             Thời gian thực hiện <span className="required">*</span>
           </Form.Label>
@@ -138,7 +141,7 @@ function FormProduct({ data: { type, visible, info }, onClear }) {
           )}
         </div>
 
-        <div className="mt-3">
+        <div className="col-6 mt-3">
           <Form.Label htmlFor="NumberSession">
             Số buổi <span className="required">*</span>
           </Form.Label>
@@ -162,7 +165,7 @@ function FormProduct({ data: { type, visible, info }, onClear }) {
           )}
         </div>
 
-        <div className="mt-3">
+        <div className="col-6 mt-3">
           <Form.Label htmlFor="Price">
             Giá dịch vụ <span className="required">*</span>
           </Form.Label>
@@ -186,7 +189,7 @@ function FormProduct({ data: { type, visible, info }, onClear }) {
           )}
         </div>
 
-        <div className="mt-3">
+        <div className="col-6 mt-3">
           <Form.Label htmlFor="Role">
             Danh mục <span className="required">*</span>
           </Form.Label>
@@ -206,7 +209,7 @@ function FormProduct({ data: { type, visible, info }, onClear }) {
         </div>
 
         {data.category === "CHAM_DA" && (
-          <div className="mt-3">
+          <div className="col-6 mt-3">
             <Form.Label htmlFor="Price">Nội dung</Form.Label>
             <Form.Control
               as="textarea"
@@ -220,7 +223,7 @@ function FormProduct({ data: { type, visible, info }, onClear }) {
           </div>
         )}
 
-        <div className="mt-3">
+        <div className="col-6 mt-3">
           <Form.Label htmlFor="Image">
             Hình ảnh <span className="required">*</span>
           </Form.Label>
