@@ -40,6 +40,7 @@ function LazyLoadImage({ src, alt, ...restProps }) {
 
   return (
     <img
+      id="image_lazyload"
       src={imageSrc}
       alt={alt}
       {...restProps}

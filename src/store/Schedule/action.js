@@ -30,36 +30,6 @@ export const actionDetailFailed = (error) => ({
   error,
 });
 
-export const actionConfirm = (id) => ({
-  type: ActionTypes.CONFIRM,
-  id,
-});
-
-export const actionConfirmSuccess = (payload) => ({
-  type: ActionTypes.CONFIRM_SUCCESS,
-  payload,
-});
-
-export const actionConfirmFailed = (error) => ({
-  type: ActionTypes.CONFIRM_FAILED,
-  error,
-});
-
-export const actionDestroy = (id) => ({
-  type: ActionTypes.DESTROY,
-  id,
-});
-
-export const actionDestroySuccess = (payload) => ({
-  type: ActionTypes.DESTROY_SUCCESS,
-  payload,
-});
-
-export const actionDestroyFailed = (error) => ({
-  type: ActionTypes.DESTROY_FAILED,
-  error,
-});
-
 export const resetData = () => ({
   type: ActionTypes.RESET_DATA,
 });

@@ -9,12 +9,17 @@ function CustomTooltip({
   onClose,
   onDelete,
   showAction = true,
+  propsTooltip,
 }) {
   return (
     <>
-      <Overlay target={tooltip.target} show={tooltip.visible} placement="top">
+      <Overlay
+        target={tooltip.target}
+        show={tooltip.visible}
+        placement="bottom"
+      >
         {(props) => (
-          <Tooltip id="tooltip" {...props}>
+          <Tooltip id="tooltip" {...props} {...propsTooltip}>
             <div style={{ zIndex: 2 }}>
               {content}
               {showAction && (
@@ -57,11 +62,12 @@ function CustomTooltip({
 
 CustomTooltip.propTypes = {
   loading: PropTypes.bool,
-  content: PropTypes.string,
+  content: PropTypes.any,
   tooltip: PropTypes.object,
   onClose: PropTypes.func,
   onDelete: PropTypes.func,
   showAction: PropTypes.bool,
+  propsTooltip: PropTypes.object,
 };
 
 export default CustomTooltip;

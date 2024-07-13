@@ -30,10 +30,7 @@ function* callApiList({ params }) {
 
 function* callApiAdd({ params }) {
   try {
-    const response = yield call(post, ENDPOINT.ADD_PRODUCT, {
-      ...params,
-      content: "",
-    });
+    const response = yield call(post, ENDPOINT.ADD_PRODUCT, params);
     if (response.status === 200) {
       yield put(actionAddSuccess(response.data.data));
       yield put(

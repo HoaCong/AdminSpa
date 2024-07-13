@@ -1,16 +1,13 @@
 import { ENDPOINT } from "constants/routerApi";
-import { get, post, put as puts } from "helper/ajax";
+import { get, post } from "helper/ajax";
 import { all, call, put, takeLatest, takeLeading } from "redux-saga/effects";
-import { addToast } from "store/Toast/action";
 import {
-  actionAddFailed,
-  actionAddSuccess,
-  actionDeleteFailed,
-  actionDeleteSuccess,
+  actionConfirmFailed,
+  actionConfirmSuccess,
+  actionDestroyFailed,
+  actionDestroySuccess,
   actionDetailFailed,
   actionDetailSuccess,
-  actionEditFailed,
-  actionEditSuccess,
   actionGetListFailed,
   actionGetListSuccess,
 } from "./action";
@@ -28,122 +25,6 @@ function* callApiList({ params }) {
   }
 }
 
-function* callApiAdd({ params }) {
-  try {
-    const response = yield call(post, ENDPOINT.ADD_BOOKING, {
-      ...params,
-      content: "",
-    });
-    if (response.status === 200) {
-      yield put(actionAddSuccess(response.data.data));
-      yield put(
-        addToast({
-          text: response.data.message,
-          type: "success",
-          title: "",
-        })
-      );
-    } else {
-      yield put(actionAddFailed());
-      yield put(
-        addToast({
-          text: "Add booking failed",
-          type: "danger",
-          title: "",
-        })
-      );
-    }
-  } catch (error) {
-    yield put(actionAddFailed(error.response.data.error));
-    yield put(
-      addToast({
-        text: "Add booking failed",
-        type: "danger",
-        title: "",
-      })
-    );
-  }
-}
-
-function* callApiEdit({ params }) {
-  try {
-    const { id, content, name, image, category, time, numbersesion, price } =
-      params;
-    const response = yield call(puts, ENDPOINT.EDIT_BOOKING + id, {
-      content,
-      name,
-      image,
-      category,
-      time,
-      numbersesion,
-      price,
-    });
-
-    if (response.status === 200) {
-      yield put(actionEditSuccess(response.data.data));
-      yield put(
-        addToast({
-          text: response.data.message,
-          type: "success",
-          title: "",
-        })
-      );
-    } else {
-      yield put(actionEditFailed());
-      yield put(
-        addToast({
-          text: "Update booking failed",
-          type: "danger",
-          title: "",
-        })
-      );
-    }
-  } catch (error) {
-    yield put(actionEditFailed(error.response.data.error));
-    yield put(
-      addToast({
-        text: "Update booking failed",
-        type: "danger",
-        title: "",
-      })
-    );
-  }
-}
-
-function* callApiDelete({ id }) {
-  try {
-    const response = yield call(puts, ENDPOINT.ACTIVE_BOOKING + id);
-    if (response.status === 200) {
-      yield put(actionDeleteSuccess(id));
-      yield put(
-        addToast({
-          text: response.data.message,
-          type: "success",
-          title: "",
-        })
-      );
-    } else {
-      yield put(actionDeleteFailed());
-      yield put(
-        addToast({
-          text: "Update booking failed",
-          type: "danger",
-          title: "",
-        })
-      );
-    }
-  } catch (error) {
-    yield put(actionDeleteFailed(error.response.data.error));
-    yield put(
-      addToast({
-        text: "Update booking failed",
-        type: "danger",
-        title: "",
-      })
-    );
-  }
-}
-
 function* callApiDetail({ id }) {
   try {
     const response = yield call(get, ENDPOINT.DETAIL_BOOKING + id);
@@ -157,53 +38,45 @@ function* callApiDetail({ id }) {
   }
 }
 
-function* callApơUpdateDetail({ params }) {
+function* callApiConfirm({ id }) {
   try {
-    const { id } = params;
-    const response = yield call(
-      puts,
-      ENDPOINT.UPDATE_DETAIL_BOOKING + id,
-      params
-    );
-
+    const response = yield call(post, ENDPOINT.CONFIRM_BOOKING, {
+      idbooking: id,
+    });
     if (response.status === 200) {
-      yield put(actionEditSuccess(response.data.data));
       yield put(
-        addToast({
-          text: response.data.message,
-          type: "success",
-          title: "",
-        })
+        actionConfirmSuccess({ status: response.data.data.message, id })
       );
     } else {
-      yield put(actionEditFailed());
-      yield put(
-        addToast({
-          text: "Update booking failed",
-          type: "danger",
-          title: "",
-        })
-      );
+      yield put(actionConfirmFailed());
     }
   } catch (error) {
-    yield put(actionEditFailed(error.response.data.error));
-    yield put(
-      addToast({
-        text: "Update booking failed",
-        type: "danger",
-        title: "",
-      })
-    );
+    yield put(actionConfirmFailed(error.response.data.error));
+  }
+}
+
+function* callApiDestroy({ id }) {
+  try {
+    const response = yield call(post, ENDPOINT.DESTROY_BOOKING, {
+      idbooking: id,
+    });
+    if (response.status === 200) {
+      yield put(
+        actionDestroySuccess({ status: response.data.data.message, id })
+      );
+    } else {
+      yield put(actionDestroyFailed());
+    }
+  } catch (error) {
+    yield put(actionDestroyFailed(error.response.data.error));
   }
 }
 
 export default function* bookingSaga() {
   yield all([
     yield takeLeading(ActionTypes.LIST, callApiList),
-    yield takeLatest(ActionTypes.ADD, callApiAdd),
-    yield takeLatest(ActionTypes.EDIT, callApiEdit),
-    yield takeLatest(ActionTypes.DELETE, callApiDelete),
-    yield takeLatest(ActionTypes.DETAIL, callApiDetail),
-    yield takeLatest(ActionTypes.UPDATE, callApơUpdateDetail),
+    yield takeLeading(ActionTypes.DETAIL, callApiDetail),
+    yield takeLatest(ActionTypes.CONFIRM, callApiConfirm),
+    yield takeLatest(ActionTypes.DESTROY, callApiDestroy),
   ]);
 }

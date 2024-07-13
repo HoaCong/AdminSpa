@@ -8,6 +8,8 @@ import employeeReducer from "./Employee/reducer";
 import factoryReducer from "./Factory/reducer";
 import loginReducer from "./Login/reducer";
 import productReducer from "./Product/reducer";
+import scheduleReducer from "./Schedule/reducer";
+import settingReducer from "./Setting/reducer";
 import toastReducer from "./Toast/reducer";
 
 const rootReducer = combineReducers({
@@ -19,6 +21,8 @@ const rootReducer = combineReducers({
   productReducer,
   customerReducer,
   bookingReducer,
+  settingReducer,
+  scheduleReducer,
 });
 
 export default rootReducer;

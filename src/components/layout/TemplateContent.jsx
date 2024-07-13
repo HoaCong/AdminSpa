@@ -1,7 +1,9 @@
 import PropTypes from "prop-types";
 import React from "react";
+import { Button } from "react-bootstrap";
 
 function TemplateContent({
+  labelNew = "Thêm mới",
   title,
   filter,
   children,
@@ -17,11 +19,7 @@ function TemplateContent({
           <h5 className="m-0 title">
             <strong>{title}</strong>
           </h5>
-          {showNew && (
-            <button type="button" className="btn btn-primary" {...btnProps}>
-              Thêm mới
-            </button>
-          )}
+          {showNew && <Button {...btnProps}>{labelNew}</Button>}
         </div>
       </div>
 
@@ -39,6 +37,7 @@ function TemplateContent({
 }
 
 TemplateContent.propTypes = {
+  labelNew: PropTypes.string,
   title: PropTypes.string,
   children: PropTypes.node,
   showNew: PropTypes.bool,

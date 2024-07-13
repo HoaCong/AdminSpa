@@ -74,6 +74,17 @@ body {
   height: 60px;
 }
 
+.h-0 {
+  height: 0;
+}
+
+.w-0 {
+  width: 0;
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+
 .custom-scrollbar {
   overflow: auto;
   max-height: 75vh;
@@ -148,7 +159,14 @@ span.required {
     padding-top: calc(100% * 9 / 16);
   }
 }
-
+#image_lazyload {
+  object-fit: cover;
+  object-position: center;
+  background-repeat: no-repeat;
+}
+.custom-picker {
+  --bs-tooltip-max-width: unset !important;
+}
 @media only screen and (max-width: 992px) {
   .hidden-widget {
     display: none;

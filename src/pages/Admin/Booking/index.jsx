@@ -1,25 +1,41 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import ActionTable from "components/common/ActionTable";
 import CustomPagination from "components/common/CustomPagination";
 import CustomTooltip from "components/common/CustomTooltip";
 import LazyLoadImage from "components/common/LazyLoadImage";
 import TemplateContent from "components/layout/TemplateContent";
-import { formatCurrency } from "helper/functions";
+import { ROUTES } from "constants/routerWeb";
+import { formatCurrency, parserRouter } from "helper/functions";
 import _map from "lodash/map";
 import _omit from "lodash/omit";
 import _size from "lodash/size";
 import { Fragment, useEffect, useState } from "react";
-import { Button, Card, Collapse, Form, Spinner } from "react-bootstrap";
+import { Badge, Button, Collapse, Form, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { actionDelete, actionGetList, resetData } from "store/Booking/action";
+import { useNavigate } from "react-router-dom";
+import {
+  actionConfirm,
+  actionDestroy,
+  actionGetList,
+  resetData,
+} from "store/Booking/action";
 import FormBooking from "./FormBooking";
-const initialData = { query: "", timedate: "", timehour: "" };
+const initialData = { query: "", timedate: "", timehour: "", status: 0 };
 const STATUS = [
   { id: 0, name: "Tất cả" },
-  { id: "IN_PROCESS", name: "Chưa duyệt" },
-  { id: "COMPLETED", name: "Đã duyệt" },
+  { id: "IN_PROCCESS", name: "Chưa duyệt" },
+  { id: "CONFIRMED", name: "Đã duyệt" },
   { id: "DESTROYED", name: "Đã hủy" },
 ];
+const STATUS_LABEL = {
+  IN_PROCCESS: { bg: "secondary", name: "Chưa duyệt" },
+  CONFIRMED: { bg: "success", name: "Đã duyệt" },
+  DESTROYED: { bg: "danger", name: "Đã hủy" },
+};
+
+const TYPE_LABEL = {
+  TRIET_LONG: "Triệt lông",
+  CHAM_DA: "Chăm da",
+};
 function Booking(props) {
   const {
     listStatus: { isLoading },
@@ -29,9 +45,12 @@ function Booking(props) {
     meta,
   } = useSelector((state) => state.bookingReducer);
 
+  const navigate = useNavigate();
+
   const dispatch = useDispatch();
   const onGetListBooking = (body) => dispatch(actionGetList(body));
-  const onDeleteBooking = (body) => dispatch(actionDelete(body));
+  const onConfirmBooking = (body) => dispatch(actionConfirm(body));
+  const onDestroyBooking = (body) => dispatch(actionDestroy(body));
   const onResetData = () => dispatch(resetData());
 
   const [detail, setDetail] = useState({
@@ -39,14 +58,16 @@ function Booking(props) {
     visible: false,
     type: "",
   });
+
+  const [data, setData] = useState(initialData);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [expandedRows, setExpandedRows] = useState(-1);
   const [tooltip, setTooltip] = useState({
     target: null,
     visible: false,
     info: null,
+    type: null,
   });
-  const [data, setData] = useState(initialData);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [expandedRows, setExpandedRows] = useState(-1);
 
   useEffect(() => {
     if (!isLoading) onGetListBooking(params);
@@ -56,16 +77,12 @@ function Booking(props) {
   }, []);
 
   useEffect(() => {
-    if (actionSuccess) onCloseTooltip();
+    if (actionSuccess) {
+      if (tooltip.type === "confirm")
+        navigate(parserRouter(ROUTES.ADMIN_BOOKING_DETAIL, tooltip.info.id));
+      onCloseTooltip();
+    }
   }, [actionSuccess]);
-
-  const onCloseTooltip = () => {
-    setTooltip({
-      visible: false,
-      target: null,
-      info: null,
-    });
-  };
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -95,6 +112,24 @@ function Booking(props) {
       return index;
     });
   };
+
+  const handleDetailBooking = (id) => {
+    navigate(parserRouter(ROUTES.ADMIN_BOOKING_DETAIL, id));
+  };
+
+  const onCloseTooltip = () => {
+    setTooltip({
+      visible: false,
+      target: null,
+      info: null,
+      type: null,
+    });
+  };
+
+  const handleAction = (id, type) => {
+    if (type === "confirm") onConfirmBooking(id);
+    if (type === "destroy") onDestroyBooking(id);
+  };
   return (
     <div className="mb-5">
       <TemplateContent
@@ -103,7 +138,7 @@ function Booking(props) {
           <div>
             <div className="row">
               <div className="col-6 col-md-3">
-                <Form.Label htmlFor="search">Tìm kiếm</Form.Label>
+                <Form.Label htmlFor="search">Tìm kiếm </Form.Label>
                 <Form.Control
                   id="search"
                   aria-label="Tìm kiếm"
@@ -190,13 +225,13 @@ function Booking(props) {
                 Cơ sở
               </th>
               <th scope="col" className="align-middle">
+                Trạng thái
+              </th>
+              <th scope="col" className="align-middle">
                 Ghi chú
               </th>
               <th scope="col" className="align-middle">
-                Trạng thái{" "}
-              </th>
-              <th scope="col" className="align-middle">
-                Hành động{" "}
+                Hành động
               </th>
             </tr>
           </thead>
@@ -238,16 +273,69 @@ function Booking(props) {
                     {`${item.timedate} ${item.timehour}`}
                   </td>
                   <td className="align-middle">{item?.factory?.name || "_"}</td>
+                  <td className="align-middle">
+                    <Badge pill bg={STATUS_LABEL[item.status].bg}>
+                      {STATUS_LABEL[item.status].name}
+                    </Badge>
+                  </td>
                   <td className="align-middle">{item.note || "_"}</td>
                   <td className="align-middle">
-                    {item.status === "IN_PROCESS" ? "Chưa duyệt" : "Đã duyệt"}
-                  </td>
-                  <td className="align-middle">
-                    <ActionTable
-                      onDetail={() =>
-                        setDetail({ info: item, visible: true, type: "detail" })
-                      }
-                    />
+                    {item.status === "CONFIRMED" && (
+                      <button
+                        className="btn btn-outline-primary rounded-circle d-flex justify-content-center align-items-center"
+                        style={{ width: 30, height: 30 }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDetailBooking(item.id);
+                        }}
+                      >
+                        <i className="far fa-eye"></i>
+                      </button>
+                    )}
+                    {item.status === "IN_PROCCESS" && (
+                      <div className="d-flex gap-2">
+                        <button
+                          className="btn btn-outline-success rounded-circle d-flex justify-content-center align-items-center"
+                          style={{ width: 30, height: 30 }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setTooltip((prev) => {
+                              return {
+                                visible:
+                                  prev.target === e.target
+                                    ? !tooltip.visible
+                                    : true,
+                                target: e.target,
+                                info: item,
+                                type: "confirm",
+                              };
+                            });
+                          }}
+                        >
+                          <i className="far fa-check-circle"></i>
+                        </button>
+                        <button
+                          className="btn btn-outline-danger rounded-circle d-flex justify-content-center align-items-center"
+                          style={{ width: 30, height: 30 }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setTooltip((prev) => {
+                              return {
+                                visible:
+                                  prev.target === e.target
+                                    ? !tooltip.visible
+                                    : true,
+                                target: e.target,
+                                info: item,
+                                type: "destroy",
+                              };
+                            });
+                          }}
+                        >
+                          <i className="far fa-times-circle"></i>
+                        </button>
+                      </div>
+                    )}
                   </td>
                 </tr>
                 <tr>
@@ -290,7 +378,7 @@ function Booking(props) {
                                   <LazyLoadImage
                                     src={item.image}
                                     alt={item.name}
-                                    witdh={50}
+                                    width={50}
                                     height={50}
                                   />
                                 </td>
@@ -303,7 +391,7 @@ function Booking(props) {
                                 </td>
                                 <td className="align-middle">{item.time}</td>
                                 <td className="align-middle">
-                                  {item.category}
+                                  {TYPE_LABEL[item.category]}
                                 </td>
                               </tr>
                             ))}
@@ -331,12 +419,12 @@ function Booking(props) {
       />
       <CustomTooltip
         content={`Bạn có chắc muốn ${
-          tooltip.info?.active ? "hủy " : ""
-        }kích hoạt dịch vụ này không?`}
+          tooltip.type === "confirm" ? "xác nhận " : "từ chối"
+        } lịch đặt này không?`}
         tooltip={tooltip}
         loading={actionLoading}
         onClose={onCloseTooltip}
-        onDelete={() => onDeleteBooking(tooltip.info.id)}
+        onDelete={() => handleAction(tooltip.info.id, tooltip.type)}
       />
     </div>
   );

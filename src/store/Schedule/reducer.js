@@ -7,14 +7,14 @@ const initialState = {
   listStatus: { ...status },
   actionStatus: { ...status },
   list: [],
-  detail: [],
+  detail: {},
   params: { limit: 10, page: 1 },
   meta: {
     total: 0,
   },
 };
 
-const bookingReducer = (state = initialState, action) => {
+const scheduleReducer = (state = initialState, action) => {
   return produce(state, (draft) => {
     switch (action.type) {
       case ActionTypes.LIST:
@@ -54,44 +54,6 @@ const bookingReducer = (state = initialState, action) => {
         draft.actionStatus.isFailure = true;
         break;
 
-      case ActionTypes.CONFIRM:
-        draft.actionStatus.isLoading = true;
-        draft.actionStatus.isSuccess = false;
-        draft.actionStatus.isFailure = false;
-        break;
-
-      case ActionTypes.CONFIRM_SUCCESS:
-        draft.actionStatus.isLoading = false;
-        draft.actionStatus.isSuccess = true;
-        draft.list = state.list.map((item) =>
-          item.id === action.payload.id ? { ...item, ...action.payload } : item
-        );
-        break;
-
-      case ActionTypes.CONFIRM_FAILED:
-        draft.actionStatus.isLoading = false;
-        draft.actionStatus.isFailure = true;
-        break;
-
-      case ActionTypes.DESTROY:
-        draft.actionStatus.isLoading = true;
-        draft.actionStatus.isSuccess = false;
-        draft.actionStatus.isFailure = false;
-        break;
-
-      case ActionTypes.DESTROY_SUCCESS:
-        draft.actionStatus.isLoading = false;
-        draft.actionStatus.isSuccess = true;
-        draft.list = state.list.map((item) =>
-          item.id === action.payload.id ? { ...item, ...action.payload } : item
-        );
-        break;
-
-      case ActionTypes.DESTROY_FAILED:
-        draft.actionStatus.isLoading = false;
-        draft.actionStatus.isFailure = true;
-        break;
-
       case ActionTypes.RESET_DATA:
         return initialState;
 
@@ -101,4 +63,4 @@ const bookingReducer = (state = initialState, action) => {
   });
 };
 
-export default bookingReducer;
+export default scheduleReducer;

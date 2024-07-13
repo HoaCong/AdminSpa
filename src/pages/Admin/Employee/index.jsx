@@ -165,7 +165,7 @@ function Employee(props) {
                   <LazyLoadImage
                     src={item.image}
                     alt={item.name}
-                    witdh={50}
+                    width={50}
                     height={50}
                   />
                 </td>

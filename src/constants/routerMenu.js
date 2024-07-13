@@ -13,6 +13,12 @@ export const MENU_MANAGER = [
     icon: <i className="far fa-calendar-check"></i>,
   },
   {
+    label: "Schedule",
+    active: false,
+    src: ROUTES.ADMIN_SCHEDULE,
+    icon: <i className="fas fa-calendar-alt"></i>,
+  },
+  {
     label: "Factory",
     active: false,
     src: ROUTES.ADMIN_FACTORY,
@@ -35,6 +41,12 @@ export const MENU_MANAGER = [
     active: false,
     src: ROUTES.ADMIN_CUSTOMER,
     icon: <i className="fas fa-users"></i>,
+  },
+  {
+    label: "Setting",
+    active: false,
+    src: ROUTES.ADMIN_SETTING,
+    icon: <i className="fas fa-cog"></i>,
   },
 ];
 
