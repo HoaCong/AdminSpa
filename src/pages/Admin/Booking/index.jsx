@@ -23,7 +23,7 @@ import {
 import FormBooking from "./FormBooking";
 const initialData = { query: "", timedate: "", timehour: "", status: 0 };
 const STATUS = [
-  { id: 0, name: "Tất cả" },
+  { id: null, name: "Tất cả" },
   { id: "IN_PROCCESS", name: "Chưa duyệt" },
   { id: "CONFIRMED", name: "Đã duyệt" },
   { id: "DESTROYED", name: "Đã hủy" },
@@ -291,7 +291,9 @@ function Booking(props) {
             )}
             {list.map((item, index) => (
               <Fragment key={item.updatedAt + index}>
-                <tr onClick={() => handleExpandCollapse(index)}>
+                <tr
+                  onClick={() => handleExpandCollapse(index)}
+                >
                   <th scope="row" className="align-middle">
                     <div style={{ width: 16 }}>
                       {expandedRows === index ? (
@@ -313,7 +315,11 @@ function Booking(props) {
                   </td>
                   <td className="align-middle">{item?.factory?.name || "_"}</td>
                   <td className="align-middle">
-                    <Badge pill bg={STATUS_LABEL[item.status].bg}>
+                    <Badge
+                      className="py-2 px-3"
+                      pill
+                      bg={STATUS_LABEL[item.status].bg}
+                    >
                       {STATUS_LABEL[item.status].name}
                     </Badge>
                   </td>

@@ -8,10 +8,22 @@ const initialState = {
   actionStatus: { ...status },
   list: [],
   detail: [],
+  customer: null,
   params: { limit: 10, page: 1 },
   meta: {
     total: 0,
   },
+};
+
+const parserData = (data) => {
+  const hash = {};
+  data.forEach((item) => {
+    if (!hash[item.serviceid]) {
+      hash[item.serviceid] = { list: [], service: item.service };
+    }
+    hash[item.serviceid].list.push(item);
+  });
+  return hash;
 };
 
 const bookingReducer = (state = initialState, action) => {
@@ -46,7 +58,8 @@ const bookingReducer = (state = initialState, action) => {
       case ActionTypes.DETAIL_SUCCESS:
         draft.actionStatus.isLoading = false;
         draft.actionStatus.isSuccess = true;
-        draft.detail = action.payload;
+        draft.detail = parserData(action.payload);
+        draft.customer = action.payload[0].customer;
         break;
 
       case ActionTypes.DETAIL_FAILED:

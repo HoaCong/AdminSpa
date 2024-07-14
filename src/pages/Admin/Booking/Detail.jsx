@@ -3,12 +3,13 @@ import LazyLoadImage from "components/common/LazyLoadImage";
 import TemplateContent from "components/layout/TemplateContent";
 import { ROUTES } from "constants/routerWeb";
 import { formatCurrency } from "helper/functions";
+import _map from "lodash/map";
+import _size from "lodash/size";
 import { Fragment, useEffect, useState } from "react";
 import { Badge, Collapse, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { actionDetail } from "store/Booking/action";
-
 const STATUS_LABEL = {
   IN_PROCCESS: { bg: "secondary", name: "Chưa duyệt" },
   CONFIRMED: { bg: "success", name: "Đã duyệt" },
@@ -23,6 +24,7 @@ function BookingDetail(props) {
   const {
     actionStatus: { isLoading: actionLoading },
     detail,
+    customer,
   } = useSelector((state) => state.bookingReducer);
 
   const navigate = useNavigate();
@@ -63,22 +65,19 @@ function BookingDetail(props) {
                   <tr>
                     <th scope="col" className="align-middle"></th>
                     <th scope="col" className="align-middle">
-                      #
+                      Hình ảnh
                     </th>
                     <th scope="col" className="align-middle">
-                      Số điện thoại
+                      Tên dịch vụ
+                    </th>
+                    <th scope="col" className="align-middle">
+                      Giá
                     </th>
                     <th scope="col" className="align-middle">
                       Thời gian
                     </th>
                     <th scope="col" className="align-middle">
-                      Cơ sở
-                    </th>
-                    <th scope="col" className="align-middle">
-                      Trạng thái
-                    </th>
-                    <th scope="col" className="align-middle">
-                      Ghi chú
+                      Danh mục
                     </th>
                   </tr>
                 </thead>
@@ -98,7 +97,7 @@ function BookingDetail(props) {
                     </tr>
                   ) : (
                     <>
-                      {!detail.length && (
+                      {!_size(detail) && (
                         <tr>
                           <td colSpan={9}>
                             <div className="text-center">
@@ -107,8 +106,8 @@ function BookingDetail(props) {
                           </td>
                         </tr>
                       )}
-                      {detail.map((item, index) => (
-                        <Fragment key={item.updatedAt + index}>
+                      {_map(detail, (item, index) => (
+                        <Fragment key={item.service.updatedAt + index}>
                           <tr onClick={() => handleExpandCollapse(index)}>
                             <th scope="row" className="align-middle">
                               <div style={{ width: 16 }}>
@@ -119,22 +118,26 @@ function BookingDetail(props) {
                                 )}
                               </div>
                             </th>
-                            <th scope="row" className="align-middle">
-                              {index + 1}
-                            </th>
-                            <td className="align-middle">{item.phone}</td>
                             <td className="align-middle">
-                              {`${item.timedate} ${item.timehour}`}
+                              <LazyLoadImage
+                                src={item.service.image}
+                                alt={item.service.name}
+                                width={50}
+                                height={50}
+                              />
                             </td>
                             <td className="align-middle">
-                              {item?.factory?.name || "_"}
+                              {item.service.name}
                             </td>
                             <td className="align-middle">
-                              <Badge pill bg={STATUS_LABEL[item.status].bg}>
-                                {STATUS_LABEL[item.status].name}
-                              </Badge>
+                              {formatCurrency(item.service.price)}
                             </td>
-                            <td className="align-middle">{item.note || "_"}</td>
+                            <td className="align-middle">
+                              {item.service.time}
+                            </td>
+                            <td className="align-middle">
+                              {TYPE_LABEL[item.service.category]}
+                            </td>
                           </tr>
                           <tr>
                             <td colSpan="9" className="p-0">
@@ -147,19 +150,13 @@ function BookingDetail(props) {
                                           scope="col"
                                           className="align-middle"
                                         >
-                                          Hình ảnh
+                                          #
                                         </th>
                                         <th
                                           scope="col"
                                           className="align-middle"
                                         >
-                                          Tên dịch vụ
-                                        </th>
-                                        <th
-                                          scope="col"
-                                          className="align-middle"
-                                        >
-                                          Giá
+                                          Số điện thoại
                                         </th>
                                         <th
                                           scope="col"
@@ -171,33 +168,51 @@ function BookingDetail(props) {
                                           scope="col"
                                           className="align-middle"
                                         >
-                                          Danh mục
+                                          Cơ sở
+                                        </th>
+                                        <th
+                                          scope="col"
+                                          className="align-middle"
+                                        >
+                                          Trạng thái
+                                        </th>
+                                        <th
+                                          scope="col"
+                                          className="align-middle"
+                                        >
+                                          Ghi chú
                                         </th>
                                       </tr>
                                     </thead>
                                     <tbody>
-                                      <tr>
-                                        <td className="align-middle">
-                                          <LazyLoadImage
-                                            src={item.service.image}
-                                            alt={item.service.name}
-                                            width={50}
-                                            height={50}
-                                          />
-                                        </td>
-                                        <td className="align-middle">
-                                          {item.service.name}
-                                        </td>
-                                        <td className="align-middle">
-                                          {formatCurrency(item.service.price)}
-                                        </td>
-                                        <td className="align-middle">
-                                          {item.service.time}
-                                        </td>
-                                        <td className="align-middle">
-                                          {TYPE_LABEL[item.service.category]}
-                                        </td>
-                                      </tr>
+                                      {_map(item.list, (ele, index) => (
+                                        <tr key={ele.service.updatedAt + index}>
+                                          <td className="align-middle">
+                                            {index + 1}
+                                          </td>
+                                          <td className="align-middle">
+                                            {ele.phone}
+                                          </td>
+                                          <td className="align-middle">
+                                            {`${ele.timedate} ${ele.timehour}`}
+                                          </td>
+                                          <td className="align-middle">
+                                            {ele?.factory?.name || "_"}
+                                          </td>
+                                          <td className="align-middle">
+                                            <Badge
+                                              className="py-2 px-3"
+                                              pill
+                                              bg={STATUS_LABEL[ele.status].bg}
+                                            >
+                                              {STATUS_LABEL[ele.status].name}
+                                            </Badge>
+                                          </td>
+                                          <td className="align-middle">
+                                            {ele.note || "_"}
+                                          </td>
+                                        </tr>
+                                      ))}
                                     </tbody>
                                   </table>
                                 </div>
@@ -211,21 +226,19 @@ function BookingDetail(props) {
                 </tbody>
               </table>
             </div>
-            <div className="col card text-center">
-              <h5 className="mt-2">Thông tin khách hàng</h5>
+            <div className="col card text-center py-3">
+              <h5>Thông tin khách hàng</h5>
               <div>
                 <LazyLoadImage
-                  src={detail[0]?.customer?.image}
-                  alt={detail[0]?.customer?.name}
+                  src={customer?.image}
+                  alt={customer?.name}
                   width={200}
                   height={200}
                   className="rounded-circle"
                 />
-                <div>
-                  Tên khách hàng: {detail[0]?.customer?.fullname || "_"}
-                </div>
-                <div>Email: {detail[0]?.customer?.email || "_"}</div>
-                <div>Số điện thoại: {detail[0]?.customer?.phone}</div>
+                <div>Tên khách hàng: {customer?.fullname || "_"}</div>
+                <div>Email: {customer?.email || "_"}</div>
+                <div>Số điện thoại: {customer?.phone || "_"}</div>
               </div>
             </div>
           </div>

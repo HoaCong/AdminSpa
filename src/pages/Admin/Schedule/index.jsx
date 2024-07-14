@@ -126,7 +126,11 @@ function Schedule(props) {
                   </td>
                   <td className="align-middle">{item?.factory?.name || "_"}</td>
                   <td className="align-middle">
-                    <Badge pill bg={STATUS_LABEL[item.status].bg}>
+                    <Badge
+                      className="py-2 px-3"
+                      pill
+                      bg={STATUS_LABEL[item.status].bg}
+                    >
                       {STATUS_LABEL[item.status].name}
                     </Badge>
                   </td>

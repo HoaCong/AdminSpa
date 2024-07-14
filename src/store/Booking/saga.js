@@ -44,9 +44,7 @@ function* callApiConfirm({ id }) {
       idbooking: id,
     });
     if (response.status === 200) {
-      yield put(
-        actionConfirmSuccess({ status: response.data.data.message, id })
-      );
+      yield put(actionConfirmSuccess({ status: response.data.message, id }));
     } else {
       yield put(actionConfirmFailed());
     }
@@ -61,9 +59,7 @@ function* callApiDestroy({ id }) {
       idbooking: id,
     });
     if (response.status === 200) {
-      yield put(
-        actionDestroySuccess({ status: response.data.data.message, id })
-      );
+      yield put(actionDestroySuccess({ status: response.data.message, id }));
     } else {
       yield put(actionDestroyFailed());
     }
