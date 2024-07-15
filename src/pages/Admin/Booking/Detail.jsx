@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import LazyLoadImage from "components/common/LazyLoadImage";
 import TemplateContent from "components/layout/TemplateContent";
+import { STATUS_LABEL, TYPE_LABEL } from "constants";
 import { ROUTES } from "constants/routerWeb";
 import { formatCurrency } from "helper/functions";
 import _map from "lodash/map";
@@ -10,21 +11,14 @@ import { Badge, Collapse, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { actionDetail } from "store/Booking/action";
-const STATUS_LABEL = {
-  IN_PROCCESS: { bg: "secondary", name: "Chưa duyệt" },
-  CONFIRMED: { bg: "success", name: "Đã duyệt" },
-  DESTROYED: { bg: "danger", name: "Đã hủy" },
-};
+import FormConfirm from "./FormConfirm";
 
-const TYPE_LABEL = {
-  TRIET_LONG: "Triệt lông",
-  CHAM_DA: "Chăm da",
-};
 function BookingDetail(props) {
   const {
     actionStatus: { isLoading: actionLoading },
     detail,
     customer,
+    factory,
   } = useSelector((state) => state.bookingReducer);
 
   const navigate = useNavigate();
@@ -33,8 +27,12 @@ function BookingDetail(props) {
   const dispatch = useDispatch();
   const onGetDetailBooking = (id) => dispatch(actionDetail(id));
 
-  const [expandedRows, setExpandedRows] = useState(-1);
-
+  const [expandedRows, setExpandedRows] = useState(0);
+  const [modalData, setModalData] = useState({
+    info: {},
+    visible: false,
+    type: "",
+  });
   useEffect(() => {
     if (!actionLoading) onGetDetailBooking(id);
   }, []);
@@ -156,19 +154,7 @@ function BookingDetail(props) {
                                           scope="col"
                                           className="align-middle"
                                         >
-                                          Số điện thoại
-                                        </th>
-                                        <th
-                                          scope="col"
-                                          className="align-middle"
-                                        >
                                           Thời gian
-                                        </th>
-                                        <th
-                                          scope="col"
-                                          className="align-middle"
-                                        >
-                                          Cơ sở
                                         </th>
                                         <th
                                           scope="col"
@@ -182,22 +168,22 @@ function BookingDetail(props) {
                                         >
                                           Ghi chú
                                         </th>
+                                        <th
+                                          scope="col"
+                                          className="align-middle"
+                                        >
+                                          Hành động
+                                        </th>
                                       </tr>
                                     </thead>
                                     <tbody>
-                                      {_map(item.list, (ele, index) => (
-                                        <tr key={ele.service.updatedAt + index}>
+                                      {_map(item.dataSchedule, (ele, index) => (
+                                        <tr key={ele.updatedAt + index}>
                                           <td className="align-middle">
-                                            {index + 1}
-                                          </td>
-                                          <td className="align-middle">
-                                            {ele.phone}
+                                            Buổi {ele.session}
                                           </td>
                                           <td className="align-middle">
                                             {`${ele.timedate} ${ele.timehour}`}
-                                          </td>
-                                          <td className="align-middle">
-                                            {ele?.factory?.name || "_"}
                                           </td>
                                           <td className="align-middle">
                                             <Badge
@@ -210,6 +196,46 @@ function BookingDetail(props) {
                                           </td>
                                           <td className="align-middle">
                                             {ele.note || "_"}
+                                          </td>
+                                          <td className="align-middle">
+                                            {ele.status === "IN_PROCCESS" && (
+                                              <div className="d-flex gap-2">
+                                                <button
+                                                  className="btn btn-outline-success rounded-circle d-flex justify-content-center align-items-center"
+                                                  style={{
+                                                    width: 30,
+                                                    height: 30,
+                                                  }}
+                                                  onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setModalData({
+                                                      info: ele,
+                                                      visible: true,
+                                                      type: "confirm",
+                                                    });
+                                                  }}
+                                                >
+                                                  <i className="far fa-check-circle"></i>
+                                                </button>
+                                                <button
+                                                  className="btn btn-outline-danger rounded-circle d-flex justify-content-center align-items-center"
+                                                  style={{
+                                                    width: 30,
+                                                    height: 30,
+                                                  }}
+                                                  onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setModalData({
+                                                      info: ele,
+                                                      visible: true,
+                                                      type: "destroy",
+                                                    });
+                                                  }}
+                                                >
+                                                  <i className="far fa-times-circle"></i>
+                                                </button>
+                                              </div>
+                                            )}
                                           </td>
                                         </tr>
                                       ))}
@@ -232,18 +258,25 @@ function BookingDetail(props) {
                 <LazyLoadImage
                   src={customer?.image}
                   alt={customer?.name}
-                  width={200}
-                  height={200}
+                  width={80}
+                  height={80}
                   className="rounded-circle"
                 />
                 <div>Tên khách hàng: {customer?.fullname || "_"}</div>
                 <div>Email: {customer?.email || "_"}</div>
                 <div>Số điện thoại: {customer?.phone || "_"}</div>
               </div>
+              <hr />
+              <h5> Địa chỉ chăm sóc</h5>
+              <p>{factory?.name || "_ _ _"}</p>
             </div>
           </div>
         </div>
       </TemplateContent>
+      <FormConfirm
+        data={modalData}
+        onClear={() => setModalData({ info: {}, visible: false, type: "" })}
+      />
     </div>
   );
 }

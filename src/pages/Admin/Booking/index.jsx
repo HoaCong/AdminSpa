@@ -4,6 +4,7 @@ import CustomTooltip from "components/common/CustomTooltip";
 import LazyLoadImage from "components/common/LazyLoadImage";
 import LinearProgress from "components/common/LinearProgress";
 import TemplateContent from "components/layout/TemplateContent";
+import { STATUS, STATUS_LABEL, TYPE_LABEL } from "constants";
 import { ROUTES } from "constants/routerWeb";
 import { formatCurrency, parserRouter } from "helper/functions";
 import _map from "lodash/map";
@@ -20,24 +21,7 @@ import {
   actionGetList,
   resetData,
 } from "store/Booking/action";
-import FormBooking from "./FormBooking";
 const initialData = { query: "", timedate: "", timehour: "", status: 0 };
-const STATUS = [
-  { id: null, name: "Tất cả" },
-  { id: "IN_PROCCESS", name: "Chưa duyệt" },
-  { id: "CONFIRMED", name: "Đã duyệt" },
-  { id: "DESTROYED", name: "Đã hủy" },
-];
-const STATUS_LABEL = {
-  IN_PROCCESS: { bg: "secondary", name: "Chưa duyệt" },
-  CONFIRMED: { bg: "success", name: "Đã duyệt" },
-  DESTROYED: { bg: "danger", name: "Đã hủy" },
-};
-
-const TYPE_LABEL = {
-  TRIET_LONG: "Triệt lông",
-  CHAM_DA: "Chăm da",
-};
 
 const time = [
   "11:00",
@@ -74,12 +58,6 @@ function Booking(props) {
   const onConfirmBooking = (body) => dispatch(actionConfirm(body));
   const onDestroyBooking = (body) => dispatch(actionDestroy(body));
   const onResetData = () => dispatch(resetData());
-
-  const [detail, setDetail] = useState({
-    info: {},
-    visible: false,
-    type: "",
-  });
 
   const [data, setData] = useState(initialData);
   const [currentPage, setCurrentPage] = useState(1);
@@ -291,9 +269,7 @@ function Booking(props) {
             )}
             {list.map((item, index) => (
               <Fragment key={item.updatedAt + index}>
-                <tr
-                  onClick={() => handleExpandCollapse(index)}
-                >
+                <tr onClick={() => handleExpandCollapse(index)}>
                   <th scope="row" className="align-middle">
                     <div style={{ width: 16 }}>
                       {expandedRows === index ? (
@@ -463,10 +439,6 @@ function Booking(props) {
           currentPage={currentPage}
         />
       </TemplateContent>
-      <FormBooking
-        data={detail}
-        onClear={() => setDetail({ info: {}, visible: false, type: "" })}
-      />
       <CustomTooltip
         content={`Bạn có chắc muốn ${
           tooltip.type === "confirm" ? "xác nhận " : "từ chối"

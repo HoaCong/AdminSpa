@@ -1,4 +1,4 @@
-import { ModalDialog, Spinner } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
@@ -15,7 +15,7 @@ function ModalBlock(props) {
   } = props;
 
   return (
-    <Modal show={show} onHide={onClose} {...propsModal}>
+    <Modal show={show} onHide={onClose} centered {...propsModal}>
       <Modal.Header closeButton>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
@@ -24,7 +24,7 @@ function ModalBlock(props) {
         {show && (
           <>
             <Button variant="secondary" disabled={loading} onClick={onClose}>
-              Cancel
+              Hủy
             </Button>
             {!hideSave && (
               <Button variant="primary" disabled={loading} onClick={onSave}>
@@ -37,7 +37,7 @@ function ModalBlock(props) {
                     aria-hidden="true"
                   />
                 )}
-                Save
+                Lưu
               </Button>
             )}
           </>

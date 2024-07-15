@@ -1,22 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import LazyLoadImage from "components/common/LazyLoadImage";
 import TemplateContent from "components/layout/TemplateContent";
+import { STATUS_LABEL, TYPE_LABEL } from "constants";
 import { formatCurrency } from "helper/functions";
 import { Fragment, useEffect, useState } from "react";
 import { Badge, Collapse, Spinner, Tab, Tabs } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { actionGetList, resetData } from "store/Schedule/action";
-
-const TYPE_LABEL = {
-  TRIET_LONG: "Triệt lông",
-  CHAM_DA: "Chăm da",
-};
-
-const STATUS_LABEL = {
-  IN_PROCCESS: { bg: "secondary", name: "Chưa duyệt" },
-  CONFIRMED: { bg: "success", name: "Đã duyệt" },
-  DESTROYED: { bg: "danger", name: "Đã hủy" },
-};
 
 function Schedule(props) {
   const {

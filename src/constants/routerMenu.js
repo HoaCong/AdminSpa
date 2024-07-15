@@ -1,49 +1,49 @@
 import { ROUTES } from "./routerWeb";
 export const MENU_MANAGER = [
   {
-    label: "Dashboard",
+    label: "Trang chủ",
     active: false,
     src: ROUTES.ADMIN_DASHBOARD,
     icon: <i className="fas fa-home"></i>,
   },
   {
-    label: "Booking",
+    label: "Đặt lịch",
     active: false,
     src: ROUTES.ADMIN_BOOKING,
     icon: <i className="far fa-calendar-check"></i>,
   },
   {
-    label: "Schedule",
+    label: "Lịch hẹn",
     active: false,
     src: ROUTES.ADMIN_SCHEDULE,
     icon: <i className="fas fa-calendar-alt"></i>,
   },
   {
-    label: "Factory",
+    label: "Cơ sở",
     active: false,
     src: ROUTES.ADMIN_FACTORY,
     icon: <i className="fas fa-map-marked-alt"></i>,
   },
   {
-    label: "Employee",
+    label: "Nhân viên",
     active: false,
     src: ROUTES.ADMIN_EMPLOYEE,
     icon: <i className="fas fa-users-cog"></i>,
   },
   {
-    label: "Service",
+    label: "Dịch vụ",
     active: false,
     src: ROUTES.ADMIN_PRODUCT,
     icon: <i className="fas fa-window-restore"></i>,
   },
   {
-    label: "Customer",
+    label: "Khách hàng",
     active: false,
     src: ROUTES.ADMIN_CUSTOMER,
     icon: <i className="fas fa-users"></i>,
   },
   {
-    label: "Setting",
+    label: "Cấu hình",
     active: false,
     src: ROUTES.ADMIN_SETTING,
     icon: <i className="fas fa-cog"></i>,
@@ -52,27 +52,45 @@ export const MENU_MANAGER = [
 
 export const MENU_EMPLOYEE = [
   {
-    label: "Dashboard",
+    label: "Trang chủ",
     active: false,
     src: ROUTES.ADMIN_DASHBOARD,
     icon: <i className="fas fa-home"></i>,
   },
   {
-    label: "Factory",
+    label: "Đặt lịch",
+    active: false,
+    src: ROUTES.ADMIN_BOOKING,
+    icon: <i className="far fa-calendar-check"></i>,
+  },
+  {
+    label: "Lịch hẹn",
+    active: false,
+    src: ROUTES.ADMIN_SCHEDULE,
+    icon: <i className="fas fa-calendar-alt"></i>,
+  },
+  {
+    label: "Cơ sở",
     active: false,
     src: ROUTES.ADMIN_FACTORY,
     icon: <i className="fas fa-home"></i>,
   },
   {
-    label: "Employee",
+    label: "Nhân viên",
     active: false,
     src: ROUTES.ADMIN_EMPLOYEE,
     icon: <i className="fas fa-users"></i>,
   },
   {
-    label: "Service",
+    label: "Dịch vụ",
     active: false,
     src: ROUTES.ADMIN_PRODUCT,
+    icon: <i className="fas fa-users"></i>,
+  },
+  {
+    label: "Khách hàng",
+    active: false,
+    src: ROUTES.ADMIN_CUSTOMER,
     icon: <i className="fas fa-users"></i>,
   },
 ];

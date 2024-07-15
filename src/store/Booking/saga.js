@@ -1,10 +1,14 @@
 import { ENDPOINT } from "constants/routerApi";
-import { get, post } from "helper/ajax";
+import { get, post, put as puts } from "helper/ajax";
 import { all, call, put, takeLatest, takeLeading } from "redux-saga/effects";
 import {
   actionConfirmFailed,
+  actionConfirmScheduleFailed,
+  actionConfirmScheduleSuccess,
   actionConfirmSuccess,
   actionDestroyFailed,
+  actionDestroyScheduleFailed,
+  actionDestroyScheduleSuccess,
   actionDestroySuccess,
   actionDetailFailed,
   actionDetailSuccess,
@@ -68,11 +72,63 @@ function* callApiDestroy({ id }) {
   }
 }
 
+function* callApiConfirmSchedule({ payload, note }) {
+  try {
+    const response = yield call(
+      post,
+      `${ENDPOINT.CONFIRM_SCHEDULE + payload.id}/${payload.serviceid}`,
+      {
+        note,
+      }
+    );
+    if (response.status === 200) {
+      yield put(
+        actionConfirmScheduleSuccess({
+          ...payload,
+          status: response.data.message,
+          note,
+        })
+      );
+    } else {
+      yield put(actionConfirmScheduleFailed());
+    }
+  } catch (error) {
+    yield put(actionConfirmScheduleFailed(error.response.data.error));
+  }
+}
+
+function* callApiDestroySchedule({ payload, note }) {
+  try {
+    const response = yield call(
+      puts,
+      ENDPOINT.DESTROY_SCHEDULE + payload.idbookingdetail,
+      {
+        note,
+      }
+    );
+    if (response.status === 200) {
+      yield put(
+        actionDestroyScheduleSuccess({
+          ...payload,
+          status: response.data.message,
+          note,
+        })
+      );
+    } else {
+      yield put(actionDestroyScheduleFailed());
+    }
+  } catch (error) {
+    yield put(actionDestroyScheduleFailed(error.response.data.error));
+  }
+}
+
 export default function* bookingSaga() {
   yield all([
     yield takeLeading(ActionTypes.LIST, callApiList),
     yield takeLeading(ActionTypes.DETAIL, callApiDetail),
     yield takeLatest(ActionTypes.CONFIRM, callApiConfirm),
     yield takeLatest(ActionTypes.DESTROY, callApiDestroy),
+    yield takeLatest(ActionTypes.CONFIRM_SCHEDULE, callApiConfirmSchedule),
+    yield takeLatest(ActionTypes.DESTROY_SCHEDULE, callApiDestroySchedule),
   ]);
 }

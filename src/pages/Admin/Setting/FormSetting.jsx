@@ -14,11 +14,14 @@ const initialData = {
   colorone: "",
   colortwo: "",
   colorthree: "",
+  reminderbefore: null,
+  remindercarebelow: null,
+  remindercaretop: null,
 };
 function FormSetting({ data: { type, visible, info }, onClear }) {
   const {
     actionStatus: { isLoading, isSuccess },
-  } = useSelector((state) => state.factoryReducer);
+  } = useSelector((state) => state.settingReducer);
 
   const dispatch = useDispatch();
   const onUpdateSetting = (body) => dispatch(actionUpdate(body));
@@ -59,6 +62,14 @@ function FormSetting({ data: { type, visible, info }, onClear }) {
           [key]: `${_capitalize(key)} required`,
         }));
         validates = false;
+      }
+      if (
+        ["reminderbefore", "remindercarebelow", "remindercaretop"].includes(
+          key
+        ) &&
+        !isNaN(data[key])
+      ) {
+        console.log(123);
       }
     });
     if (validates) {
@@ -155,6 +166,75 @@ function FormSetting({ data: { type, visible, info }, onClear }) {
               bsPrefix="d-inline-block text-danger lh-1"
             >
               {error.nameBanner}
+            </Form.Text>
+          )}
+        </div>
+        <div className="mt-2">
+          <Form.Label htmlFor="ReminderBefore">
+            Nhắc nhở trước <span className="required">*</span>
+          </Form.Label>
+          <Form.Control
+            type="text"
+            id="ReminderBefore"
+            name="reminderbefore"
+            placeholder="Nhập số ngày"
+            defaultValue={data.reminderbefore || ""}
+            aria-describedby="helperReminderBefore"
+            onChange={handleChange}
+          />
+          {error.reminderbefore && (
+            <Form.Text
+              id="helperReminderBefore"
+              danger="true"
+              bsPrefix="d-inline-block text-danger lh-1"
+            >
+              {error.reminderbefore}
+            </Form.Text>
+          )}
+        </div>
+        <div className="mt-2">
+          <Form.Label htmlFor="ReminderCareTop">
+            Nhắc nhở chăm sóc trước <span className="required">*</span>
+          </Form.Label>
+          <Form.Control
+            type="text"
+            id="ReminderCareTop"
+            name="remindercaretop"
+            placeholder="Nhập số ngày"
+            defaultValue={data.remindercaretop || ""}
+            aria-describedby="helperReminderCareTop"
+            onChange={handleChange}
+          />
+          {error.remindercaretop && (
+            <Form.Text
+              id="helperReminderCareTop"
+              danger="true"
+              bsPrefix="d-inline-block text-danger lh-1"
+            >
+              {error.remindercaretop}
+            </Form.Text>
+          )}
+        </div>
+        <div className="mt-2">
+          <Form.Label htmlFor="ReminderCareBelow">
+            Nhắc nhở chăm sóc sau <span className="required">*</span>
+          </Form.Label>
+          <Form.Control
+            type="text"
+            id="ReminderCareBelow"
+            name="remindercarebelow"
+            placeholder="Nhập số ngày"
+            defaultValue={data.remindercarebelow || ""}
+            aria-describedby="helperReminderCareBelow"
+            onChange={handleChange}
+          />
+          {error.remindercarebelow && (
+            <Form.Text
+              id="helperReminderCareBelow"
+              danger="true"
+              bsPrefix="d-inline-block text-danger lh-1"
+            >
+              {error.remindercarebelow}
             </Form.Text>
           )}
         </div>

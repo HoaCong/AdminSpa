@@ -24,8 +24,17 @@ function* callApiGet() {
 
 function* callApiUpdate({ params }) {
   try {
-    const { logo, numberPhone, nameBanner, colorone, colortwo, colorthree } =
-      params;
+    const {
+      logo,
+      numberPhone,
+      nameBanner,
+      colorone,
+      colortwo,
+      colorthree,
+      reminderbefore,
+      remindercarebelow,
+      remindercaretop,
+    } = params;
     const response = yield call(puts, ENDPOINT.UPDATE_SETTING, {
       logo,
       numberPhone,
@@ -33,6 +42,9 @@ function* callApiUpdate({ params }) {
       colorone,
       colortwo,
       colorthree,
+      // reminderbefore,
+      // remindercarebelow,
+      // remindercaretop,
     });
     if (response.status === 200) {
       yield put(actionUpdateSuccess(response.data.data));

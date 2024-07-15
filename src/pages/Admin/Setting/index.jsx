@@ -1,5 +1,4 @@
 // react-bootstrap components
-
 import TemplateContent from "components/layout/TemplateContent";
 import { useEffect, useState } from "react";
 import { Spinner } from "react-bootstrap";
@@ -47,45 +46,54 @@ function Setting() {
               </Spinner>
             </div>
           ) : (
-            <div>
-              <p>Logo: {data.logo}</p>
-              <p>Tên shop: {data.nameBanner}</p>
-              <p>Số điện thoại: {data.numberPhone}</p>
-              <div className="mt-3">
-                <span> Màu chủ đạo 1</span>
-                <span
-                  className="ms-2"
-                  style={{
-                    background: data.colorone,
-                    paddingInline: 10,
-                    height: 20,
-                    border: "1px solid black",
-                  }}
-                ></span>
+            <div className="row">
+              <div className="col-4">
+                <p>Logo: {data.logo}</p>
+                <p>Tên shop: {data.nameBanner}</p>
+                <p>Số điện thoại: {data.numberPhone}</p>
               </div>
-              <div className="mt-3">
-                <span> Màu chủ đạo 2</span>
-                <span
-                  className="ms-2"
-                  style={{
-                    background: data.colortwo,
-                    paddingInline: 10,
-                    height: 20,
-                    border: "1px solid black",
-                  }}
-                ></span>
+              <div className="col-4">
+                <div className="">
+                  <span> Màu chủ đạo 1</span>
+                  <span
+                    className="ms-2"
+                    style={{
+                      background: data.colorone,
+                      paddingInline: 10,
+                      height: 20,
+                      border: "1px solid black",
+                    }}
+                  ></span>
+                </div>
+                <div className="mt-3">
+                  <span> Màu chủ đạo 2</span>
+                  <span
+                    className="ms-2"
+                    style={{
+                      background: data.colortwo,
+                      paddingInline: 10,
+                      height: 20,
+                      border: "1px solid black",
+                    }}
+                  ></span>
+                </div>
+                <div className="mt-3">
+                  <span> Màu chủ đạo 3</span>
+                  <span
+                    className="ms-2"
+                    style={{
+                      background: data.colorthree,
+                      paddingInline: 10,
+                      height: 20,
+                      border: "1px solid black",
+                    }}
+                  ></span>
+                </div>
               </div>
-              <div className="mt-3">
-                <span> Màu chủ đạo 3</span>
-                <span
-                  className="ms-2"
-                  style={{
-                    background: data.colorthree,
-                    paddingInline: 10,
-                    height: 20,
-                    border: "1px solid black",
-                  }}
-                ></span>
+              <div className="col-4">
+                <p>Nhắc nhở trước: {data.reminderbefore || 0} ngày</p>
+                <p>Nhắc nhở chăm sóc sau: {data.remindercarebelow || 0} ngày</p>
+                <p>Nhắc nhở chăm sóc trước: {data.remindercaretop || 0} ngày</p>
               </div>
             </div>
           )}
