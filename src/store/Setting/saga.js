@@ -32,8 +32,8 @@ function* callApiUpdate({ params }) {
       colortwo,
       colorthree,
       reminderbefore,
-      remindercarebelow,
-      remindercaretop,
+      // remindercarebelow,
+      // remindercaretop,
     } = params;
     const response = yield call(puts, ENDPOINT.UPDATE_SETTING, {
       logo,
@@ -42,7 +42,7 @@ function* callApiUpdate({ params }) {
       colorone,
       colortwo,
       colorthree,
-      // reminderbefore,
+      reminderbefore,
       // remindercarebelow,
       // remindercaretop,
     });

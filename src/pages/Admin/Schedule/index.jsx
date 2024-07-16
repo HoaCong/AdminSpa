@@ -2,10 +2,12 @@
 import LazyLoadImage from "components/common/LazyLoadImage";
 import TemplateContent from "components/layout/TemplateContent";
 import { STATUS_LABEL, TYPE_LABEL } from "constants";
-import { formatCurrency } from "helper/functions";
+import { ROUTES } from "constants/routerWeb";
+import { formatCurrency, parserRouter } from "helper/functions";
 import { Fragment, useEffect, useState } from "react";
 import { Badge, Collapse, Spinner, Tab, Tabs } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { actionGetList, resetData } from "store/Schedule/action";
 
 function Schedule(props) {
@@ -13,7 +15,7 @@ function Schedule(props) {
     listStatus: { isLoading },
     list,
   } = useSelector((state) => state.scheduleReducer);
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const onGetListBooking = (tab) => dispatch(actionGetList(tab));
   const onResetData = () => dispatch(resetData());
@@ -41,6 +43,10 @@ function Schedule(props) {
     });
   };
 
+  const handleDetailSchedule = (id) => {
+    navigate(parserRouter(ROUTES.ADMIN_SCHEDULE_DETAIL, id));
+  };
+
   const ContentTab = (
     <table className="table table-hover">
       <thead>
@@ -66,6 +72,9 @@ function Schedule(props) {
           </th>
           <th scope="col" className="align-middle">
             Ghi chú
+          </th>
+          <th scope="col" className="align-middle">
+            Hành động
           </th>
         </tr>
       </thead>
@@ -112,7 +121,7 @@ function Schedule(props) {
                   </td>
                   <td className="align-middle">{item.phone}</td>
                   <td className="align-middle">
-                    {`${item.timedate} ${item.timehour}`}
+                    {`${item.timedate} ${item.timehour || ""}`}
                   </td>
                   <td className="align-middle">{item?.factory?.name || "_"}</td>
                   <td className="align-middle">
@@ -125,6 +134,18 @@ function Schedule(props) {
                     </Badge>
                   </td>
                   <td className="align-middle">{item.note || "_"}</td>
+                  <td className="align-middle">
+                    <button
+                      className="btn btn-outline-primary rounded-circle d-flex justify-content-center align-items-center"
+                      style={{ width: 30, height: 30 }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDetailSchedule(item.idbookingdetail);
+                      }}
+                    >
+                      <i className="far fa-eye"></i>
+                    </button>
+                  </td>
                 </tr>
                 <tr>
                   <td colSpan="9" className="p-0">
@@ -198,6 +219,7 @@ function Schedule(props) {
         >
           <Tab eventKey="today" title="Hôm nay"></Tab>
           <Tab eventKey="reminder" title="Ngày tái hẹn"></Tab>
+          <Tab eventKey="remindercare" title="Ngày nhắc hẹn"></Tab>
         </Tabs>
         {ContentTab}
       </TemplateContent>

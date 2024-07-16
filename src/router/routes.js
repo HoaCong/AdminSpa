@@ -8,6 +8,7 @@ import AdminEmployee from "pages/Admin/Employee";
 import AdminFactory from "pages/Admin/Factory";
 import AdminProduct from "pages/Admin/Product";
 import AdminSchedule from "pages/Admin/Schedule";
+import AdminScheduleDetail from "pages/Admin/Schedule/Detail";
 import AdminSetting from "pages/Admin/Setting";
 import Login from "pages/Login";
 import PageNotFound from "pages/NotFoundPage";
@@ -70,6 +71,11 @@ export const managerRoutes = [
         name: "Booking detail",
         element: <AdminBookingDetail />,
       },
+      {
+        path: ROUTES.ADMIN_SCHEDULE_DETAIL,
+        name: "Schedule detail",
+        element: <AdminScheduleDetail />,
+      },
       { path: "*", name: "Not Found Page", element: <PageNotFound /> },
     ],
   },
@@ -82,6 +88,16 @@ export const employeeRoutes = [
     element: <AdminLayout />,
     children: [
       { isRoot: true, name: "Dashboard Page", element: <AdminDashboard /> },
+      {
+        path: ROUTES.ADMIN_BOOKING,
+        name: "Booking",
+        element: <AdminBooking />,
+      },
+      {
+        path: ROUTES.ADMIN_SCHEDULE,
+        name: "Schedule",
+        element: <AdminSchedule />,
+      },
       {
         path: ROUTES.ADMIN_FACTORY,
         name: "Factory",
@@ -96,6 +112,16 @@ export const employeeRoutes = [
         path: ROUTES.ADMIN_PRODUCT,
         name: "Product",
         element: <AdminProduct />,
+      },
+      {
+        path: ROUTES.ADMIN_BOOKING_DETAIL,
+        name: "Booking detail",
+        element: <AdminBookingDetail />,
+      },
+      {
+        path: ROUTES.ADMIN_SCHEDULE_DETAIL,
+        name: "Schedule detail",
+        element: <AdminScheduleDetail />,
       },
       { path: "*", name: "Not Found Page", element: <PageNotFound /> },
     ],

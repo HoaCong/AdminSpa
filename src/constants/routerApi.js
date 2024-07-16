@@ -36,6 +36,7 @@ export const ENDPOINT = {
   DESTROY_SCHEDULE: "/api/bookingdetail/destroyservice/",
   // ======/api/schedule======
   LIST_SCHEDULE: "/api/schedule/",
+  REMINDER_CARE_SCHEDULE: "/api/schedule/remindercare/",
   // =========/api/setting===========
   GET_SETTING: "/api/setting",
   UPDATE_SETTING: "/api/setting",

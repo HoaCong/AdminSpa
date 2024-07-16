@@ -64,12 +64,17 @@ function FormSetting({ data: { type, visible, info }, onClear }) {
         validates = false;
       }
       if (
-        ["reminderbefore", "remindercarebelow", "remindercaretop"].includes(
-          key
-        ) &&
-        !isNaN(data[key])
+        ["reminderbefore", "remindercarebelow", "remindercaretop"].includes(key)
       ) {
-        console.log(123);
+        if (/^[0-9]$/.test(data[key]))
+          setData((prevData) => ({ ...prevData, [key]: +data[key] }));
+        else {
+          setError((prevError) => ({
+            ...prevError,
+            [key]: `${_capitalize(key)} can only number (1 -> 9)`,
+          }));
+          validates = false;
+        }
       }
     });
     if (validates) {
@@ -175,6 +180,7 @@ function FormSetting({ data: { type, visible, info }, onClear }) {
           </Form.Label>
           <Form.Control
             type="text"
+            maxLength={1}
             id="ReminderBefore"
             name="reminderbefore"
             placeholder="Nhập số ngày"
@@ -198,6 +204,7 @@ function FormSetting({ data: { type, visible, info }, onClear }) {
           </Form.Label>
           <Form.Control
             type="text"
+            maxLength={1}
             id="ReminderCareTop"
             name="remindercaretop"
             placeholder="Nhập số ngày"
@@ -221,6 +228,7 @@ function FormSetting({ data: { type, visible, info }, onClear }) {
           </Form.Label>
           <Form.Control
             type="text"
+            maxLength={1}
             id="ReminderCareBelow"
             name="remindercarebelow"
             placeholder="Nhập số ngày"

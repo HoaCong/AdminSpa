@@ -14,4 +14,5 @@ export const ROUTES = {
   ADMIN_SETTING: "/admin/setting",
   ADMIN_SCHEDULE: "/admin/schedule",
   ADMIN_BOOKING_DETAIL: "/admin/booking/:id",
+  ADMIN_SCHEDULE_DETAIL: "/admin/schedule/:id",
 };

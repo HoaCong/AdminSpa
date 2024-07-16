@@ -77,6 +77,9 @@ function BookingDetail(props) {
                     <th scope="col" className="align-middle">
                       Danh mục
                     </th>
+                    <th scope="col" className="align-middle">
+                      Trạng thái
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -135,6 +138,15 @@ function BookingDetail(props) {
                             </td>
                             <td className="align-middle">
                               {TYPE_LABEL[item.service.category]}
+                            </td>
+                            <td className="align-middle">
+                              <Badge
+                                className="py-2 px-3"
+                                pill
+                                bg={STATUS_LABEL[item.status].bg}
+                              >
+                                {STATUS_LABEL[item.status].name}
+                              </Badge>
                             </td>
                           </tr>
                           <tr>
