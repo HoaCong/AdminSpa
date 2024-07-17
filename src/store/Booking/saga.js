@@ -1,6 +1,12 @@
 import { ENDPOINT } from "constants/routerApi";
 import { get, post, put as puts } from "helper/ajax";
 import { all, call, put, takeLatest, takeLeading } from "redux-saga/effects";
+import {
+  actionConfirmBookingDetailFailed,
+  actionConfirmBookingDetailSuccess,
+  actionDestroyBookingDetailFailed,
+  actionDestroyBookingDetailSuccess,
+} from "store/BookingDetailList/action";
 import { addToast } from "store/Toast/action";
 import {
   actionConfirmFailed,
@@ -119,6 +125,13 @@ function* callApiConfirmSchedule({ payload, note }) {
         })
       );
       yield put(
+        actionConfirmBookingDetailSuccess({
+          ...payload,
+          status: response.data.message,
+          note,
+        })
+      );
+      yield put(
         addToast({
           text: "Xác nhận thành công",
           type: "success",
@@ -127,6 +140,7 @@ function* callApiConfirmSchedule({ payload, note }) {
       );
     } else {
       yield put(actionConfirmScheduleFailed());
+      yield put(actionConfirmBookingDetailFailed());
       yield put(
         addToast({
           text: "Xác nhận thất bại",
@@ -137,7 +151,7 @@ function* callApiConfirmSchedule({ payload, note }) {
     }
   } catch (error) {
     yield put(actionConfirmScheduleFailed(error.response.data.error));
-
+    yield put(actionConfirmBookingDetailFailed(error.response.data.error));
     yield put(
       addToast({
         text: "Xảy ra lỗi",
@@ -166,6 +180,13 @@ function* callApiDestroySchedule({ payload, note }) {
         })
       );
       yield put(
+        actionDestroyBookingDetailSuccess({
+          ...payload,
+          status: response.data.message,
+          note,
+        })
+      );
+      yield put(
         addToast({
           text: "Xác nhận thành công",
           type: "success",
@@ -174,6 +195,7 @@ function* callApiDestroySchedule({ payload, note }) {
       );
     } else {
       yield put(actionDestroyScheduleFailed());
+      yield put(actionDestroyBookingDetailFailed());
       yield put(
         addToast({
           text: "Hủy bỏ thất bại",
@@ -184,6 +206,7 @@ function* callApiDestroySchedule({ payload, note }) {
     }
   } catch (error) {
     yield put(actionDestroyScheduleFailed(error.response.data.error));
+    yield put(actionDestroyBookingDetailFailed(error.response.data.error));
     yield put(
       addToast({
         text: "Xảy ra lỗi",

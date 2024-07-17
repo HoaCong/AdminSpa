@@ -33,6 +33,8 @@ export const ENDPOINT = {
   CONFIRM_BOOKING: "/api/booking/generate",
   DESTROY_BOOKING: "/api/booking/destroy",
   DESTROY_SCHEDULE: "/api/bookingdetail/destroyservice/",
+  // ======/api/bookingdetail======
+  LIST_BOOKING_DETAIL: "/api/bookingdetail/",
   // ======/api/schedule======
   LIST_SCHEDULE: "/api/schedule/",
   CONFIRM_SCHEDULE: "/api/schedule/reminder/",

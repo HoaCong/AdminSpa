@@ -13,6 +13,12 @@ export const MENU_MANAGER = [
     icon: <i className="far fa-calendar-check"></i>,
   },
   {
+    label: "Lịch đặt chi tiết",
+    active: false,
+    src: ROUTES.ADMIN_BOOKING_DETAIL_LIST,
+    icon: <i className="far fa-calendar-alt"></i>,
+  },
+  {
     label: "Lịch hẹn",
     active: false,
     src: ROUTES.ADMIN_SCHEDULE,
@@ -61,6 +67,12 @@ export const MENU_EMPLOYEE = [
     label: "Đặt lịch",
     active: false,
     src: ROUTES.ADMIN_BOOKING,
+    icon: <i className="far fa-calendar-check"></i>,
+  },
+  {
+    label: "Lịch đặt chi tiết",
+    active: false,
+    src: ROUTES.ADMIN_BOOKING_DETAIL_LIST,
     icon: <i className="far fa-calendar-check"></i>,
   },
   {

@@ -2,6 +2,7 @@
 import { combineReducers } from "redux";
 
 import bookingReducer from "./Booking/reducer";
+import bookingDetailReducer from "./BookingDetailList/reducer";
 import customerReducer from "./Customer/reducer";
 import dashboardReducer from "./Dashboard/reducer";
 import employeeReducer from "./Employee/reducer";
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
   productReducer,
   customerReducer,
   bookingReducer,
+  bookingDetailReducer,
   settingReducer,
   scheduleReducer,
 });

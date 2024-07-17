@@ -2,6 +2,7 @@
 import { all, fork } from "redux-saga/effects";
 
 import bookingSaga from "./Booking/saga";
+import bookingDetailSaga from "./BookingDetailList/saga";
 import customerSaga from "./Customer/saga";
 import dashboardSaga from "./Dashboard/saga";
 import employeeSaga from "./Employee/saga";
@@ -20,6 +21,7 @@ export default function* rootSaga() {
     fork(factorySaga),
     fork(customerSaga),
     fork(bookingSaga),
+    fork(bookingDetailSaga),
     fork(settingSaga),
     fork(scheduleSaga),
   ]);

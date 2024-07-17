@@ -2,6 +2,7 @@ import AdminLayout from "components/layout/AdminLayout";
 import { ROUTES } from "constants/routerWeb";
 import AdminBooking from "pages/Admin/Booking";
 import AdminBookingDetail from "pages/Admin/Booking/Detail";
+import AdminBookingDetailList from "pages/Admin/BookingDetailList";
 import AdminCustomer from "pages/Admin/Customer";
 import AdminDashboard from "pages/Admin/Dashboard";
 import AdminEmployee from "pages/Admin/Employee";
@@ -70,6 +71,11 @@ export const managerRoutes = [
         path: ROUTES.ADMIN_BOOKING_DETAIL,
         name: "Booking detail",
         element: <AdminBookingDetail />,
+      },
+      {
+        path: ROUTES.ADMIN_BOOKING_DETAIL_LIST,
+        name: "List booking detail",
+        element: <AdminBookingDetailList />,
       },
       {
         path: ROUTES.ADMIN_SCHEDULE_DETAIL,

@@ -1,10 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import CustomPagination from "components/common/CustomPagination";
-import CustomTooltip from "components/common/CustomTooltip";
 import LazyLoadImage from "components/common/LazyLoadImage";
 import LinearProgress from "components/common/LinearProgress";
 import TemplateContent from "components/layout/TemplateContent";
-import { STATUS, STATUS_LABEL, TIME, TYPE_LABEL } from "constants";
+import { STATUS_2, STATUS_LABEL, TIME, TYPE_LABEL } from "constants";
 import { ROUTES } from "constants/routerWeb";
 import { format } from "date-fns";
 import { formatCurrency, parserRouter } from "helper/functions";
@@ -16,28 +15,23 @@ import { Badge, Button, Collapse, Form, Spinner } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {
-  actionConfirm,
-  actionDestroy,
-  actionGetList,
-  resetData,
-} from "store/Booking/action";
+import { actionGetList, resetData } from "store/BookingDetailList/action";
+import FormConfirm from "../Booking/FormConfirm";
 const initialData = { query: "", timedate: "", timehour: "", status: 0 };
-function Booking(props) {
+
+function BookingDetailList(props) {
   const {
     listStatus: { isLoading },
     actionStatus: { isLoading: actionLoading, isSuccess: actionSuccess },
     list,
     params,
     meta,
-  } = useSelector((state) => state.bookingReducer);
+  } = useSelector((state) => state.bookingDetailReducer);
 
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  const onGetListBooking = (body) => dispatch(actionGetList(body));
-  const onConfirmBooking = (body) => dispatch(actionConfirm(body));
-  const onDestroyBooking = (body) => dispatch(actionDestroy(body));
+  const onGetListBookingDetailList = (body) => dispatch(actionGetList(body));
   const onResetData = () => dispatch(resetData());
 
   const [data, setData] = useState(initialData);
@@ -50,8 +44,14 @@ function Booking(props) {
     type: null,
   });
 
+  const [modalData, setModalData] = useState({
+    info: {},
+    visible: false,
+    type: "",
+  });
+
   useEffect(() => {
-    if (!isLoading) onGetListBooking(params);
+    if (!isLoading) onGetListBookingDetailList(params);
     return () => {
       onResetData();
     };
@@ -67,7 +67,7 @@ function Booking(props) {
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
-    onGetListBooking({ ...params, page });
+    onGetListBookingDetailList({ ...params, page });
   };
 
   const handleChange = (e) => {
@@ -85,7 +85,13 @@ function Booking(props) {
       !data.timehour || type === "reset" ? null : data.timehour.trim();
     const status = !data.status || type === "reset" ? null : data.status;
     const newParams = _omit(params, ["query"]);
-    onGetListBooking({ ...newParams, query, status, timedate, timehour });
+    onGetListBookingDetailList({
+      ...newParams,
+      query,
+      status,
+      timedate,
+      timehour,
+    });
     if (type === "reset") setData(initialData);
   };
 
@@ -94,10 +100,6 @@ function Booking(props) {
       if (prev === index) return -1;
       return index;
     });
-  };
-
-  const handleDetailBooking = (id) => {
-    navigate(parserRouter(ROUTES.ADMIN_BOOKING_DETAIL, id));
   };
 
   const onCloseTooltip = () => {
@@ -109,14 +111,10 @@ function Booking(props) {
     });
   };
 
-  const handleAction = (id, type) => {
-    if (type === "confirm") onConfirmBooking(id);
-    if (type === "destroy") onDestroyBooking(id);
-  };
   return (
     <div className="mb-5">
       <TemplateContent
-        title="Danh sách đặt lịch"
+        title="Danh sách lịch đặt chi tiết"
         filter={
           <div>
             <div className="row">
@@ -177,7 +175,7 @@ function Booking(props) {
                   value={data.status}
                   onChange={handleChange}
                 >
-                  {_map(STATUS, (item) => (
+                  {_map(STATUS_2, (item) => (
                     <option key={item.id} value={item.id}>
                       {item.name}
                     </option>
@@ -210,25 +208,22 @@ function Booking(props) {
             <tr>
               <th scope="col" className="align-middle"></th>
               <th scope="col" className="align-middle">
-                #
+                Hình ảnh
               </th>
               <th scope="col" className="align-middle">
-                Khách hàng
+                Tên dịch vụ
               </th>
               <th scope="col" className="align-middle">
-                Số điện thoại
+                Giá
               </th>
               <th scope="col" className="align-middle">
                 Thời gian
               </th>
               <th scope="col" className="align-middle">
-                Cơ sở
+                Danh mục
               </th>
               <th scope="col" className="align-middle">
                 Trạng thái
-              </th>
-              <th scope="col" className="align-middle">
-                Ghi chú
               </th>
               <th scope="col" className="align-middle">
                 Hành động
@@ -251,7 +246,7 @@ function Booking(props) {
               </tr>
             )}
             {list.map((item, index) => (
-              <Fragment key={item.updatedAt + index}>
+              <Fragment key={item.service.updatedAt + index}>
                 <tr onClick={() => handleExpandCollapse(index)}>
                   <th scope="row" className="align-middle">
                     <div style={{ width: 16 }}>
@@ -262,17 +257,22 @@ function Booking(props) {
                       )}
                     </div>
                   </th>
-                  <th scope="row" className="align-middle">
-                    {index + 1}
-                  </th>
                   <td className="align-middle">
-                    {item.customer.fullName || "_"}
+                    <LazyLoadImage
+                      src={item.service.image}
+                      alt={item.service.name}
+                      width={50}
+                      height={50}
+                    />
                   </td>
-                  <td className="align-middle">{item.phone}</td>
+                  <td className="align-middle">{item.service.name}</td>
                   <td className="align-middle">
-                    {`${item.timedate} ${item.timehour}`}
+                    {formatCurrency(item.service.price)}
                   </td>
-                  <td className="align-middle">{item?.factory?.name || "_"}</td>
+                  <td className="align-middle">{item.service.time}</td>
+                  <td className="align-middle">
+                    {TYPE_LABEL[item.service.category]}
+                  </td>
                   <td className="align-middle">
                     <Badge
                       className="py-2 px-3"
@@ -282,63 +282,25 @@ function Booking(props) {
                       {STATUS_LABEL[item.status].name}
                     </Badge>
                   </td>
-                  <td className="align-middle">{item.note || "_"}</td>
                   <td className="align-middle">
-                    {item.status === "CONFIRMED" && (
+                    {item.status === "IN_PROCCESS" && (
                       <button
-                        className="btn btn-outline-primary rounded-circle d-flex justify-content-center align-items-center"
-                        style={{ width: 30, height: 30 }}
+                        className="btn btn-outline-danger rounded-circle d-flex justify-content-center align-items-center"
+                        style={{
+                          width: 30,
+                          height: 30,
+                        }}
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleDetailBooking(item.id);
+                          setModalData({
+                            info: item.dataSchedule[0],
+                            visible: true,
+                            type: "destroy",
+                          });
                         }}
                       >
-                        <i className="far fa-eye"></i>
+                        <i className="far fa-times-circle"></i>
                       </button>
-                    )}
-                    {item.status === "IN_PROCCESS" && (
-                      <div className="d-flex gap-2">
-                        <button
-                          className="btn btn-outline-success rounded-circle d-flex justify-content-center align-items-center"
-                          style={{ width: 30, height: 30 }}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setTooltip((prev) => {
-                              return {
-                                visible:
-                                  prev.target === e.target
-                                    ? !tooltip.visible
-                                    : true,
-                                target: e.target,
-                                info: item,
-                                type: "confirm",
-                              };
-                            });
-                          }}
-                        >
-                          <i className="far fa-check-circle"></i>
-                        </button>
-                        <button
-                          className="btn btn-outline-danger rounded-circle d-flex justify-content-center align-items-center"
-                          style={{ width: 30, height: 30 }}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setTooltip((prev) => {
-                              return {
-                                visible:
-                                  prev.target === e.target
-                                    ? !tooltip.visible
-                                    : true,
-                                target: e.target,
-                                info: item,
-                                type: "destroy",
-                              };
-                            });
-                          }}
-                        >
-                          <i className="far fa-times-circle"></i>
-                        </button>
-                      </div>
                     )}
                   </td>
                 </tr>
@@ -353,49 +315,79 @@ function Booking(props) {
                                 #
                               </th>
                               <th scope="col" className="align-middle">
-                                Hình ảnh
-                              </th>
-                              <th scope="col" className="align-middle">
-                                Tên dịch vụ
-                              </th>
-                              <th scope="col" className="align-middle">
-                                Số buổi
-                              </th>
-                              <th scope="col" className="align-middle">
-                                Giá
-                              </th>
-                              <th scope="col" className="align-middle">
                                 Thời gian
                               </th>
                               <th scope="col" className="align-middle">
-                                Danh mục
+                                Trạng thái
+                              </th>
+                              <th scope="col" className="align-middle">
+                                Ghi chú
+                              </th>
+                              <th scope="col" className="align-middle">
+                                Hành động
                               </th>
                             </tr>
                           </thead>
                           <tbody>
-                            {item.listService.map((item, index) => (
-                              <tr key={item.updatedAt + index}>
-                                <th scope="row" className="align-middle">
-                                  {index + 1}
-                                </th>
+                            {_map(item.dataSchedule, (ele, index) => (
+                              <tr key={ele.updatedAt + index}>
                                 <td className="align-middle">
-                                  <LazyLoadImage
-                                    src={item.image}
-                                    alt={item.name}
-                                    width={50}
-                                    height={50}
-                                  />
-                                </td>
-                                <td className="align-middle">{item.name}</td>
-                                <td className="align-middle">
-                                  {item.numbersesion} buổi
+                                  Buổi {ele.session}
                                 </td>
                                 <td className="align-middle">
-                                  {formatCurrency(item.price)}
+                                  {`${ele.timedate} ${ele.timehour}`}
                                 </td>
-                                <td className="align-middle">{item.time}</td>
                                 <td className="align-middle">
-                                  {TYPE_LABEL[item.category]}
+                                  <Badge
+                                    className="py-2 px-3"
+                                    pill
+                                    bg={STATUS_LABEL[ele.status].bg}
+                                  >
+                                    {STATUS_LABEL[ele.status].name}
+                                  </Badge>
+                                </td>
+                                <td className="align-middle">
+                                  {ele.note || "_"}
+                                </td>
+                                <td className="align-middle">
+                                  {ele.status === "IN_PROCCESS" && (
+                                    <div className="d-flex gap-2">
+                                      <button
+                                        className="btn btn-outline-success rounded-circle d-flex justify-content-center align-items-center"
+                                        style={{
+                                          width: 30,
+                                          height: 30,
+                                        }}
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setModalData({
+                                            info: ele,
+                                            visible: true,
+                                            type: "confirm",
+                                          });
+                                        }}
+                                      >
+                                        <i className="far fa-check-circle"></i>
+                                      </button>
+                                      <button
+                                        className="btn btn-outline-danger rounded-circle d-flex justify-content-center align-items-center"
+                                        style={{
+                                          width: 30,
+                                          height: 30,
+                                        }}
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setModalData({
+                                            info: ele,
+                                            visible: true,
+                                            type: "destroy",
+                                          });
+                                        }}
+                                      >
+                                        <i className="far fa-times-circle"></i>
+                                      </button>
+                                    </div>
+                                  )}
                                 </td>
                               </tr>
                             ))}
@@ -422,17 +414,12 @@ function Booking(props) {
           currentPage={currentPage}
         />
       </TemplateContent>
-      <CustomTooltip
-        content={`Bạn có chắc muốn ${
-          tooltip.type === "confirm" ? "xác nhận " : "từ chối"
-        } lịch đặt này không?`}
-        tooltip={tooltip}
-        loading={actionLoading}
-        onClose={onCloseTooltip}
-        onDelete={() => handleAction(tooltip.info.id, tooltip.type)}
+      <FormConfirm
+        data={modalData}
+        onClear={() => setModalData({ info: {}, visible: false, type: "" })}
       />
     </div>
   );
 }
 
-export default Booking;
+export default BookingDetailList;

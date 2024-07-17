@@ -9,7 +9,6 @@ import {
 } from "store/Booking/action";
 
 function FormConfirm({ data: { type, visible, info }, onClear }) {
-  console.log("FormConfirm  info:", info);
   const {
     detailStatus: { isLoading, isSuccess },
   } = useSelector((state) => state.bookingReducer);
