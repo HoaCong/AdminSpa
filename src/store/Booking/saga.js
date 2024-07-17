@@ -1,6 +1,7 @@
 import { ENDPOINT } from "constants/routerApi";
 import { get, post, put as puts } from "helper/ajax";
 import { all, call, put, takeLatest, takeLeading } from "redux-saga/effects";
+import { addToast } from "store/Toast/action";
 import {
   actionConfirmFailed,
   actionConfirmScheduleFailed,
@@ -49,11 +50,32 @@ function* callApiConfirm({ id }) {
     });
     if (response.status === 200) {
       yield put(actionConfirmSuccess({ status: response.data.message, id }));
+      yield put(
+        addToast({
+          text: "Xác nhận thành công",
+          type: "success",
+          title: "",
+        })
+      );
     } else {
       yield put(actionConfirmFailed());
+      yield put(
+        addToast({
+          text: "Xác nhận thất bại",
+          type: "danger",
+          title: "",
+        })
+      );
     }
   } catch (error) {
     yield put(actionConfirmFailed(error.response.data.error));
+    yield put(
+      addToast({
+        text: "Xác nhận thất bại",
+        type: "danger",
+        title: "",
+      })
+    );
   }
 }
 
@@ -69,6 +91,13 @@ function* callApiDestroy({ id }) {
     }
   } catch (error) {
     yield put(actionDestroyFailed(error.response.data.error));
+    yield put(
+      addToast({
+        text: "Xảy ra lỗi",
+        type: "danger",
+        title: "",
+      })
+    );
   }
 }
 
@@ -81,7 +110,7 @@ function* callApiConfirmSchedule({ payload, note }) {
         note,
       }
     );
-    if (response.status === 200) {
+    if (response.status === 200 && response.data.status) {
       yield put(
         actionConfirmScheduleSuccess({
           ...payload,
@@ -89,11 +118,33 @@ function* callApiConfirmSchedule({ payload, note }) {
           note,
         })
       );
+      yield put(
+        addToast({
+          text: "Xác nhận thành công",
+          type: "success",
+          title: "",
+        })
+      );
     } else {
       yield put(actionConfirmScheduleFailed());
+      yield put(
+        addToast({
+          text: "Xác nhận thất bại",
+          type: "danger",
+          title: "",
+        })
+      );
     }
   } catch (error) {
     yield put(actionConfirmScheduleFailed(error.response.data.error));
+
+    yield put(
+      addToast({
+        text: "Xảy ra lỗi",
+        type: "danger",
+        title: "",
+      })
+    );
   }
 }
 
@@ -106,7 +157,7 @@ function* callApiDestroySchedule({ payload, note }) {
         note,
       }
     );
-    if (response.status === 200) {
+    if (response.status === 200 && response.data.status) {
       yield put(
         actionDestroyScheduleSuccess({
           ...payload,
@@ -114,11 +165,32 @@ function* callApiDestroySchedule({ payload, note }) {
           note,
         })
       );
+      yield put(
+        addToast({
+          text: "Xác nhận thành công",
+          type: "success",
+          title: "",
+        })
+      );
     } else {
       yield put(actionDestroyScheduleFailed());
+      yield put(
+        addToast({
+          text: "Hủy bỏ thất bại",
+          type: "danger",
+          title: "",
+        })
+      );
     }
   } catch (error) {
     yield put(actionDestroyScheduleFailed(error.response.data.error));
+    yield put(
+      addToast({
+        text: "Xảy ra lỗi",
+        type: "danger",
+        title: "",
+      })
+    );
   }
 }
 

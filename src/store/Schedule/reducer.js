@@ -68,19 +68,31 @@ const scheduleReducer = (state = initialState, action) => {
       case ActionTypes.CONFIRM_REMINDERCARE_SUCCESS:
         draft.detailStatus.isLoading = false;
         draft.detailStatus.isSuccess = true;
-        draft.detail = state.detail.map((item) =>
-          item.id === action.payload.idbookingdetail
-            ? {
-                ...item,
-                dataSchedule: item.dataSchedule.map((element) =>
-                  element.id === action.payload.id ? action.payload : element
-                ),
-              }
-            : item
+        draft.list = state.list.map((item) =>
+          item.id === action.payload.id ? { ...item, ...action.payload } : item
         );
         break;
 
       case ActionTypes.CONFIRM_REMINDERCARE_FAILED:
+        draft.detailStatus.isLoading = false;
+        draft.detailStatus.isFailure = true;
+        break;
+
+      case ActionTypes.CONFIRM_REMINDERCARE_DETAIL:
+        draft.detailStatus.isLoading = true;
+        draft.detailStatus.isSuccess = false;
+        draft.detailStatus.isFailure = false;
+        break;
+
+      case ActionTypes.CONFIRM_REMINDERCARE_DETAIL_SUCCESS:
+        draft.detailStatus.isLoading = false;
+        draft.detailStatus.isSuccess = true;
+        draft.list = state.list.map((item) =>
+          item.id === action.payload.id ? { ...item, ...action.payload } : item
+        );
+        break;
+
+      case ActionTypes.CONFIRM_REMINDERCARE_DETAIL_FAILED:
         draft.detailStatus.isLoading = false;
         draft.detailStatus.isFailure = true;
         break;

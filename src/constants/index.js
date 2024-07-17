@@ -1,7 +1,7 @@
 export const pageSize = 20;
 
 export const STATUS_LABEL = {
-  IN_PROCCESS: { bg: "secondary", name: "Chưa duyệt" },
+  IN_PROCCESS: { bg: "secondary", name: "Đang xử lý" },
   CONFIRMED: { bg: "success", name: "Đã duyệt" },
   DESTROYED: { bg: "danger", name: "Đã hủy" },
   SUCCESS: { bg: "success", name: "Thành công" },
@@ -14,7 +14,7 @@ export const TYPE_LABEL = {
 
 export const STATUS = [
   { id: null, name: "Tất cả" },
-  { id: "IN_PROCCESS", name: "Chưa duyệt" },
+  { id: "IN_PROCCESS", name: "Đang xử lý" },
   { id: "CONFIRMED", name: "Đã duyệt" },
   { id: "DESTROYED", name: "Đã hủy" },
 ];

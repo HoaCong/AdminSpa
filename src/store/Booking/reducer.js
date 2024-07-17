@@ -147,6 +147,7 @@ const bookingReducer = (state = initialState, action) => {
           item.id === action.payload.idbookingdetail
             ? {
                 ...item,
+                status: "DESTROYED",
                 dataSchedule: item.dataSchedule.map((element) =>
                   element.status === "IN_PROCCESS"
                     ? {

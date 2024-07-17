@@ -2,28 +2,28 @@
 import ModalBlock from "components/common/Modal";
 import { useEffect, useState } from "react";
 import { FloatingLabel, Form } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import { actionConfirmReminderCare } from "store/Schedule/action";
+import { useSelector } from "react-redux";
 
-function FormConfirm({ data: { type, visible, info }, onClear }) {
+function FormConfirm({
+  data: { type, visible, info },
+  onClear,
+  onConfirm,
+  onDestroy,
+}) {
   const {
     detailStatus: { isLoading, isSuccess },
   } = useSelector((state) => state.scheduleReducer);
-  const dispatch = useDispatch();
-  const onConfirmReminderCare = (body, note) =>
-    dispatch(actionConfirmReminderCare(body, note));
-  // const onDestroyReminderCare = (body, note) =>
-  // dispatch(actionDestroyReminderCare(body, note));
+
   const [note, setNote] = useState("");
 
   const handleClose = () => {
     onClear();
+    setNote("");
   };
 
   useEffect(() => {
     if (isSuccess) {
-      onClear();
-      setNote("");
+      handleClose();
     }
   }, [isSuccess]);
 
@@ -33,8 +33,8 @@ function FormConfirm({ data: { type, visible, info }, onClear }) {
   };
 
   const handleSave = () => {
-    if (type === "confirm") onConfirmReminderCare(info, note);
-    // if (type === "destroy") onDestroyReminderCare(info, note);
+    if (type === "confirm") onConfirm(note);
+    if (type === "destroy") onDestroy(note);
   };
 
   return (

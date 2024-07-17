@@ -32,11 +32,12 @@ export const ENDPOINT = {
   DETAIL_BOOKING: "/api/bookingdetail/",
   CONFIRM_BOOKING: "/api/booking/generate",
   DESTROY_BOOKING: "/api/booking/destroy",
-  CONFIRM_SCHEDULE: "/api/schedule/reminder/",
   DESTROY_SCHEDULE: "/api/bookingdetail/destroyservice/",
   // ======/api/schedule======
   LIST_SCHEDULE: "/api/schedule/",
+  CONFIRM_SCHEDULE: "/api/schedule/reminder/",
   REMINDER_CARE_SCHEDULE: "/api/schedule/remindercare/",
+  CONFIRM_REMINDER_CARE_SCHEDULE: "/api/schedule/remindercare/confirm/", //:idReminder
   // =========/api/setting===========
   GET_SETTING: "/api/setting",
   UPDATE_SETTING: "/api/setting",

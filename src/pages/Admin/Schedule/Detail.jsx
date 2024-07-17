@@ -10,7 +10,10 @@ import { useEffect, useState } from "react";
 import { Badge, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { actionDetail } from "store/Schedule/action";
+import {
+  actionConfirmReminderCareDetail,
+  actionDetail,
+} from "store/Schedule/action";
 import FormConfirm from "./FormConfirm";
 
 function ScheduleDetail(props) {
@@ -26,6 +29,8 @@ function ScheduleDetail(props) {
 
   const dispatch = useDispatch();
   const onGetDetailBooking = (id) => dispatch(actionDetail(id));
+  const onConfirmReminderCareDetail = (body, note) =>
+    dispatch(actionConfirmReminderCareDetail(body, note));
 
   const [modalData, setModalData] = useState({
     info: {},
@@ -39,11 +44,11 @@ function ScheduleDetail(props) {
   return (
     <div className="mb-5">
       <TemplateContent
-        title="Chi tiết chăm sóc lịch hẹn"
+        title="Chi tiết chăm sóc khách hàng"
         showNew
         labelNew="Quay lại"
         btnProps={{
-          onClick: () => navigate(ROUTES.ADMIN_BOOKING),
+          onClick: () => navigate(ROUTES.ADMIN_SCHEDULE),
           variant: "outline-primary",
         }}
         cardProps={{ className: "col-12" }}
@@ -135,91 +140,95 @@ function ScheduleDetail(props) {
                       {_size(detail) && (
                         <tr>
                           <td colSpan="9" className="p-0">
-                            <table className="table table-hover table-striped mb-0">
-                              <thead>
-                                <tr>
-                                  <th scope="col" className="align-middle">
-                                    #
-                                  </th>
-                                  <th scope="col" className="align-middle">
-                                    Thời gian
-                                  </th>
-                                  <th scope="col" className="align-middle">
-                                    Trạng thái
-                                  </th>
-                                  <th scope="col" className="align-middle">
-                                    Ghi chú
-                                  </th>
-                                  <th scope="col" className="align-middle">
-                                    Hành động
-                                  </th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {_map(detail, (ele, index) => (
-                                  <tr key={ele.updatedAt + index}>
-                                    <td className="align-middle">
-                                      Sau buổi {ele.session}
-                                    </td>
-                                    <td className="align-middle">
-                                      {`${ele.timedate} ${ele.timehour || ""}`}
-                                    </td>
-                                    <td className="align-middle">
-                                      <Badge
-                                        className="py-2 px-3"
-                                        pill
-                                        bg={STATUS_LABEL[ele.status].bg}
-                                      >
-                                        {STATUS_LABEL[ele.status].name}
-                                      </Badge>
-                                    </td>
-                                    <td className="align-middle">
-                                      {ele.note || "_"}
-                                    </td>
-                                    <td className="align-middle">
-                                      {ele.status === "IN_PROCCESS" && (
-                                        <div className="d-flex gap-2">
-                                          <button
-                                            className="btn btn-outline-success rounded-circle d-flex justify-content-center align-items-center"
-                                            style={{
-                                              width: 30,
-                                              height: 30,
-                                            }}
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              setModalData({
-                                                info: ele,
-                                                visible: true,
-                                                type: "confirm",
-                                              });
-                                            }}
-                                          >
-                                            <i className="far fa-check-circle"></i>
-                                          </button>
-                                          {/* <button
-                                            className="btn btn-outline-danger rounded-circle d-flex justify-content-center align-items-center"
-                                            style={{
-                                              width: 30,
-                                              height: 30,
-                                            }}
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              setModalData({
-                                                info: ele,
-                                                visible: true,
-                                                type: "destroy",
-                                              });
-                                            }}
-                                          >
-                                            <i className="far fa-times-circle"></i>
-                                          </button> */}
-                                        </div>
-                                      )}
-                                    </td>
+                            <div>
+                              <table className="table table-hover table-striped mb-0">
+                                <thead>
+                                  <tr>
+                                    <th scope="col" className="align-middle">
+                                      #
+                                    </th>
+                                    <th scope="col" className="align-middle">
+                                      Thời gian
+                                    </th>
+                                    <th scope="col" className="align-middle">
+                                      Trạng thái
+                                    </th>
+                                    <th scope="col" className="align-middle">
+                                      Ghi chú
+                                    </th>
+                                    <th scope="col" className="align-middle">
+                                      Hành động
+                                    </th>
                                   </tr>
-                                ))}
-                              </tbody>
-                            </table>
+                                </thead>
+                                <tbody>
+                                  {_map(detail, (ele, index) => (
+                                    <tr key={ele.updatedAt + index}>
+                                      <td className="align-middle">
+                                        Sau buổi {ele.session}
+                                      </td>
+                                      <td className="align-middle">
+                                        {`${ele.timedate} ${
+                                          ele.timehour || ""
+                                        }`}
+                                      </td>
+                                      <td className="align-middle">
+                                        <Badge
+                                          className="py-2 px-3"
+                                          pill
+                                          bg={STATUS_LABEL[ele.status].bg}
+                                        >
+                                          {STATUS_LABEL[ele.status].name}
+                                        </Badge>
+                                      </td>
+                                      <td className="align-middle">
+                                        {ele.note || "_"}
+                                      </td>
+                                      <td className="align-middle">
+                                        {ele.status === "IN_PROCCESS" && (
+                                          <div className="d-flex gap-2">
+                                            <button
+                                              className="btn btn-outline-success rounded-circle d-flex justify-content-center align-items-center"
+                                              style={{
+                                                width: 30,
+                                                height: 30,
+                                              }}
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                setModalData({
+                                                  info: ele,
+                                                  visible: true,
+                                                  type: "confirm",
+                                                });
+                                              }}
+                                            >
+                                              <i className="far fa-check-circle"></i>
+                                            </button>
+                                            {/* <button
+                                              className="btn btn-outline-danger rounded-circle d-flex justify-content-center align-items-center"
+                                              style={{
+                                                width: 30,
+                                                height: 30,
+                                              }}
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                setModalData({
+                                                  info: ele,
+                                                  visible: true,
+                                                  type: "destroy",
+                                                });
+                                              }}
+                                            >
+                                              <i className="far fa-times-circle"></i>
+                                            </button> */}
+                                          </div>
+                                        )}
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
                           </td>
                         </tr>
                       )}
@@ -252,6 +261,7 @@ function ScheduleDetail(props) {
       <FormConfirm
         data={modalData}
         onClear={() => setModalData({ info: {}, visible: false, type: "" })}
+        onConfirm={(note) => onConfirmReminderCareDetail(modalData.info, note)}
       />
     </div>
   );

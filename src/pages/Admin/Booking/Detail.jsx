@@ -80,6 +80,9 @@ function BookingDetail(props) {
                     <th scope="col" className="align-middle">
                       Trạng thái
                     </th>
+                    <th scope="col" className="align-middle">
+                      Hành động
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -147,6 +150,27 @@ function BookingDetail(props) {
                               >
                                 {STATUS_LABEL[item.status].name}
                               </Badge>
+                            </td>
+                            <td className="align-middle">
+                              {item.status === "IN_PROCCESS" && (
+                                <button
+                                  className="btn btn-outline-danger rounded-circle d-flex justify-content-center align-items-center"
+                                  style={{
+                                    width: 30,
+                                    height: 30,
+                                  }}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setModalData({
+                                      info: item.dataSchedule[0],
+                                      visible: true,
+                                      type: "destroy",
+                                    });
+                                  }}
+                                >
+                                  <i className="far fa-times-circle"></i>
+                                </button>
+                              )}
                             </td>
                           </tr>
                           <tr>

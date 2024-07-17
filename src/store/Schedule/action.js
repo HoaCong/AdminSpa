@@ -46,6 +46,22 @@ export const actionConfirmReminderCareFailed = (error) => ({
   error,
 });
 
+export const actionConfirmReminderCareDetail = (payload, note) => ({
+  type: ActionTypes.CONFIRM_REMINDERCARE_DETAIL,
+  payload,
+  note,
+});
+
+export const actionConfirmReminderCareDetailSuccess = (payload) => ({
+  type: ActionTypes.CONFIRM_REMINDERCARE_DETAIL_SUCCESS,
+  payload,
+});
+
+export const actionConfirmReminderCareDetailFailed = (error) => ({
+  type: ActionTypes.CONFIRM_REMINDERCARE_DETAIL_FAILED,
+  error,
+});
+
 export const resetData = () => ({
   type: ActionTypes.RESET_DATA,
 });

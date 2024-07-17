@@ -8,7 +8,12 @@ import { Fragment, useEffect, useState } from "react";
 import { Badge, Collapse, Spinner, Tab, Tabs } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { actionGetList, resetData } from "store/Schedule/action";
+import {
+  actionConfirmReminderCare,
+  actionGetList,
+  resetData,
+} from "store/Schedule/action";
+import FormConfirm from "./FormConfirm";
 
 function Schedule(props) {
   const {
@@ -18,6 +23,9 @@ function Schedule(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const onGetListBooking = (tab) => dispatch(actionGetList(tab));
+  const onConfirmReminderCare = (body, note) =>
+    dispatch(actionConfirmReminderCare(body, note));
+
   const onResetData = () => dispatch(resetData());
   const [expandedRows, setExpandedRows] = useState(-1);
 
@@ -46,6 +54,12 @@ function Schedule(props) {
   const handleDetailSchedule = (id) => {
     navigate(parserRouter(ROUTES.ADMIN_SCHEDULE_DETAIL, id));
   };
+
+  const [modalData, setModalData] = useState({
+    info: {},
+    visible: false,
+    type: "",
+  });
 
   const ContentTab = (
     <table className="table table-hover">
@@ -114,7 +128,9 @@ function Schedule(props) {
                     </div>
                   </th>
                   <th scope="row" className="align-middle">
-                    {index + 1}
+                    {item.sessionreminder
+                      ? `Buổi ${item.sessionreminder}`
+                      : index + 1}
                   </th>
                   <td className="align-middle">
                     {item.customer.fullName || "_"}
@@ -135,16 +151,36 @@ function Schedule(props) {
                   </td>
                   <td className="align-middle">{item.note || "_"}</td>
                   <td className="align-middle">
-                    <button
-                      className="btn btn-outline-primary rounded-circle d-flex justify-content-center align-items-center"
-                      style={{ width: 30, height: 30 }}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDetailSchedule(item.idbookingdetail);
-                      }}
-                    >
-                      <i className="far fa-eye"></i>
-                    </button>
+                    {currentTab === "remindercare" && (
+                      <div className="d-flex gap-2">
+                        <button
+                          className="btn btn-outline-primary rounded-circle d-flex justify-content-center align-items-center"
+                          style={{ width: 30, height: 30 }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDetailSchedule(item.idbookingdetail);
+                          }}
+                        >
+                          <i className="far fa-eye"></i>
+                        </button>
+                        {item.status === "IN_PROCCESS" && (
+                          <button
+                            className="btn btn-outline-success rounded-circle d-flex justify-content-center align-items-center"
+                            style={{ width: 30, height: 30 }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setModalData({
+                                info: item,
+                                visible: true,
+                                type: "confirm",
+                              });
+                            }}
+                          >
+                            <i className="far fa-check-circle"></i>
+                          </button>
+                        )}
+                      </div>
+                    )}
                   </td>
                 </tr>
                 <tr>
@@ -219,10 +255,15 @@ function Schedule(props) {
         >
           <Tab eventKey="today" title="Hôm nay"></Tab>
           <Tab eventKey="reminder" title="Ngày tái hẹn"></Tab>
-          <Tab eventKey="remindercare" title="Ngày nhắc hẹn"></Tab>
+          <Tab eventKey="remindercare" title="Chăm sóc khách hàng"></Tab>
         </Tabs>
         {ContentTab}
       </TemplateContent>
+      <FormConfirm
+        data={modalData}
+        onClear={() => setModalData({ info: {}, visible: false, type: "" })}
+        onConfirm={(note) => onConfirmReminderCare(modalData.info, note)}
+      />
     </div>
   );
 }

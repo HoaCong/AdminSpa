@@ -1,7 +1,10 @@
 import { ENDPOINT } from "constants/routerApi";
-import { get, post } from "helper/ajax";
+import { get, post, put as puts } from "helper/ajax";
 import { all, call, put, takeLatest, takeLeading } from "redux-saga/effects";
+import { addToast } from "store/Toast/action";
 import {
+  actionConfirmReminderCareDetailFailed,
+  actionConfirmReminderCareDetailSuccess,
   actionConfirmReminderCareFailed,
   actionConfirmReminderCareSuccess,
   actionDetailFailed,
@@ -39,25 +42,92 @@ function* callApiDetail({ id }) {
 function* callApiConfirmReminderCare({ payload, note }) {
   try {
     const response = yield call(
-      post,
-      `${ENDPOINT.CONFIRM_SCHEDULE + payload.idschedule}/${payload.serviceid}`,
+      puts,
+      ENDPOINT.CONFIRM_REMINDER_CARE_SCHEDULE + payload.id,
       {
         note,
       }
     );
-    if (response.status === 200) {
+    if (response.status === 200 && response.data.status) {
       yield put(
         actionConfirmReminderCareSuccess({
-          ...payload,
+          id: payload.id,
           status: response.data.message,
           note,
         })
       );
+      yield put(
+        addToast({
+          text: "Xác nhận thành công",
+          type: "success",
+          title: "",
+        })
+      );
     } else {
       yield put(actionConfirmReminderCareFailed());
+      yield put(
+        addToast({
+          text: response.data.message,
+          type: "danger",
+          title: "",
+        })
+      );
     }
   } catch (error) {
     yield put(actionConfirmReminderCareFailed(error.response.data.error));
+    yield put(
+      addToast({
+        text: "Đã xảy ra lỗi",
+        type: "danger",
+        title: "",
+      })
+    );
+  }
+}
+
+function* callApiConfirmReminderCareDetail({ payload, note }) {
+  try {
+    const response = yield call(
+      puts,
+      ENDPOINT.CONFIRM_REMINDER_CARE_SCHEDULE + payload.id,
+      {
+        note,
+      }
+    );
+    if (response.status === 200 && response.data.status) {
+      yield put(
+        actionConfirmReminderCareDetailSuccess({
+          id: payload.id,
+          status: response.data.message,
+          note,
+        })
+      );
+      yield put(
+        addToast({
+          text: "Xác nhận thành công",
+          type: "success",
+          title: "",
+        })
+      );
+    } else {
+      yield put(actionConfirmReminderCareDetailFailed());
+      yield put(
+        addToast({
+          text: response.data.message,
+          type: "danger",
+          title: "",
+        })
+      );
+    }
+  } catch (error) {
+    yield put(actionConfirmReminderCareDetailFailed(error.response.data.error));
+    yield put(
+      addToast({
+        text: "Đã xảy ra lỗi",
+        type: "danger",
+        title: "",
+      })
+    );
   }
 }
 
@@ -68,6 +138,10 @@ export default function* scheduleSaga() {
     yield takeLatest(
       ActionTypes.CONFIRM_REMINDERCARE,
       callApiConfirmReminderCare
+    ),
+    yield takeLatest(
+      ActionTypes.CONFIRM_REMINDERCARE_DETAIL,
+      callApiConfirmReminderCareDetail
     ),
   ]);
 }
