@@ -123,7 +123,6 @@ function Customer(props) {
               <th scope="col" className="align-middle">
                 Tên khách hàng
               </th>
-
               <th scope="col" className="align-middle">
                 Email
               </th>
@@ -131,9 +130,8 @@ function Customer(props) {
                 Số điện thoại
               </th>
               <th scope="col" className="align-middle">
-                Mật khẩu
+                Địa chỉ
               </th>
-
               <th scope="col" className="align-middle">
                 Trạng thái
               </th>
@@ -173,7 +171,7 @@ function Customer(props) {
                 <td className="align-middle">{item.fullname || "_"}</td>
                 <td className="align-middle">{item.email || "_"}</td>
                 <td className="align-middle">{item.phone}</td>
-                <td className="align-middle">******</td>
+                <td className="align-middle">{item.address || ""}</td>
                 <td className="align-middle">
                   <ToggleSwitch
                     status={item.active}

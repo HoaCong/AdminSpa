@@ -104,11 +104,14 @@ function FormCustomer({ data: { type, visible, info }, onClear }) {
       onSave={handleSubmit}
       hideSave={type === "detail"}
       loading={isLoading}
+      propsModal={{
+        size: "lg",
+      }}
     >
-      <form>
-        <div>
+      <form className="row">
+        <div className="col-6">
           <Form.Label htmlFor="Customername">
-            Tên tài khoản <span className="required">*</span>
+            Tên khách hàng <span className="required">*</span>
           </Form.Label>
           <Form.Control
             type="text"
@@ -129,7 +132,7 @@ function FormCustomer({ data: { type, visible, info }, onClear }) {
             </Form.Text>
           )}
         </div>
-        <div className="mt-3">
+        <div className="col-6">
           <Form.Label htmlFor="Name">
             Email <span className="required">*</span>
           </Form.Label>
@@ -153,7 +156,7 @@ function FormCustomer({ data: { type, visible, info }, onClear }) {
           )}
         </div>
 
-        <div className="mt-3">
+        <div className="col-6 mt-3">
           <Form.Label htmlFor="Name">
             Số điện thoại <span className="required">*</span>
           </Form.Label>
@@ -177,8 +180,31 @@ function FormCustomer({ data: { type, visible, info }, onClear }) {
             </Form.Text>
           )}
         </div>
+        <div className="col-6 mt-3">
+          <Form.Label htmlFor="Name">
+            Địa chỉ <span className="required">*</span>
+          </Form.Label>
+          <Form.Control
+            type="text"
+            id="Address"
+            name="address"
+            defaultValue={data.address}
+            aria-describedby="helperAddress"
+            disabled={type === "detail"}
+            onChange={handleChange}
+          />
+          {error.address && (
+            <Form.Text
+              id="helperAddress"
+              danger="true"
+              bsPrefix="d-inline-block text-danger lh-1"
+            >
+              {error.address}
+            </Form.Text>
+          )}
+        </div>
 
-        <div className="mt-3">
+        <div className="col-6 mt-3">
           <Form.Label htmlFor="Codepin">
             Mã pin <span className="required">*</span>
           </Form.Label>
@@ -203,10 +229,8 @@ function FormCustomer({ data: { type, visible, info }, onClear }) {
           )}
         </div>
 
-        <div className="mt-3">
-          <Form.Label htmlFor="Image">
-            Hình ảnh <span className="required">*</span>
-          </Form.Label>
+        <div className="col-6 mt-3">
+          <Form.Label htmlFor="Image">Hình ảnh</Form.Label>
           <UploadImage
             image={data.image || ""}
             callback={(url) =>
