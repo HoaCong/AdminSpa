@@ -29,6 +29,8 @@ export const ENDPOINT = {
   UPDATE_DETAIL_CUSTOMER: "/api/customer/detail/",
   // ======/api/booking======
   LIST_BOOKING: "/api/booking/search",
+  ADD_BOOKING: "/api/booking/create",
+  EDIT_BOOKING: "/api/booking/",
   DETAIL_BOOKING: "/api/bookingdetail/",
   CONFIRM_BOOKING: "/api/booking/generate",
   DESTROY_BOOKING: "/api/booking/destroy",

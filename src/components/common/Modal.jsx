@@ -16,7 +16,7 @@ function ModalBlock(props) {
 
   return (
     <Modal show={show} onHide={onClose} centered {...propsModal}>
-      <Modal.Header closeButton>
+      <Modal.Header closeButton className="py-2">
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
       <Modal.Body>{children}</Modal.Body>

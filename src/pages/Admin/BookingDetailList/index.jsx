@@ -315,6 +315,12 @@ function BookingDetailList(props) {
                                 #
                               </th>
                               <th scope="col" className="align-middle">
+                                Khách hàng
+                              </th>
+                              <th scope="col" className="align-middle">
+                                Số điện thoại
+                              </th>
+                              <th scope="col" className="align-middle">
                                 Thời gian
                               </th>
                               <th scope="col" className="align-middle">
@@ -333,6 +339,12 @@ function BookingDetailList(props) {
                               <tr key={ele.updatedAt + index}>
                                 <td className="align-middle">
                                   Buổi {ele.session}
+                                </td>
+                                <td className="align-middle">
+                                  {item.customer.name || "_"}
+                                </td>
+                                <td className="align-middle">
+                                  {item.customer.phone}
                                 </td>
                                 <td className="align-middle">
                                   {`${ele.timedate} ${ele.timehour}`}

@@ -9,6 +9,8 @@ import {
 } from "store/BookingDetailList/action";
 import { addToast } from "store/Toast/action";
 import {
+  actionAddFailed,
+  actionAddSuccess,
   actionConfirmFailed,
   actionConfirmScheduleFailed,
   actionConfirmScheduleSuccess,
@@ -19,6 +21,8 @@ import {
   actionDestroySuccess,
   actionDetailFailed,
   actionDetailSuccess,
+  actionEditFailed,
+  actionEditSuccess,
   actionGetListFailed,
   actionGetListSuccess,
 } from "./action";
@@ -217,6 +221,81 @@ function* callApiDestroySchedule({ payload, note }) {
   }
 }
 
+function* callApiAdd({ params }) {
+  try {
+    const response = yield call(post, ENDPOINT.ADD_BOOKING, params);
+    if (response.status === 200) {
+      yield put(actionAddSuccess(response.data.data));
+      yield put(
+        addToast({
+          text: response.data.message,
+          type: "success",
+          title: "",
+        })
+      );
+    } else {
+      yield put(actionAddFailed());
+      yield put(
+        addToast({
+          text: "Thêm mới lịch đặt thất bại",
+          type: "danger",
+          title: "",
+        })
+      );
+    }
+  } catch (error) {
+    yield put(actionAddFailed(error.response.data.error));
+    yield put(
+      addToast({
+        text: "Thêm mới lịch đặt thất bại",
+        type: "danger",
+        title: "",
+      })
+    );
+  }
+}
+function* callApiEdit({ params }) {
+  try {
+    const { id, services, note, status, timedate, timehour } = params;
+    const response = yield call(puts, ENDPOINT.EDIT_BOOKING + id, {
+      services,
+      note,
+      status,
+      timedate,
+      timehour,
+    });
+
+    if (response.status === 200) {
+      yield put(actionEditSuccess(response.data.data));
+      yield put(
+        addToast({
+          text: response.data.message,
+          type: "success",
+          title: "",
+        })
+      );
+    } else {
+      yield put(actionEditFailed());
+      yield put(
+        addToast({
+          text: "Cập nhật lịch đặt thất bại",
+          type: "danger",
+          title: "",
+        })
+      );
+    }
+  } catch (error) {
+    yield put(actionEditFailed(error.response.data.error));
+    yield put(
+      addToast({
+        text: "Cập nhật lịch đặt thất bại",
+        type: "danger",
+        title: "",
+      })
+    );
+  }
+}
+
 export default function* bookingSaga() {
   yield all([
     yield takeLeading(ActionTypes.LIST, callApiList),
@@ -225,5 +304,7 @@ export default function* bookingSaga() {
     yield takeLatest(ActionTypes.DESTROY, callApiDestroy),
     yield takeLatest(ActionTypes.CONFIRM_SCHEDULE, callApiConfirmSchedule),
     yield takeLatest(ActionTypes.DESTROY_SCHEDULE, callApiDestroySchedule),
+    yield takeLatest(ActionTypes.ADD, callApiAdd),
+    yield takeLatest(ActionTypes.EDIT, callApiEdit),
   ]);
 }

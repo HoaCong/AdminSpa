@@ -22,6 +22,7 @@ import {
   actionGetList,
   resetData,
 } from "store/Booking/action";
+import FormBooking from "./FormBooking";
 const initialData = { query: "", timedate: "", timehour: "", status: 0 };
 function Booking(props) {
   const {
@@ -48,6 +49,11 @@ function Booking(props) {
     visible: false,
     info: null,
     type: null,
+  });
+  const [detail, setDetail] = useState({
+    info: {},
+    visible: false,
+    type: "",
   });
 
   useEffect(() => {
@@ -117,6 +123,11 @@ function Booking(props) {
     <div className="mb-5">
       <TemplateContent
         title="Danh sách đặt lịch"
+        showNew
+        btnProps={{
+          onClick: () =>
+            setDetail((prev) => ({ ...prev, visible: true, type: "create" })),
+        }}
         filter={
           <div>
             <div className="row">
@@ -285,16 +296,33 @@ function Booking(props) {
                   <td className="align-middle">{item.note || "_"}</td>
                   <td className="align-middle">
                     {item.status === "CONFIRMED" && (
-                      <button
-                        className="btn btn-outline-primary rounded-circle d-flex justify-content-center align-items-center"
-                        style={{ width: 30, height: 30 }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDetailBooking(item.id);
-                        }}
-                      >
-                        <i className="far fa-eye"></i>
-                      </button>
+                      <div className="d-flex gap-2">
+                        <button
+                          className="btn btn-outline-primary rounded-circle d-flex justify-content-center align-items-center"
+                          style={{ width: 30, height: 30 }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDetailBooking(item.id);
+                          }}
+                        >
+                          <i className="far fa-eye"></i>
+                        </button>
+                        <button
+                          className="btn btn-outline-warning rounded-circle d-flex justify-content-center align-items-center"
+                          style={{ width: 30, height: 30 }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setDetail((prev) => ({
+                              ...prev,
+                              info: item,
+                              visible: true,
+                              type: "edit",
+                            }));
+                          }}
+                        >
+                          <i className="fas fa-pencil-alt"></i>
+                        </button>
+                      </div>
                     )}
                     {item.status === "IN_PROCCESS" && (
                       <div className="d-flex gap-2">
@@ -430,6 +458,10 @@ function Booking(props) {
         loading={actionLoading}
         onClose={onCloseTooltip}
         onDelete={() => handleAction(tooltip.info.id, tooltip.type)}
+      />
+      <FormBooking
+        data={detail}
+        onClear={() => setDetail({ info: {}, visible: false, type: "" })}
       />
     </div>
   );

@@ -25,10 +25,25 @@ function ToastComponent() {
             onSetToast(newToasts);
           }}
         >
-          <Toast.Header>
-            <small className="ms-auto">{toast.title ? toast.title : ""}</small>
-          </Toast.Header>
-          <Toast.Body className="text-white">{toast.text}</Toast.Body>
+          {toast.title && (
+            <Toast.Header className="d-flex justify-content-between">
+              <strong>{toast.title}</strong>
+            </Toast.Header>
+          )}
+          <Toast.Body className="text-white d-flex align-items-center">
+            <span>{toast.text}</span>
+            {!toast.title && (
+              <i
+                className="fas fa-times ms-auto"
+                onClick={() => {
+                  const newToasts = toasts.filter(
+                    (item) => item.key !== toast.key
+                  );
+                  onSetToast(newToasts);
+                }}
+              ></i>
+            )}
+          </Toast.Body>
         </Toast>
       ))}
     </ToastContainer>

@@ -218,7 +218,6 @@ function Customer(props) {
         data={detail}
         onClear={() => setDetail({ info: {}, visible: false, type: "" })}
       />
-
       <CustomTooltip
         content={`Bạn có chắc muốn ${
           tooltip.info?.active ? "hủy " : ""
