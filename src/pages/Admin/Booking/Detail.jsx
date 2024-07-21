@@ -43,6 +43,14 @@ function BookingDetail(props) {
       return index;
     });
   };
+
+  const getIndexActive = (list) => {
+    return Math.min(
+      ...list.map((item) =>
+        item.status === "IN_PROCCESS" ? item.session : 1000000000000000
+      )
+    );
+  };
   return (
     <div className="mb-5">
       <TemplateContent
@@ -234,7 +242,10 @@ function BookingDetail(props) {
                                             {ele.note || "_"}
                                           </td>
                                           <td className="align-middle">
-                                            {ele.status === "IN_PROCCESS" && (
+                                            {ele.session ===
+                                              getIndexActive(
+                                                item.dataSchedule
+                                              ) && (
                                               <div className="d-flex gap-2">
                                                 <button
                                                   className="btn btn-outline-success rounded-circle d-flex justify-content-center align-items-center"

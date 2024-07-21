@@ -313,33 +313,16 @@ function Booking(props) {
                   <td className="align-middle">{item.note || "_"}</td>
                   <td className="align-middle">
                     {item.status === "CONFIRMED" && (
-                      <div className="d-flex gap-2">
-                        <button
-                          className="btn btn-outline-primary rounded-circle d-flex justify-content-center align-items-center"
-                          style={{ width: 30, height: 30 }}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDetailBooking(item.id);
-                          }}
-                        >
-                          <i className="far fa-eye"></i>
-                        </button>
-                        <button
-                          className="btn btn-outline-warning rounded-circle d-flex justify-content-center align-items-center"
-                          style={{ width: 30, height: 30 }}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setDetail((prev) => ({
-                              ...prev,
-                              info: item,
-                              visible: true,
-                              type: "edit",
-                            }));
-                          }}
-                        >
-                          <i className="fas fa-pencil-alt"></i>
-                        </button>
-                      </div>
+                      <button
+                        className="btn btn-outline-primary rounded-circle d-flex justify-content-center align-items-center"
+                        style={{ width: 30, height: 30 }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDetailBooking(item.id);
+                        }}
+                      >
+                        <i className="far fa-eye"></i>
+                      </button>
                     )}
                     {item.status === "IN_PROCCESS" && (
                       <div className="d-flex gap-2">
@@ -382,6 +365,21 @@ function Booking(props) {
                           }}
                         >
                           <i className="far fa-times-circle"></i>
+                        </button>
+                        <button
+                          className="btn btn-outline-warning rounded-circle d-flex justify-content-center align-items-center"
+                          style={{ width: 30, height: 30 }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setDetail((prev) => ({
+                              ...prev,
+                              info: item,
+                              visible: true,
+                              type: "edit",
+                            }));
+                          }}
+                        >
+                          <i className="fas fa-pencil-alt"></i>
                         </button>
                       </div>
                     )}

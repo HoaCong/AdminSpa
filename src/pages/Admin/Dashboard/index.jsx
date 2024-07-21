@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { actionDashboard } from "store/Dashboard/action";
 export default function Dashboard() {
   const {
-    dashboardStatus: { isLoading, isSuccess },
+    dashboardStatus: { isLoading },
     dashboard: { overview, statisticStatus, listService },
   } = useSelector((state) => state.dashboardReducer);
 
