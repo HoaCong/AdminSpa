@@ -93,20 +93,20 @@ const customerReducer = (state = initialState, action) => {
         break;
 
       case ActionTypes.DETAIL:
-        draft.listStatus.isLoading = true;
-        draft.listStatus.isSuccess = false;
-        draft.listStatus.isFailure = false;
+        draft.actionStatus.isLoading = true;
+        draft.actionStatus.isSuccess = false;
+        draft.actionStatus.isFailure = false;
         break;
 
       case ActionTypes.DETAIL_SUCCESS:
-        draft.listStatus.isLoading = false;
-        draft.listStatus.isSuccess = true;
+        draft.actionStatus.isLoading = false;
+        draft.actionStatus.isSuccess = true;
         draft.detail = action.payload;
         break;
 
       case ActionTypes.DETAIL_FAILED:
-        draft.listStatus.isLoading = false;
-        draft.listStatus.isFailure = true;
+        draft.actionStatus.isLoading = false;
+        draft.actionStatus.isFailure = true;
         break;
 
       case ActionTypes.UPDATE:

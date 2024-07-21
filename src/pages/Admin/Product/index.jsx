@@ -99,7 +99,7 @@ function Product(props) {
                 onChange={handleChange}
               ></Form.Control>
             </div>
-            <div className="ms-2" style={{ width: "100%", maxWidth: 250 }}>
+            <div style={{ width: "100%", maxWidth: 250 }}>
               <Form.Label htmlFor="category">Danh mục</Form.Label>
               <Form.Select
                 id="category"

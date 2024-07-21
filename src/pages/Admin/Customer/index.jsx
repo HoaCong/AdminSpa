@@ -6,10 +6,13 @@ import LazyLoadImage from "components/common/LazyLoadImage";
 import LinearProgress from "components/common/LinearProgress";
 import ToggleSwitch from "components/common/ToggleSwitch";
 import TemplateContent from "components/layout/TemplateContent";
+import { ROUTES } from "constants/routerWeb";
+import { parserRouter } from "helper/functions";
 import _size from "lodash/size";
 import { useEffect, useState } from "react";
 import { Button, Form, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { actionDelete, actionGetList, resetData } from "store/Customer/action";
 import FormCustomer from "./FormCustomer";
 
@@ -21,7 +24,7 @@ function Customer(props) {
     params,
     meta,
   } = useSelector((state) => state.customerReducer);
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const onGetListCustomer = (body) => dispatch(actionGetList(body));
   const onDeleteCustomer = (body) => dispatch(actionDelete(body));
@@ -190,7 +193,9 @@ function Customer(props) {
                 <td className="align-middle">
                   <ActionTable
                     onDetail={() =>
-                      setDetail({ info: item, visible: true, type: "detail" })
+                      navigate(
+                        parserRouter(ROUTES.ADMIN_CUSTOMER_DETAIL, item.id)
+                      )
                     }
                     onEdit={() =>
                       setDetail({ info: item, visible: true, type: "edit" })

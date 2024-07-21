@@ -9,6 +9,7 @@ export const ROUTES = {
   ADMIN_EMPLOYEE: "/admin/employee",
   ADMIN_PRODUCT: "/admin/product",
   ADMIN_CUSTOMER: "/admin/customer",
+  ADMIN_CUSTOMER_DETAIL: "/admin/customer/:id",
   ADMIN_BOOKING: "/admin/booking",
   ADMIN_SIGNOUT: "/admin/singout",
   ADMIN_SETTING: "/admin/setting",

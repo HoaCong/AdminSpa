@@ -130,7 +130,7 @@ function Booking(props) {
         }}
         filter={
           <div>
-            <div className="row">
+            <div className="row g-2">
               <div className="col-6 col-md-3">
                 <Form.Label htmlFor="search">Tìm kiếm </Form.Label>
                 <Form.Control
@@ -178,7 +178,6 @@ function Booking(props) {
                   </Form.Select>
                 </div>
               </div>
-
               <div className="col-auto">
                 <Form.Label htmlFor="status">Trạng thái</Form.Label>
                 <Form.Select

@@ -91,7 +91,6 @@ function FormCustomer({ data: { type, visible, info }, onClear }) {
   };
 
   const getTitle = {
-    detail: "Thông tin khách hàng",
     edit: "Chỉnh sửa khách hàng",
     create: "Thêm mới khách hàng",
   };
@@ -102,7 +101,6 @@ function FormCustomer({ data: { type, visible, info }, onClear }) {
       show={visible}
       onClose={handleClose}
       onSave={handleSubmit}
-      hideSave={type === "detail"}
       loading={isLoading}
       propsModal={{
         size: "lg",
@@ -119,7 +117,6 @@ function FormCustomer({ data: { type, visible, info }, onClear }) {
             name="fullname"
             defaultValue={data.fullname}
             aria-describedby="helperCustomername"
-            disabled={type === "detail"}
             onChange={handleChange}
           />
           {error.fullname && (
@@ -142,7 +139,6 @@ function FormCustomer({ data: { type, visible, info }, onClear }) {
             name="email"
             defaultValue={data.email}
             aria-describedby="helperEmail"
-            disabled={type === "detail"}
             onChange={handleChange}
           />
           {error.email && (
@@ -167,7 +163,7 @@ function FormCustomer({ data: { type, visible, info }, onClear }) {
             maxLength={11}
             defaultValue={data.phone}
             aria-describedby="helperPhone"
-            disabled={type === "detail" || type === "edit"}
+            disabled={type === "edit"}
             onChange={handleChange}
           />
           {error.phone && (
@@ -190,7 +186,6 @@ function FormCustomer({ data: { type, visible, info }, onClear }) {
             name="address"
             defaultValue={data.address}
             aria-describedby="helperAddress"
-            disabled={type === "detail"}
             onChange={handleChange}
           />
           {error.address && (
@@ -215,7 +210,7 @@ function FormCustomer({ data: { type, visible, info }, onClear }) {
             maxLength={6}
             defaultValue={data.codepin}
             aria-describedby="helperCodepin"
-            disabled={type === "detail" || type === "edit"}
+            disabled={type === "edit"}
             onChange={handleChange}
           />
           {error.codepin && (

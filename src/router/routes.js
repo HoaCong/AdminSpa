@@ -4,6 +4,7 @@ import AdminBooking from "pages/Admin/Booking";
 import AdminBookingDetail from "pages/Admin/Booking/Detail";
 import AdminBookingDetailList from "pages/Admin/BookingDetailList";
 import AdminCustomer from "pages/Admin/Customer";
+import AdminCustomerDetail from "pages/Admin/Customer/Detail";
 import AdminDashboard from "pages/Admin/Dashboard";
 import AdminEmployee from "pages/Admin/Employee";
 import AdminFactory from "pages/Admin/Factory";
@@ -61,6 +62,11 @@ export const managerRoutes = [
         path: ROUTES.ADMIN_CUSTOMER,
         name: "Customer",
         element: <AdminCustomer />,
+      },
+      {
+        path: ROUTES.ADMIN_CUSTOMER_DETAIL,
+        name: "Customer detail",
+        element: <AdminCustomerDetail />,
       },
       {
         path: ROUTES.ADMIN_SETTING,

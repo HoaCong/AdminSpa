@@ -117,7 +117,7 @@ function BookingDetailList(props) {
         title="Danh sách lịch đặt chi tiết"
         filter={
           <div>
-            <div className="row">
+            <div className="row g-2">
               <div className="col-6 col-md-3">
                 <Form.Label htmlFor="search">Tìm kiếm </Form.Label>
                 <Form.Control

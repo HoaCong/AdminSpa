@@ -197,7 +197,7 @@ export default function* customerSaga() {
     yield takeLatest(ActionTypes.ADD, callApiAdd),
     yield takeLatest(ActionTypes.EDIT, callApiEdit),
     yield takeLatest(ActionTypes.DELETE, callApiDelete),
-    yield takeLatest(ActionTypes.DETAIL, callApiDetail),
+    yield takeLeading(ActionTypes.DETAIL, callApiDetail),
     yield takeLatest(ActionTypes.UPDATE, callApơUpdateDetail),
   ]);
 }
