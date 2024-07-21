@@ -7,7 +7,7 @@ import { formatCurrency, parserRouter } from "helper/functions";
 import { Fragment, useEffect, useState } from "react";
 import { Badge, Collapse, Spinner, Tab, Tabs } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   actionConfirmReminderCare,
   actionGetList,
@@ -135,7 +135,17 @@ function Schedule(props) {
                   <td className="align-middle">
                     {item.customer.fullName || "_"}
                   </td>
-                  <td className="align-middle">{item.phone}</td>
+                  <td className="align-middle">
+                    <Link
+                      className="link_router"
+                      to={parserRouter(
+                        ROUTES.ADMIN_CUSTOMER_DETAIL,
+                        item.idcustomer
+                      )}
+                    >
+                      {item.phone}
+                    </Link>
+                  </td>
                   <td className="align-middle">
                     {`${item.timedate} ${item.timehour || ""}`}
                   </td>

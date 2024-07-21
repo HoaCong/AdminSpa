@@ -15,7 +15,7 @@ import { Fragment, useEffect, useState } from "react";
 import { Badge, Button, Collapse, Form, Spinner } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   actionConfirm,
   actionDestroy,
@@ -278,7 +278,17 @@ function Booking(props) {
                   <td className="align-middle">
                     {item.customer.fullName || "_"}
                   </td>
-                  <td className="align-middle">{item.phone}</td>
+                  <td className="align-middle">
+                    <Link
+                      className="link_router"
+                      to={parserRouter(
+                        ROUTES.ADMIN_CUSTOMER_DETAIL,
+                        item.idcustomer
+                      )}
+                    >
+                      {item.phone}
+                    </Link>
+                  </td>
                   <td className="align-middle">
                     {`${item.timedate} ${item.timehour}`}
                   </td>

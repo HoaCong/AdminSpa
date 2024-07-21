@@ -14,7 +14,7 @@ import { Fragment, useEffect, useState } from "react";
 import { Badge, Button, Collapse, Form, Spinner } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { actionGetList, resetData } from "store/BookingDetailList/action";
 import FormConfirm from "../Booking/FormConfirm";
 const initialData = { query: "", timedate: "", timehour: "", status: 0 };
@@ -344,7 +344,15 @@ function BookingDetailList(props) {
                                   {item.customer.name || "_"}
                                 </td>
                                 <td className="align-middle">
-                                  {item.customer.phone}
+                                  <Link
+                                    className="link_router"
+                                    to={parserRouter(
+                                      ROUTES.ADMIN_CUSTOMER_DETAIL,
+                                      item.customer.id
+                                    )}
+                                  >
+                                    {item.customer.phone}
+                                  </Link>
                                 </td>
                                 <td className="align-middle">
                                   {`${ele.timedate} ${ele.timehour}`}

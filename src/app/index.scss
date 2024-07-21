@@ -167,6 +167,11 @@ span.required {
 .custom-picker {
   --bs-tooltip-max-width: unset !important;
 }
+.link_router {
+  &:hover {
+    color: #0d6efd;
+  }
+}
 @media only screen and (max-width: 992px) {
   .hidden-widget {
     display: none;

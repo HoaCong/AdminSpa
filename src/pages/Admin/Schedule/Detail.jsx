@@ -3,13 +3,13 @@ import LazyLoadImage from "components/common/LazyLoadImage";
 import TemplateContent from "components/layout/TemplateContent";
 import { STATUS_LABEL, TYPE_LABEL } from "constants";
 import { ROUTES } from "constants/routerWeb";
-import { formatCurrency } from "helper/functions";
+import { formatCurrency, parserRouter } from "helper/functions";
 import _map from "lodash/map";
 import _size from "lodash/size";
 import { useEffect, useState } from "react";
 import { Badge, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   actionConfirmReminderCareDetail,
   actionDetail,
@@ -249,7 +249,18 @@ function ScheduleDetail(props) {
                 />
                 <div>Tên khách hàng: {customer?.fullname || "_"}</div>
                 <div>Email: {customer?.email || "_"}</div>
-                <div>Số điện thoại: {customer?.phone || "_"}</div>
+                <div>
+                  Số điện thoại:{" "}
+                  <Link
+                    className="link_router"
+                    to={parserRouter(
+                      ROUTES.ADMIN_CUSTOMER_DETAIL,
+                      customer?.id
+                    )}
+                  >
+                    {customer?.phone || "_"}
+                  </Link>
+                </div>
               </div>
               <hr />
               <h5> Địa chỉ chăm sóc</h5>
