@@ -41,3 +41,11 @@ export const formatCurrencyToK = (amount) => {
   const formattedAmount = (amount / 1000).toLocaleString("vi-VN");
   return `${formattedAmount}K`;
 };
+
+export const getIndexActive = (list) => {
+  return Math.min(
+    ...list.map((item) =>
+      item.status === "IN_PROCCESS" ? item.session : 1000000000000000
+    )
+  );
+};

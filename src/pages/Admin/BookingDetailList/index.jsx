@@ -6,7 +6,7 @@ import TemplateContent from "components/layout/TemplateContent";
 import { STATUS_2, STATUS_LABEL, TIME, TYPE_LABEL } from "constants";
 import { ROUTES } from "constants/routerWeb";
 import { format } from "date-fns";
-import { formatCurrency, parserRouter } from "helper/functions";
+import { formatCurrency, getIndexActive, parserRouter } from "helper/functions";
 import _map from "lodash/map";
 import _omit from "lodash/omit";
 import _size from "lodash/size";
@@ -372,7 +372,8 @@ function BookingDetailList(props) {
                                   {ele.note || "_"}
                                 </td>
                                 <td className="align-middle">
-                                  {ele.status === "IN_PROCCESS" && (
+                                  {ele.session ===
+                                    getIndexActive(item.dataSchedule) && (
                                     <div className="d-flex gap-2">
                                       <button
                                         className="btn btn-outline-success rounded-circle d-flex justify-content-center align-items-center"

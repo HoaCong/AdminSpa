@@ -3,7 +3,7 @@ import LazyLoadImage from "components/common/LazyLoadImage";
 import TemplateContent from "components/layout/TemplateContent";
 import { STATUS_LABEL, TYPE_LABEL } from "constants";
 import { ROUTES } from "constants/routerWeb";
-import { formatCurrency, parserRouter } from "helper/functions";
+import { formatCurrency, getIndexActive, parserRouter } from "helper/functions";
 import _map from "lodash/map";
 import _size from "lodash/size";
 import { Fragment, useEffect, useState } from "react";
@@ -44,13 +44,6 @@ function BookingDetail(props) {
     });
   };
 
-  const getIndexActive = (list) => {
-    return Math.min(
-      ...list.map((item) =>
-        item.status === "IN_PROCCESS" ? item.session : 1000000000000000
-      )
-    );
-  };
   return (
     <div className="mb-5">
       <TemplateContent

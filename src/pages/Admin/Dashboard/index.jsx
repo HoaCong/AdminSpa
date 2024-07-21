@@ -32,14 +32,7 @@ export default function Dashboard() {
       count: 27,
       quizz: {
         id: 11,
-        name: "Test 01",
-        image: "https://kubtool.000webhostapp.com/uploads/amazing.jpeg",
-        idtopic: 1,
-        idcategory: 2,
-        groupquestion: "[4,3]",
-        idcreated: 21,
-        createdat: 1702478294,
-        updatedat: 1702478294,
+        name: "T01",
       },
     },
     {
@@ -47,15 +40,7 @@ export default function Dashboard() {
       count: 2,
       quizz: {
         id: 12,
-        name: "Test344",
-        image:
-          "https://kubtool.000webhostapp.com/uploads/green_trees_nature.jpeg",
-        idtopic: 1,
-        idcategory: 3,
-        groupquestion: "[6,14]",
-        idcreated: 21,
-        createdat: 1702478382,
-        updatedat: 1702478382,
+        name: "T02",
       },
     },
     {
@@ -63,15 +48,7 @@ export default function Dashboard() {
       count: 2,
       quizz: {
         id: 15,
-        name: "Test Quiz 123456",
-        image:
-          "https://cdn.britannica.com/36/123536-050-95CB0C6E/Variety-fruits-vegetables.jpg",
-        idtopic: 29,
-        idcategory: 2,
-        groupquestion: "[3,4,5,6]",
-        idcreated: 13,
-        createdat: 1705881190,
-        updatedat: 1705881190,
+        name: "T03",
       },
     },
     {
@@ -79,14 +56,7 @@ export default function Dashboard() {
       count: 1,
       quizz: {
         id: 16,
-        name: "QUIZ 1",
-        image: "https://kubtool.000webhostapp.com/uploads/img3.jpg",
-        idtopic: 1,
-        idcategory: 2,
-        groupquestion: "[3,4,10,16,17,15]",
-        idcreated: 1,
-        createdat: 1704288530,
-        updatedat: 1704288530,
+        name: "T04",
       },
     },
     {
@@ -94,14 +64,7 @@ export default function Dashboard() {
       count: 5,
       quizz: {
         id: 19,
-        name: "Happy quizz",
-        image: "https://kubtool.000webhostapp.com/uploads/apple.png",
-        idtopic: 1,
-        idcategory: 5,
-        groupquestion: "[44,37,45,64,63,49]",
-        idcreated: 1,
-        createdat: 1704288523,
-        updatedat: 1704288523,
+        name: "T05",
       },
     },
     {
@@ -109,14 +72,7 @@ export default function Dashboard() {
       count: 7,
       quizz: {
         id: 16,
-        name: "QUIZ 1",
-        image: "https://kubtool.000webhostapp.com/uploads/img3.jpg",
-        idtopic: 1,
-        idcategory: 2,
-        groupquestion: "[3,4,10,16,17,15]",
-        idcreated: 1,
-        createdat: 1704288530,
-        updatedat: 1704288530,
+        name: "T06",
       },
     },
     {
@@ -124,15 +80,7 @@ export default function Dashboard() {
       count: 1,
       quizz: {
         id: 12,
-        name: "Test344",
-        image:
-          "https://kubtool.000webhostapp.com/uploads/green_trees_nature.jpeg",
-        idtopic: 1,
-        idcategory: 3,
-        groupquestion: "[6,14]",
-        idcreated: 21,
-        createdat: 1702478382,
-        updatedat: 1702478382,
+        name: "T07",
       },
     },
     {
@@ -140,14 +88,7 @@ export default function Dashboard() {
       count: 2,
       quizz: {
         id: 24,
-        name: "Test question",
-        image: "https://kubtool.000webhostapp.com/uploads/accountant.png",
-        idtopic: 29,
-        idcategory: 2,
-        groupquestion: "[5]",
-        idcreated: 13,
-        createdat: 1705881419,
-        updatedat: 1705881419,
+        name: "T08",
       },
     },
     {
@@ -155,14 +96,7 @@ export default function Dashboard() {
       count: 1,
       quizz: {
         id: 11,
-        name: "Test 01",
-        image: "https://kubtool.000webhostapp.com/uploads/amazing.jpeg",
-        idtopic: 1,
-        idcategory: 2,
-        groupquestion: "[4,3]",
-        idcreated: 21,
-        createdat: 1702478294,
-        updatedat: 1702478294,
+        name: "T09",
       },
     },
   ];
@@ -177,7 +111,7 @@ export default function Dashboard() {
     },
     series: [
       {
-        name: "Doanh thu",
+        name: "T01",
         data: revenue.map((item) => item.count),
       },
     ],
@@ -209,7 +143,7 @@ export default function Dashboard() {
           <div className="col-12 col-sm-6 col-md-3">
             <div className="card px-4 py-2 h-100">
               <div className="d-flex justify-content-between">
-                <h6>Số lượng đơn</h6>
+                <h6>Số lượng đơn hoàn thành</h6>
                 <div
                   className="d-flex justify-content-center align-items-center rounded text-info"
                   style={{
