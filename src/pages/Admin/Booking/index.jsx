@@ -91,8 +91,16 @@ function Booking(props) {
       !data.timehour || type === "reset" ? null : data.timehour.trim();
     const status = !data.status || type === "reset" ? null : data.status;
     const newParams = _omit(params, ["query"]);
-    onGetListBooking({ ...newParams, query, status, timedate, timehour });
+    onGetListBooking({
+      ...newParams,
+      query,
+      status,
+      timedate,
+      timehour,
+      page: 1,
+    });
     if (type === "reset") setData(initialData);
+    setCurrentPage(1);
   };
 
   const handleExpandCollapse = (index) => {

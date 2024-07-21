@@ -1,6 +1,8 @@
 export const ENDPOINT = {
   LOGIN: "/api/login",
   REGISTER: "/register",
+  // =========/api/dashboard===========
+  DASHBOARD: "/api/dashboard",
   // ======factory======
   LIST_FACTORY: "/api/factory",
   ADD_FACTORY: "/api/factory/create",

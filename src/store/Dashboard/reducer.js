@@ -9,17 +9,29 @@ const status = {
 // DEFAULT STATE
 const initialState = {
   dashboardStatus: { ...status },
-  staticQuizStatus: { ...status },
-  staticRankStatus: { ...status },
   dashboard: {
-    totalQuiz: 0,
-    totalQuestion: 0,
-    totalUser: 0,
-    totalCategory: 0,
-    totalLesson: 0,
+    overview: {
+      totalRevenue: 0,
+      totalBookings: 0,
+      totalCustomers: 0,
+      totalServices: 0,
+    },
+    statisticStatus: [
+      {
+        status: "DESTROYED",
+        count: 0,
+      },
+      {
+        status: "IN_PROCCESS",
+        count: 0,
+      },
+      {
+        status: "SUCCESS",
+        count: 0,
+      },
+    ],
+    listService: [],
   },
-  staticQuiz: [],
-  staticRank: [],
 };
 
 const dashboardReducer = (state = initialState, action) => {
@@ -41,42 +53,6 @@ const dashboardReducer = (state = initialState, action) => {
         draft.dashboardStatus.isLoading = false;
         draft.dashboardStatus.isFailure = true;
         draft.dashboard = {};
-        break;
-
-      case ActionTypes.STATIC_QUIZ:
-        draft.staticQuizStatus.isLoading = true;
-        draft.staticQuizStatus.isSuccess = false;
-        draft.staticQuizStatus.isFailure = false;
-        break;
-
-      case ActionTypes.STATIC_QUIZ_SUCCESS:
-        draft.staticQuizStatus.isLoading = false;
-        draft.staticQuizStatus.isSuccess = true;
-        draft.staticQuiz = action.payload;
-        break;
-
-      case ActionTypes.STATIC_QUIZ_FAILED:
-        draft.staticQuizStatus.isLoading = false;
-        draft.staticQuizStatus.isFailure = true;
-        draft.staticQuiz = {};
-        break;
-
-      case ActionTypes.STATIC_RANK:
-        draft.staticRankStatus.isLoading = true;
-        draft.staticRankStatus.isSuccess = false;
-        draft.staticRankStatus.isFailure = false;
-        break;
-
-      case ActionTypes.STATIC_RANK_SUCCESS:
-        draft.staticRankStatus.isLoading = false;
-        draft.staticRankStatus.isSuccess = true;
-        draft.staticRank = action.payload;
-        break;
-
-      case ActionTypes.STATIC_RANK_FAILED:
-        draft.staticRankStatus.isLoading = false;
-        draft.staticRankStatus.isFailure = true;
-        draft.staticQuiz = {};
         break;
 
       default:

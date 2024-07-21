@@ -91,8 +91,10 @@ function BookingDetailList(props) {
       status,
       timedate,
       timehour,
+      page: 1,
     });
     if (type === "reset") setData(initialData);
+    setCurrentPage(1);
   };
 
   const handleExpandCollapse = (index) => {
