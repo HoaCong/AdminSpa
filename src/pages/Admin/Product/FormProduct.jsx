@@ -9,6 +9,7 @@ import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import { useDispatch, useSelector } from "react-redux";
 import { actionAdd, actionEdit } from "store/Product/action";
+import CrmSchedule from "./CrmSchedule";
 const initialData = {
   content: "",
   name: "",
@@ -17,8 +18,14 @@ const initialData = {
   time: "",
   numbersesion: null,
   price: null,
+  distancegenerate: 5,
 };
 
+const EMUM_TYPE = [
+  { value: "TRIET_LONG", label: "Triệt lông" },
+  { value: "CHAM_DA", label: "Chăm da" },
+];
+const initCrm = [{ date: "", content: "", time: "" }];
 function FormProduct({ data: { type, visible, info }, onClear }) {
   const {
     actionStatus: { isLoading, isSuccess },
@@ -30,10 +37,14 @@ function FormProduct({ data: { type, visible, info }, onClear }) {
 
   const [data, setData] = useState(initialData);
   const [error, setError] = useState(initialData);
+  const [crmschedule, setCrmSchedule] = useState(initCrm);
 
   useEffect(() => {
     if (!_isEmpty(info)) {
       setData({ ...info });
+      if (!_isEmpty(info.crmschedule)) {
+        setCrmSchedule(JSON.parse(info.crmschedule));
+      }
     }
   }, [info]);
 
@@ -41,6 +52,7 @@ function FormProduct({ data: { type, visible, info }, onClear }) {
     if (isSuccess) {
       onClear();
       setData(initialData);
+      setCrmSchedule(initCrm);
     }
   }, [isSuccess]);
 
@@ -51,7 +63,9 @@ function FormProduct({ data: { type, visible, info }, onClear }) {
   };
 
   const handleSubmit = () => {
-    const tmpKey = Object.keys(_omit(data, "content"));
+    const tmpKey = Object.keys(
+      _omit(data, ["content", "crmschedule", "distancegenerate"])
+    );
     let validates = true;
     tmpKey.forEach((key) => {
       if (data[key] === "") {
@@ -64,6 +78,10 @@ function FormProduct({ data: { type, visible, info }, onClear }) {
     });
     if (validates) {
       const newData = { ...data };
+      const customSchedule = crmschedule.filter(
+        (item) => !!item.date && !!item.content && !!item.time
+      );
+      newData.crmschedule = JSON.stringify(customSchedule);
       if (data.category === "TRIET_LONG") newData.content = "";
       if (type === "create") onAddProduct(newData);
       if (type === "edit") onEditProduct(newData);
@@ -73,12 +91,29 @@ function FormProduct({ data: { type, visible, info }, onClear }) {
     onClear();
     setData(initialData);
     setError(initialData);
+    setCrmSchedule(initCrm);
   };
 
   const getTitle = {
     detail: "Thông tin dịch vụ",
     edit: "Chỉnh sửa dịch vụ",
     create: "Thêm mới dịch vụ",
+  };
+
+  const handleAdd = (e) => {
+    e.preventDefault();
+    setCrmSchedule([...crmschedule, { date: "", content: "", time: "" }]);
+  };
+
+  const handleChangeCrm = (index, event) => {
+    const { name, value } = event.target;
+    const newCrmSchedule = [...crmschedule];
+    newCrmSchedule[index][name] = value;
+    setCrmSchedule(newCrmSchedule);
+  };
+  const handleRemove = (e, index) => {
+    e.preventDefault();
+    setCrmSchedule((prev) => prev.filter((_e, idx) => idx !== index));
   };
 
   return (
@@ -93,7 +128,7 @@ function FormProduct({ data: { type, visible, info }, onClear }) {
         size: "lg",
       }}
     >
-      <form className="row">
+      <form className="row overflow-y-auto" style={{ maxHeight: "600px" }}>
         <div className="col-6">
           <Form.Label htmlFor="Name">
             Tên dịch vụ <span className="required">*</span>
@@ -117,52 +152,24 @@ function FormProduct({ data: { type, visible, info }, onClear }) {
             </Form.Text>
           )}
         </div>
-        <div className="col-6">
-          <Form.Label htmlFor="Time">
-            Thời gian thực hiện <span className="required">*</span>
-          </Form.Label>
-          <Form.Control
-            type="text"
-            id="Time"
-            name="time"
-            defaultValue={data.time}
-            aria-describedby="helperTime"
-            disabled={type === "detail"}
-            onChange={handleChange}
-          />
-          {error.time && (
-            <Form.Text
-              id="helperTime"
-              danger="true"
-              bsPrefix="d-inline-block text-danger lh-1"
-            >
-              {error.time}
-            </Form.Text>
-          )}
-        </div>
 
-        <div className="col-6 mt-3">
-          <Form.Label htmlFor="NumberSession">
-            Số buổi <span className="required">*</span>
+        <div className="col-6">
+          <Form.Label htmlFor="Role">
+            Danh mục <span className="required">*</span>
           </Form.Label>
-          <Form.Control
-            type="text"
-            id="NumberSession"
-            name="numbersesion"
-            defaultValue={data.numbersesion}
-            aria-describedby="helperNumberSession"
-            disabled={type === "detail"}
+          <Form.Select
+            aria-label="Danh mục"
+            name="category"
+            value={data.category}
             onChange={handleChange}
-          />
-          {error.numbersesion && (
-            <Form.Text
-              id="helperNumberSession"
-              danger="true"
-              bsPrefix="d-inline-block text-danger lh-1"
-            >
-              {error.numbersesion}
-            </Form.Text>
-          )}
+            disabled={type === "detail"}
+          >
+            {_map(EMUM_TYPE, (item) => (
+              <option key={item.value} value={item.value}>
+                {item.label}
+              </option>
+            ))}
+          </Form.Select>
         </div>
 
         <div className="col-6 mt-3">
@@ -190,22 +197,66 @@ function FormProduct({ data: { type, visible, info }, onClear }) {
         </div>
 
         <div className="col-6 mt-3">
-          <Form.Label htmlFor="Role">
-            Danh mục <span className="required">*</span>
+          <div>
+            <Form.Label htmlFor="NumberSession">
+              Số buổi <span className="required">*</span>
+            </Form.Label>
+            <Form.Control
+              type="text"
+              id="NumberSession"
+              name="numbersesion"
+              defaultValue={data.numbersesion}
+              aria-describedby="helperNumberSession"
+              disabled={type === "detail"}
+              onChange={handleChange}
+            />
+            {error.numbersesion && (
+              <Form.Text
+                id="helperNumberSession"
+                danger="true"
+                bsPrefix="d-inline-block text-danger lh-1"
+              >
+                {error.numbersesion}
+              </Form.Text>
+            )}
+          </div>
+        </div>
+
+        {+data.numbersesion === 1 &&
+          (type !== "detail" || !_isEmpty(data.crmschedule)) && (
+            <div className="col-12 mt-3">
+              <CrmSchedule
+                disabled={type === "detail"}
+                list={crmschedule}
+                handleAdd={handleAdd}
+                handleChange={handleChangeCrm}
+                handleRemove={handleRemove}
+              />
+            </div>
+          )}
+
+        <div className="col-6 mt-3">
+          <Form.Label htmlFor="Time">
+            Thời gian thực hiện <span className="required">*</span>
           </Form.Label>
-          <Form.Select
-            aria-label="Danh mục"
-            name="category"
-            value={data.category}
-            onChange={handleChange}
+          <Form.Control
+            type="text"
+            id="Time"
+            name="time"
+            defaultValue={data.time}
+            aria-describedby="helperTime"
             disabled={type === "detail"}
-          >
-            {_map(["TRIET_LONG", "CHAM_DA"], (value) => (
-              <option key={value} value={value}>
-                {value}
-              </option>
-            ))}
-          </Form.Select>
+            onChange={handleChange}
+          />
+          {error.time && (
+            <Form.Text
+              id="helperTime"
+              danger="true"
+              bsPrefix="d-inline-block text-danger lh-1"
+            >
+              {error.time}
+            </Form.Text>
+          )}
         </div>
 
         {data.category === "CHAM_DA" && (

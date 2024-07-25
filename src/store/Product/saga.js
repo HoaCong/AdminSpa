@@ -64,8 +64,18 @@ function* callApiAdd({ params }) {
 
 function* callApiEdit({ params }) {
   try {
-    const { id, content, name, image, category, time, numbersesion, price } =
-      params;
+    const {
+      id,
+      content,
+      name,
+      image,
+      category,
+      time,
+      numbersesion,
+      price,
+      distancegenerate,
+      crmschedule,
+    } = params;
     const response = yield call(puts, ENDPOINT.EDIT_PRODUCT + id, {
       content,
       name,
@@ -74,6 +84,8 @@ function* callApiEdit({ params }) {
       time,
       numbersesion,
       price,
+      distancegenerate,
+      crmschedule,
     });
 
     if (response.status === 200) {
