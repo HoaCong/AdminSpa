@@ -99,31 +99,11 @@ export const employeeRoutes = [
     name: "Admin Layout",
     element: <AdminLayout />,
     children: [
-      { isRoot: true, name: "Dashboard Page", element: <AdminDashboard /> },
+      { isRoot: true, name: "Booking", element: <AdminBooking /> },
       {
         path: ROUTES.ADMIN_BOOKING,
         name: "Booking",
         element: <AdminBooking />,
-      },
-      {
-        path: ROUTES.ADMIN_SCHEDULE,
-        name: "Schedule",
-        element: <AdminSchedule />,
-      },
-      {
-        path: ROUTES.ADMIN_FACTORY,
-        name: "Factory",
-        element: <AdminFactory />,
-      },
-      {
-        path: ROUTES.ADMIN_EMPLOYEE,
-        name: "Employee",
-        element: <AdminEmployee />,
-      },
-      {
-        path: ROUTES.ADMIN_PRODUCT,
-        name: "Product",
-        element: <AdminProduct />,
       },
       {
         path: ROUTES.ADMIN_BOOKING_DETAIL,
@@ -134,6 +114,26 @@ export const employeeRoutes = [
         path: ROUTES.ADMIN_SCHEDULE_DETAIL,
         name: "Schedule detail",
         element: <AdminScheduleDetail />,
+      },
+      {
+        path: ROUTES.ADMIN_BOOKING_DETAIL_LIST,
+        name: "List booking detail",
+        element: <AdminBookingDetailList />,
+      },
+      {
+        path: ROUTES.ADMIN_SCHEDULE,
+        name: "Schedule",
+        element: <AdminSchedule />,
+      },
+      {
+        path: ROUTES.ADMIN_CUSTOMER,
+        name: "Customer",
+        element: <AdminCustomer />,
+      },
+      {
+        path: ROUTES.ADMIN_CUSTOMER_DETAIL,
+        name: "Customer detail",
+        element: <AdminCustomerDetail />,
       },
       { path: "*", name: "Not Found Page", element: <PageNotFound /> },
     ],

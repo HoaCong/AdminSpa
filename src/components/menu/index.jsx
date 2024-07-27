@@ -11,11 +11,11 @@ function Menu({ collapsed }) {
   const [list, setList] = useState([]);
 
   useEffect(() => {
-    const adminMenu = MENU_MANAGER;
-    const managerMenu = MENU_EMPLOYEE;
+    const managerMenu = MENU_MANAGER;
+    const employeeMenu = MENU_EMPLOYEE;
     const EnumRoutes = {
-      MANAGER: adminMenu,
-      ADMIN: managerMenu,
+      MANAGER: managerMenu,
+      EMPLOYEE: employeeMenu,
     };
     setList(EnumRoutes[user?.roleid] || []);
   }, [user?.roleid]);

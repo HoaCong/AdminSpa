@@ -18,12 +18,12 @@ const initialData = {
   time: "",
   numbersesion: null,
   price: null,
-  distancegenerate: 5,
+  distancegenerate: "",
 };
 
 const EMUM_TYPE = [
-  { value: "TRIET_LONG", label: "Triệt lông" },
-  { value: "CHAM_DA", label: "Chăm da" },
+  { value: "TRIET_LONG", label: "Liệu trình" },
+  { value: "CHAM_DA", label: "Thông thường" },
 ];
 const initCrm = [{ date: "", content: "", time: "" }];
 function FormProduct({ data: { type, visible, info }, onClear }) {
@@ -63,9 +63,12 @@ function FormProduct({ data: { type, visible, info }, onClear }) {
   };
 
   const handleSubmit = () => {
-    const tmpKey = Object.keys(
-      _omit(data, ["content", "crmschedule", "distancegenerate"])
-    );
+    let tmpKey = Object.keys(_omit(data, ["content", "crmschedule"]));
+    if (data.category === "CHAM_DA") {
+      tmpKey = Object.keys(
+        _omit(data, ["content", "crmschedule", "distancegenerate"])
+      );
+    }
     let validates = true;
     tmpKey.forEach((key) => {
       if (data[key] === "") {
@@ -78,11 +81,18 @@ function FormProduct({ data: { type, visible, info }, onClear }) {
     });
     if (validates) {
       const newData = { ...data };
-      const customSchedule = crmschedule.filter(
-        (item) => !!item.date && !!item.content && !!item.time
-      );
-      newData.crmschedule = JSON.stringify(customSchedule);
-      if (data.category === "TRIET_LONG") newData.content = "";
+
+      if (data.category === "TRIET_LONG") {
+        newData.content = "";
+        newData.distancegenerate = +newData.distancegenerate;
+        newData.crmschedule = "[]";
+      } else {
+        const customSchedule = crmschedule.filter(
+          (item) => !!item.date && !!item.content && !!item.time
+        );
+        newData.crmschedule = JSON.stringify(customSchedule);
+        newData.distancegenerate = 0;
+      }
       if (type === "create") onAddProduct(newData);
       if (type === "edit") onEditProduct(newData);
     }
@@ -115,7 +125,15 @@ function FormProduct({ data: { type, visible, info }, onClear }) {
     e.preventDefault();
     setCrmSchedule((prev) => prev.filter((_e, idx) => idx !== index));
   };
-
+  const handleChangeCategory = (e) => {
+    const { value } = e.target;
+    if (value === "CHAM_DA")
+      setData((prevData) => ({
+        ...prevData,
+        numbersesion: 1,
+        distancegenerate: 0,
+      }));
+  };
   return (
     <ModalBlock
       title={getTitle[type]}
@@ -161,7 +179,10 @@ function FormProduct({ data: { type, visible, info }, onClear }) {
             aria-label="Danh mục"
             name="category"
             value={data.category}
-            onChange={handleChange}
+            onChange={(e) => {
+              handleChange(e);
+              handleChangeCategory(e);
+            }}
             disabled={type === "detail"}
           >
             {_map(EMUM_TYPE, (item) => (
@@ -207,7 +228,7 @@ function FormProduct({ data: { type, visible, info }, onClear }) {
               name="numbersesion"
               defaultValue={data.numbersesion}
               aria-describedby="helperNumberSession"
-              disabled={type === "detail"}
+              disabled={type === "detail" || data.category === "CHAM_DA"}
               onChange={handleChange}
             />
             {error.numbersesion && (
@@ -222,7 +243,7 @@ function FormProduct({ data: { type, visible, info }, onClear }) {
           </div>
         </div>
 
-        {+data.numbersesion === 1 &&
+        {data.category === "CHAM_DA" &&
           (type !== "detail" || !_isEmpty(data.crmschedule)) && (
             <div className="col-12 mt-3">
               <CrmSchedule
@@ -235,6 +256,33 @@ function FormProduct({ data: { type, visible, info }, onClear }) {
             </div>
           )}
 
+        {data.category === "TRIET_LONG" && (
+          <div className="col-6 mt-3">
+            <div>
+              <Form.Label htmlFor="distancegenerate">
+                Khoảng cách lịch hẹn <span className="required">*</span>
+              </Form.Label>
+              <Form.Control
+                type="text"
+                id="distancegenerate"
+                name="distancegenerate"
+                defaultValue={data.distancegenerate}
+                aria-describedby="helperdistancegenerate"
+                disabled={type === "detail"}
+                onChange={handleChange}
+              />
+              {error.distancegenerate && (
+                <Form.Text
+                  id="helperdistancegenerate"
+                  danger="true"
+                  bsPrefix="d-inline-block text-danger lh-1"
+                >
+                  {error.distancegenerate}
+                </Form.Text>
+              )}
+            </div>
+          </div>
+        )}
         <div className="col-6 mt-3">
           <Form.Label htmlFor="Time">
             Thời gian thực hiện <span className="required">*</span>

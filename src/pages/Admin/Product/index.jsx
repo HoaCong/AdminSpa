@@ -5,6 +5,7 @@ import LazyLoadImage from "components/common/LazyLoadImage";
 import LinearProgress from "components/common/LinearProgress";
 import ToggleSwitch from "components/common/ToggleSwitch";
 import TemplateContent from "components/layout/TemplateContent";
+import { TYPE_LABEL } from "constants";
 import { formatCurrency } from "helper/functions";
 import _map from "lodash/map";
 import _omit from "lodash/omit";
@@ -17,7 +18,7 @@ import FormProduct from "./FormProduct";
 const initialData = { query: "", category: 0 };
 const categories = [
   { id: 0, name: "Tất cả" },
-  { id: "TRIET_LONG", name: "Triệt lông" },
+  { id: "TRIET_LONG", name: "Liệu trình" },
   { id: "CHAM_DA", name: "Chăm sóc da" },
 ];
 function Product(props) {
@@ -195,7 +196,7 @@ function Product(props) {
                 <td className="align-middle">{item.numbersesion} buổi</td>
                 <td className="align-middle">{formatCurrency(item.price)}</td>
                 <td className="align-middle">{item.time}</td>
-                <td className="align-middle">{item.category}</td>
+                <td className="align-middle">{TYPE_LABEL[item.category]}</td>
                 <td className="align-middle">
                   <ToggleSwitch
                     status={item.active}

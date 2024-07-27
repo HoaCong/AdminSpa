@@ -19,7 +19,7 @@ function App() {
     const EMPLOYEE_MENU = [...publicRoutes, ...employeeRoutes];
     const ENUM_MENU = {
       MANAGER: MANAGER_MENU,
-      ADMIN: EMPLOYEE_MENU, // do add string type
+      EMPLOYEE: EMPLOYEE_MENU, // do add string type
     };
     return ENUM_MENU[user?.roleid] || ENUM_MENU["MANAGER"];
   }, [user?.roleid]);
@@ -37,7 +37,6 @@ function App() {
       if (route.isRoot) {
         return <Route index element={route.element} key={index} />;
       }
-
       return <Route path={route.path} element={route.element} key={index} />;
     });
   }, []);

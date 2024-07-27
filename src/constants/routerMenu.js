@@ -58,12 +58,6 @@ export const MENU_MANAGER = [
 
 export const MENU_EMPLOYEE = [
   {
-    label: "Trang chủ",
-    active: false,
-    src: ROUTES.ADMIN_DASHBOARD,
-    icon: <i className="fas fa-home"></i>,
-  },
-  {
     label: "Đặt lịch",
     active: false,
     src: ROUTES.ADMIN_BOOKING,
@@ -80,24 +74,6 @@ export const MENU_EMPLOYEE = [
     active: false,
     src: ROUTES.ADMIN_SCHEDULE,
     icon: <i className="fas fa-calendar-alt"></i>,
-  },
-  {
-    label: "Cơ sở",
-    active: false,
-    src: ROUTES.ADMIN_FACTORY,
-    icon: <i className="fas fa-home"></i>,
-  },
-  {
-    label: "Nhân viên",
-    active: false,
-    src: ROUTES.ADMIN_EMPLOYEE,
-    icon: <i className="fas fa-users"></i>,
-  },
-  {
-    label: "Dịch vụ",
-    active: false,
-    src: ROUTES.ADMIN_PRODUCT,
-    icon: <i className="fas fa-users"></i>,
   },
   {
     label: "Khách hàng",

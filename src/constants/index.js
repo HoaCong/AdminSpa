@@ -8,8 +8,8 @@ export const STATUS_LABEL = {
 };
 
 export const TYPE_LABEL = {
-  TRIET_LONG: "Triệt lông",
-  CHAM_DA: "Chăm da",
+  TRIET_LONG: "Liệu trình",
+  CHAM_DA: "Thông thường",
 };
 
 export const STATUS = [
