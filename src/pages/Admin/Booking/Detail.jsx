@@ -307,7 +307,7 @@ function BookingDetail(props) {
                 <div>
                   Số điện thoại:{"  "}
                   <Link
-                    className="link_router"
+                    className="link_router text-primary"
                     to={parserRouter(
                       ROUTES.ADMIN_CUSTOMER_DETAIL,
                       customer?.id

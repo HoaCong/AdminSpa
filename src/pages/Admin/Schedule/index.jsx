@@ -137,7 +137,7 @@ function Schedule(props) {
                   </td>
                   <td className="align-middle">
                     <Link
-                      className="link_router"
+                      className="link_router text-primary"
                       to={parserRouter(
                         ROUTES.ADMIN_CUSTOMER_DETAIL,
                         item.idcustomer
