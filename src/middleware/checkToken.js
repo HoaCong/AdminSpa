@@ -19,10 +19,7 @@ const CheckTokenMiddleware = ({ children }) => {
   useEffect(() => {
     // logic check token
     const isLoginPage = [ROUTES.LOGIN, ROUTES.REGISTER].includes(pathname);
-    if (
-      (!access_token || checkTimeExpired(timeExpired)) &&
-      pathname !== ROUTES.ADMIN_HOME_PAGE
-    ) {
+    if (!access_token || checkTimeExpired(timeExpired)) {
       if (isLoginPage) return;
       return navigate(ROUTES.LOGIN);
     } else if (isLoginPage) {
