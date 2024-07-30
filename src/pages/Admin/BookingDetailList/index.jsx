@@ -425,6 +425,26 @@ function BookingDetailList(props) {
                                       </button>
                                     </div>
                                   )}
+                                  {ele.status === "SUCCESS" && (
+                                    <button
+                                      className="btn btn-outline-primary rounded-circle d-flex justify-content-center align-items-center"
+                                      style={{
+                                        width: 30,
+                                        height: 30,
+                                      }}
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        navigate(
+                                          parserRouter(
+                                            ROUTES.ADMIN_SCHEDULE_DETAIL,
+                                            ele.idbookingdetail
+                                          )
+                                        );
+                                      }}
+                                    >
+                                      <i className="far fa-eye"></i>
+                                    </button>
+                                  )}
                                 </td>
                               </tr>
                             ))}

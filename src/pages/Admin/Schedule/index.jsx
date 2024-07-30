@@ -187,45 +187,63 @@ function Schedule(props) {
                   </td>
                   <td className="align-middle">{item.note || "_"}</td>
                   <td className="align-middle">
-                    {currentTab !== "remindercare" &&
-                      item.status === "IN_PROCCESS" && (
-                        <div className="d-flex gap-2">
-                          <button
-                            className="btn btn-outline-success rounded-circle d-flex justify-content-center align-items-center"
-                            style={{
-                              width: 30,
-                              height: 30,
-                            }}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setModalData({
-                                info: item,
-                                visible: true,
-                                type: "confirm",
-                              });
-                            }}
-                          >
-                            <i className="far fa-check-circle"></i>
-                          </button>
-                          <button
-                            className="btn btn-outline-danger rounded-circle d-flex justify-content-center align-items-center"
-                            style={{
-                              width: 30,
-                              height: 30,
-                            }}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setModalData({
-                                info: item,
-                                visible: true,
-                                type: "destroy",
-                              });
-                            }}
-                          >
-                            <i className="far fa-times-circle"></i>
-                          </button>
-                        </div>
-                      )}
+                    {currentTab !== "remindercare" && (
+                      <div className="d-flex gap-2">
+                        <button
+                          className="btn btn-outline-primary rounded-circle d-flex justify-content-center align-items-center"
+                          style={{ width: 30, height: 30 }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(
+                              parserRouter(
+                                ROUTES.ADMIN_BOOKING_DETAIL,
+                                item.idbooking
+                              )
+                            );
+                          }}
+                        >
+                          <i className="far fa-eye"></i>
+                        </button>
+                        {item.status === "IN_PROCCESS" && (
+                          <>
+                            <button
+                              className="btn btn-outline-success rounded-circle d-flex justify-content-center align-items-center"
+                              style={{
+                                width: 30,
+                                height: 30,
+                              }}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setModalData({
+                                  info: item,
+                                  visible: true,
+                                  type: "confirm",
+                                });
+                              }}
+                            >
+                              <i className="far fa-check-circle"></i>
+                            </button>
+                            <button
+                              className="btn btn-outline-danger rounded-circle d-flex justify-content-center align-items-center"
+                              style={{
+                                width: 30,
+                                height: 30,
+                              }}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setModalData({
+                                  info: item,
+                                  visible: true,
+                                  type: "destroy",
+                                });
+                              }}
+                            >
+                              <i className="far fa-times-circle"></i>
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    )}
                     {currentTab === "remindercare" && (
                       <div className="d-flex gap-2">
                         <button
