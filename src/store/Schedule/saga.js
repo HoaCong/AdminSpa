@@ -7,6 +7,10 @@ import {
   actionConfirmReminderCareDetailSuccess,
   actionConfirmReminderCareFailed,
   actionConfirmReminderCareSuccess,
+  actionConfirmSchedulesFailed,
+  actionConfirmSchedulesSuccess,
+  actionDestroySchedulesFailed,
+  actionDestroySchedulesSuccess,
   actionDetailFailed,
   actionDetailSuccess,
   actionGetListFailed,
@@ -131,6 +135,98 @@ function* callApiConfirmReminderCareDetail({ payload, note }) {
   }
 }
 
+function* callApiConfirmSchedule({ payload, note }) {
+  try {
+    const response = yield call(
+      post,
+      `${ENDPOINT.CONFIRM_SCHEDULE + payload.id}/${payload.serviceid}`,
+      {
+        note,
+      }
+    );
+    if (response.status === 200 && response.data.status) {
+      yield put(
+        actionConfirmSchedulesSuccess({
+          ...payload,
+          status: response.data.message,
+          note,
+        })
+      );
+      yield put(
+        addToast({
+          text: "Xác nhận thành công",
+          type: "success",
+          title: "",
+        })
+      );
+    } else {
+      yield put(actionConfirmSchedulesFailed());
+      yield put(
+        addToast({
+          text: "Xác nhận thất bại",
+          type: "danger",
+          title: "",
+        })
+      );
+    }
+  } catch (error) {
+    yield put(actionConfirmSchedulesFailed(error.response.data.error));
+    yield put(
+      addToast({
+        text: "Xảy ra lỗi",
+        type: "danger",
+        title: "",
+      })
+    );
+  }
+}
+
+function* callApiDestroySchedule({ payload, note }) {
+  try {
+    const response = yield call(
+      puts,
+      ENDPOINT.DESTROY_SCHEDULE + payload.idbookingdetail,
+      {
+        note,
+      }
+    );
+    if (response.status === 200 && response.data.status) {
+      yield put(
+        actionDestroySchedulesSuccess({
+          ...payload,
+          status: response.data.message,
+          note,
+        })
+      );
+      yield put(
+        addToast({
+          text: "Xác nhận thành công",
+          type: "success",
+          title: "",
+        })
+      );
+    } else {
+      yield put(actionDestroySchedulesFailed());
+      yield put(
+        addToast({
+          text: "Hủy bỏ thất bại",
+          type: "danger",
+          title: "",
+        })
+      );
+    }
+  } catch (error) {
+    yield put(actionDestroySchedulesFailed(error.response.data.error));
+    yield put(
+      addToast({
+        text: "Xảy ra lỗi",
+        type: "danger",
+        title: "",
+      })
+    );
+  }
+}
+
 export default function* scheduleSaga() {
   yield all([
     yield takeLatest(ActionTypes.LIST, callApiList),
@@ -143,5 +239,7 @@ export default function* scheduleSaga() {
       ActionTypes.CONFIRM_REMINDERCARE_DETAIL,
       callApiConfirmReminderCareDetail
     ),
+    yield takeLatest(ActionTypes.CONFIRM_SCHEDULES, callApiConfirmSchedule),
+    yield takeLatest(ActionTypes.DESTROY_SCHEDULES, callApiDestroySchedule),
   ]);
 }

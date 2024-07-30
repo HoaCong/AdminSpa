@@ -12,7 +12,7 @@ import _size from "lodash/size";
 import { useEffect, useState } from "react";
 import { Button, Form, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { actionDelete, actionGetList, resetData } from "store/Customer/action";
 import FormCustomer from "./FormCustomer";
 
@@ -173,7 +173,14 @@ function Customer(props) {
                 </td>
                 <td className="align-middle">{item.fullname || "_"}</td>
                 <td className="align-middle">{item.email || "_"}</td>
-                <td className="align-middle">{item.phone}</td>
+                <td className="align-middle">
+                  <Link
+                    className="link_router text-primary"
+                    to={parserRouter(ROUTES.ADMIN_CUSTOMER_DETAIL, item.id)}
+                  >
+                    {item.phone}
+                  </Link>
+                </td>
                 <td className="align-middle">{item.address || ""}</td>
                 <td className="align-middle">
                   <ToggleSwitch

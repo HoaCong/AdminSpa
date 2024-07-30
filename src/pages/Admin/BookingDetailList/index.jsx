@@ -22,7 +22,7 @@ const initialData = { query: "", timedate: "", timehour: "", status: 0 };
 function BookingDetailList(props) {
   const {
     listStatus: { isLoading },
-    actionStatus: { isLoading: actionLoading, isSuccess: actionSuccess },
+    actionStatus: { isSuccess: actionSuccess },
     list,
     params,
     meta,
@@ -213,6 +213,9 @@ function BookingDetailList(props) {
                 Hình ảnh
               </th>
               <th scope="col" className="align-middle">
+                Khách hàng
+              </th>
+              <th scope="col" className="align-middle">
                 Tên dịch vụ
               </th>
               <th scope="col" className="align-middle">
@@ -266,6 +269,17 @@ function BookingDetailList(props) {
                       width={50}
                       height={50}
                     />
+                  </td>
+                  <td className="align-middle">
+                    <Link
+                      className="link_router text-primary"
+                      to={parserRouter(
+                        ROUTES.ADMIN_CUSTOMER_DETAIL,
+                        item.idcustomer
+                      )}
+                    >
+                      {item.phone}
+                    </Link>
                   </td>
                   <td className="align-middle">{item.service.name}</td>
                   <td className="align-middle">

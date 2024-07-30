@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import {
   actionConfirmReminderCare,
+  actionConfirmSchedules,
+  actionDestroySchedules,
   actionGetList,
   resetData,
 } from "store/Schedule/action";
@@ -23,6 +25,10 @@ function Schedule(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const onGetListBooking = (tab) => dispatch(actionGetList(tab));
+  const onConfirmSChedules = (body, note) =>
+    dispatch(actionConfirmSchedules(body, note));
+  const onDestroySChedules = (body, note) =>
+    dispatch(actionDestroySchedules(body, note));
   const onConfirmReminderCare = (body, note) =>
     dispatch(actionConfirmReminderCare(body, note));
 
@@ -60,6 +66,26 @@ function Schedule(props) {
     visible: false,
     type: "",
   });
+
+  const handleConfirmAction = (note) => {
+    if (currentTab === "today") {
+      onConfirmSChedules(modalData.info, note);
+    }
+    if (currentTab === "reminder") {
+      onConfirmSChedules(modalData.info, note);
+    }
+    if (currentTab === "remindercare") {
+      onConfirmReminderCare(modalData.info, note);
+    }
+  };
+  const handleDestroyAction = (note) => {
+    if (currentTab === "today") {
+      onDestroySChedules(modalData.info, note);
+    }
+    if (currentTab === "reminder") {
+      onDestroySChedules(modalData.info, note);
+    }
+  };
 
   const ContentTab = (
     <table className="table table-hover">
@@ -161,6 +187,45 @@ function Schedule(props) {
                   </td>
                   <td className="align-middle">{item.note || "_"}</td>
                   <td className="align-middle">
+                    {currentTab !== "remindercare" &&
+                      item.status === "IN_PROCCESS" && (
+                        <div className="d-flex gap-2">
+                          <button
+                            className="btn btn-outline-success rounded-circle d-flex justify-content-center align-items-center"
+                            style={{
+                              width: 30,
+                              height: 30,
+                            }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setModalData({
+                                info: item,
+                                visible: true,
+                                type: "confirm",
+                              });
+                            }}
+                          >
+                            <i className="far fa-check-circle"></i>
+                          </button>
+                          <button
+                            className="btn btn-outline-danger rounded-circle d-flex justify-content-center align-items-center"
+                            style={{
+                              width: 30,
+                              height: 30,
+                            }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setModalData({
+                                info: item,
+                                visible: true,
+                                type: "destroy",
+                              });
+                            }}
+                          >
+                            <i className="far fa-times-circle"></i>
+                          </button>
+                        </div>
+                      )}
                     {currentTab === "remindercare" && (
                       <div className="d-flex gap-2">
                         <button
@@ -272,7 +337,8 @@ function Schedule(props) {
       <FormConfirm
         data={modalData}
         onClear={() => setModalData({ info: {}, visible: false, type: "" })}
-        onConfirm={(note) => onConfirmReminderCare(modalData.info, note)}
+        onConfirm={handleConfirmAction}
+        onDestroy={handleDestroyAction}
       />
     </div>
   );

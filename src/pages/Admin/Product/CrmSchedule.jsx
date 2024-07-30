@@ -1,4 +1,5 @@
 import React from "react";
+import { NumericFormat } from "react-number-format";
 
 const CrmSchedule = ({
   list,
@@ -34,13 +35,23 @@ const CrmSchedule = ({
       {list.map((item, index) => (
         <div className="row mb-2 g-2" key={index}>
           <div className="col-3">
-            <input
-              type="text"
+            <NumericFormat
+              id="date"
+              thousandSeparator={true}
+              prefix={"Ngày "}
               name="date"
               value={item.date}
-              disabled={disabled}
-              onChange={(event) => handleChange(index, event)}
+              displayType={"input"}
               className="form-control"
+              disabled={disabled}
+              onValueChange={({ value }) =>
+                handleChange(index, {
+                  target: {
+                    name: "date",
+                    value,
+                  },
+                })
+              }
             />
           </div>
           <div className="col">

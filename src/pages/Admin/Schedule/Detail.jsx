@@ -165,7 +165,7 @@ function ScheduleDetail(props) {
                                   {_map(detail, (ele, index) => (
                                     <tr key={ele.updatedAt + index}>
                                       <td className="align-middle">
-                                        Sau buổi {ele.session}
+                                        Buổi {ele.sessionreminder}
                                       </td>
                                       <td className="align-middle">
                                         {`${ele.timedate} ${

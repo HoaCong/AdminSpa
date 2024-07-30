@@ -4,6 +4,7 @@ import _capitalize from "lodash/capitalize";
 import _isEmpty from "lodash/isEmpty";
 import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
+import { NumericFormat, PatternFormat } from "react-number-format";
 import ColorPicker from "react-pick-color";
 import { useDispatch, useSelector } from "react-redux";
 import { actionUpdate } from "store/Setting/action";
@@ -103,148 +104,184 @@ function FormSetting({ data: { type, visible, info }, onClear }) {
       onClose={handleClose}
       onSave={handleSubmit}
       loading={isLoading}
+      propsModal={{
+        size: "lg",
+      }}
     >
       <form>
-        <div>
-          <Form.Label htmlFor="Logo">
-            Logo <span className="required">*</span>
-          </Form.Label>
-          <Form.Control
-            type="text"
-            id="Logo"
-            name="logo"
-            placeholder="Nhập link logo"
-            defaultValue={data.logo || ""}
-            aria-describedby="helperLogo"
-            onChange={handleChange}
-          />
-          {error.logo && (
-            <Form.Text
-              id="helperLogo"
-              danger="true"
-              bsPrefix="d-inline-block text-danger lh-1"
-            >
-              {error.logo}
-            </Form.Text>
-          )}
-        </div>
-        <div className="mt-2">
-          <Form.Label htmlFor="Phone">
-            Số điện thoại <span className="required">*</span>
-          </Form.Label>
-          <Form.Control
-            type="text"
-            id="Phone"
-            name="numberPhone"
-            placeholder="Nhập số điện thoại"
-            defaultValue={data.numberPhone || ""}
-            aria-describedby="helperPhone"
-            onChange={handleChange}
-          />
-          {error.numberPhone && (
-            <Form.Text
-              id="helperPhone"
-              danger="true"
-              bsPrefix="d-inline-block text-danger lh-1"
-            >
-              {error.numberPhone}
-            </Form.Text>
-          )}
-        </div>
-        <div className="mt-2">
-          <Form.Label htmlFor="NameBanner">
-            Tên shop <span className="required">*</span>
-          </Form.Label>
-          <Form.Control
-            type="text"
-            id="NameBanner"
-            name="nameBanner"
-            placeholder="Nhập tên shop"
-            defaultValue={data.nameBanner || ""}
-            aria-describedby="helperNameBanner"
-            onChange={handleChange}
-          />
-          {error.nameBanner && (
-            <Form.Text
-              id="helperNameBanner"
-              danger="true"
-              bsPrefix="d-inline-block text-danger lh-1"
-            >
-              {error.nameBanner}
-            </Form.Text>
-          )}
-        </div>
-        <div className="mt-2">
-          <Form.Label htmlFor="ReminderBefore">
-            Nhắc nhở trước <span className="required">*</span>
-          </Form.Label>
-          <Form.Control
-            type="text"
-            maxLength={1}
-            id="ReminderBefore"
-            name="reminderbefore"
-            placeholder="Nhập số ngày"
-            defaultValue={data.reminderbefore || ""}
-            aria-describedby="helperReminderBefore"
-            onChange={handleChange}
-          />
-          {error.reminderbefore && (
-            <Form.Text
-              id="helperReminderBefore"
-              danger="true"
-              bsPrefix="d-inline-block text-danger lh-1"
-            >
-              {error.reminderbefore}
-            </Form.Text>
-          )}
-        </div>
-        <div className="mt-2">
-          <Form.Label htmlFor="ReminderCareTop">
-            Nhắc nhở chăm sóc trước <span className="required">*</span>
-          </Form.Label>
-          <Form.Control
-            type="text"
-            maxLength={1}
-            id="ReminderCareTop"
-            name="remindercaretop"
-            placeholder="Nhập số ngày"
-            defaultValue={data.remindercaretop || ""}
-            aria-describedby="helperReminderCareTop"
-            onChange={handleChange}
-          />
-          {error.remindercaretop && (
-            <Form.Text
-              id="helperReminderCareTop"
-              danger="true"
-              bsPrefix="d-inline-block text-danger lh-1"
-            >
-              {error.remindercaretop}
-            </Form.Text>
-          )}
-        </div>
-        <div className="mt-2">
-          <Form.Label htmlFor="ReminderCareBelow">
-            Nhắc nhở chăm sóc sau <span className="required">*</span>
-          </Form.Label>
-          <Form.Control
-            type="text"
-            maxLength={1}
-            id="ReminderCareBelow"
-            name="remindercarebelow"
-            placeholder="Nhập số ngày"
-            defaultValue={data.remindercarebelow || ""}
-            aria-describedby="helperReminderCareBelow"
-            onChange={handleChange}
-          />
-          {error.remindercarebelow && (
-            <Form.Text
-              id="helperReminderCareBelow"
-              danger="true"
-              bsPrefix="d-inline-block text-danger lh-1"
-            >
-              {error.remindercarebelow}
-            </Form.Text>
-          )}
+        <div className="row g-2">
+          <div className="col-12 col-md-6">
+            <div>
+              <Form.Label htmlFor="Logo">
+                Logo <span className="required">*</span>
+              </Form.Label>
+              <Form.Control
+                type="text"
+                id="Logo"
+                name="logo"
+                placeholder="Nhập link logo"
+                defaultValue={data.logo || ""}
+                aria-describedby="helperLogo"
+                onChange={handleChange}
+              />
+              {error.logo && (
+                <Form.Text
+                  id="helperLogo"
+                  danger="true"
+                  bsPrefix="d-inline-block text-danger lh-1"
+                >
+                  {error.logo}
+                </Form.Text>
+              )}
+            </div>
+            <div className="mt-2">
+              <Form.Label htmlFor="Phone">
+                Số điện thoại <span className="required">*</span>
+              </Form.Label>
+              <PatternFormat
+                id="Phone"
+                className="form-control"
+                format="(+84) ### ### ####"
+                mask="_"
+                onValueChange={({ value }) =>
+                  handleChange({ target: { value, name: "numberPhone" } })
+                }
+                value={data.numberPhone || ""}
+                placeholder="+84 (123) 456 7890"
+                allowEmptyFormatting
+              />
+              {error.numberPhone && (
+                <Form.Text
+                  id="helperPhone"
+                  danger="true"
+                  bsPrefix="d-inline-block text-danger lh-1"
+                >
+                  {error.numberPhone}
+                </Form.Text>
+              )}
+            </div>
+            <div className="mt-2">
+              <Form.Label htmlFor="NameBanner">
+                Tên shop <span className="required">*</span>
+              </Form.Label>
+              <Form.Control
+                type="text"
+                id="NameBanner"
+                name="nameBanner"
+                placeholder="Nhập tên shop"
+                defaultValue={data.nameBanner || ""}
+                aria-describedby="helperNameBanner"
+                onChange={handleChange}
+              />
+              {error.nameBanner && (
+                <Form.Text
+                  id="helperNameBanner"
+                  danger="true"
+                  bsPrefix="d-inline-block text-danger lh-1"
+                >
+                  {error.nameBanner}
+                </Form.Text>
+              )}
+            </div>
+          </div>
+          <div className="col-12 col-md-6">
+            <div>
+              <Form.Label htmlFor="ReminderBefore">
+                Nhắc nhở trước <span className="required">*</span>
+              </Form.Label>
+              <NumericFormat
+                id="ReminderBefore"
+                thousandSeparator={true}
+                suffix={" ngày"}
+                name="reminderbefore"
+                value={data.reminderbefore || ""}
+                maxLength={1}
+                displayType={"input"}
+                className="form-control"
+                onValueChange={({ value }) =>
+                  handleChange({
+                    target: {
+                      name: "reminderbefore",
+                      value,
+                    },
+                  })
+                }
+              />
+              {error.reminderbefore && (
+                <Form.Text
+                  id="helperReminderBefore"
+                  danger="true"
+                  bsPrefix="d-inline-block text-danger lh-1"
+                >
+                  {error.reminderbefore}
+                </Form.Text>
+              )}
+            </div>
+            <div className="mt-2">
+              <Form.Label htmlFor="ReminderCareTop">
+                Nhắc nhở chăm sóc trước <span className="required">*</span>
+              </Form.Label>
+              <NumericFormat
+                id="ReminderCareTop"
+                thousandSeparator={true}
+                suffix={" ngày"}
+                name="remindercaretop"
+                value={data.remindercaretop || ""}
+                maxLength={1}
+                displayType={"input"}
+                className="form-control"
+                onValueChange={({ value }) =>
+                  handleChange({
+                    target: {
+                      name: "remindercaretop",
+                      value,
+                    },
+                  })
+                }
+              />
+              {error.remindercaretop && (
+                <Form.Text
+                  id="helperReminderCareTop"
+                  danger="true"
+                  bsPrefix="d-inline-block text-danger lh-1"
+                >
+                  {error.remindercaretop}
+                </Form.Text>
+              )}
+            </div>
+            <div className="mt-2">
+              <Form.Label htmlFor="ReminderCareBelow">
+                Nhắc nhở chăm sóc sau <span className="required">*</span>
+              </Form.Label>
+              <NumericFormat
+                id="ReminderCareBelow"
+                thousandSeparator={true}
+                suffix={" ngày"}
+                name="remindercarebelow"
+                value={data.remindercarebelow || ""}
+                maxLength={1}
+                displayType={"input"}
+                className="form-control"
+                onValueChange={({ value }) =>
+                  handleChange({
+                    target: {
+                      name: "remindercarebelow",
+                      value,
+                    },
+                  })
+                }
+              />
+              {error.remindercarebelow && (
+                <Form.Text
+                  id="helperReminderCareBelow"
+                  danger="true"
+                  bsPrefix="d-inline-block text-danger lh-1"
+                >
+                  {error.remindercarebelow}
+                </Form.Text>
+              )}
+            </div>
+          </div>
         </div>
         <div>
           <label htmlFor="colorone" className="mt-3 cursor-pointer">

@@ -7,6 +7,7 @@ import _map from "lodash/map";
 import _omit from "lodash/omit";
 import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
+import { NumericFormat } from "react-number-format";
 import { useDispatch, useSelector } from "react-redux";
 import { actionAdd, actionEdit } from "store/Product/action";
 import CrmSchedule from "./CrmSchedule";
@@ -16,8 +17,8 @@ const initialData = {
   image: "",
   category: "TRIET_LONG",
   time: "",
-  numbersesion: null,
-  price: null,
+  numbersesion: "",
+  price: "",
   distancegenerate: "",
 };
 
@@ -146,7 +147,10 @@ function FormProduct({ data: { type, visible, info }, onClear }) {
         size: "lg",
       }}
     >
-      <form className="row overflow-y-auto" style={{ maxHeight: "600px" }}>
+      <form
+        className="row overflow-y-auto"
+        style={{ maxHeight: "calc(100vh - 210px)" }}
+      >
         <div className="col-6">
           <Form.Label htmlFor="Name">
             Tên dịch vụ <span className="required">*</span>
@@ -197,14 +201,19 @@ function FormProduct({ data: { type, visible, info }, onClear }) {
           <Form.Label htmlFor="Price">
             Giá dịch vụ <span className="required">*</span>
           </Form.Label>
-          <Form.Control
-            type="text"
+          <NumericFormat
             id="Price"
+            thousandSeparator={true}
+            suffix={" VND"}
             name="price"
-            defaultValue={data.price}
+            value={data.price}
+            displayType={"input"}
+            className="form-control"
             aria-describedby="helperPrice"
             disabled={type === "detail"}
-            onChange={handleChange}
+            onValueChange={({ value }) =>
+              handleChange({ target: { value, name: "price" } })
+            }
           />
           {error.price && (
             <Form.Text
@@ -222,14 +231,19 @@ function FormProduct({ data: { type, visible, info }, onClear }) {
             <Form.Label htmlFor="NumberSession">
               Số buổi <span className="required">*</span>
             </Form.Label>
-            <Form.Control
-              type="text"
+            <NumericFormat
               id="NumberSession"
+              thousandSeparator={true}
+              suffix={" buổi"}
               name="numbersesion"
-              defaultValue={data.numbersesion}
+              value={data.numbersesion}
+              displayType={"input"}
+              className="form-control"
               aria-describedby="helperNumberSession"
               disabled={type === "detail" || data.category === "CHAM_DA"}
-              onChange={handleChange}
+              onValueChange={({ value }) =>
+                handleChange({ target: { value, name: "numbersesion" } })
+              }
             />
             {error.numbersesion && (
               <Form.Text

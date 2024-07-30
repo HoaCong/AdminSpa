@@ -62,6 +62,38 @@ export const actionConfirmReminderCareDetailFailed = (error) => ({
   error,
 });
 
+export const actionConfirmSchedules = (payload, note) => ({
+  type: ActionTypes.CONFIRM_SCHEDULES,
+  payload,
+  note,
+});
+
+export const actionConfirmSchedulesSuccess = (payload) => ({
+  type: ActionTypes.CONFIRM_SCHEDULES_SUCCESS,
+  payload,
+});
+
+export const actionConfirmSchedulesFailed = (error) => ({
+  type: ActionTypes.CONFIRM_SCHEDULES_FAILED,
+  error,
+});
+
+export const actionDestroySchedules = (payload, note) => ({
+  type: ActionTypes.DESTROY_SCHEDULES,
+  payload,
+  note,
+});
+
+export const actionDestroySchedulesSuccess = (payload) => ({
+  type: ActionTypes.DESTROY_SCHEDULES_SUCCESS,
+  payload,
+});
+
+export const actionDestroySchedulesFailed = (error) => ({
+  type: ActionTypes.DESTROY_SCHEDULES_FAILED,
+  error,
+});
+
 export const resetData = () => ({
   type: ActionTypes.RESET_DATA,
 });

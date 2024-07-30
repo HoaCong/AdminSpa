@@ -5,7 +5,6 @@ import { STATUS_LABEL, TYPE_LABEL } from "constants";
 import { ROUTES } from "constants/routerWeb";
 import { formatCurrency } from "helper/functions";
 import _map from "lodash/map";
-import _size from "lodash/size";
 import { Fragment, useEffect, useState } from "react";
 import { Badge, Collapse, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,8 +14,6 @@ function DetailCustomer(props) {
   const {
     actionStatus: { isLoading },
     detail,
-    customer,
-    factory,
   } = useSelector((state) => state.customerReducer);
 
   const navigate = useNavigate();
@@ -26,11 +23,6 @@ function DetailCustomer(props) {
   const onGetDetailCustomer = (id) => dispatch(actionDetail(id));
 
   const [expandedRows, setExpandedRows] = useState(null);
-  const [modalData, setModalData] = useState({
-    info: {},
-    visible: false,
-    type: "",
-  });
   useEffect(() => {
     if (!isLoading) onGetDetailCustomer(id);
   }, []);
@@ -335,11 +327,17 @@ function DetailCustomer(props) {
                                         >
                                           Danh mục
                                         </th>
+                                        <th
+                                          scope="col"
+                                          className="align-middle"
+                                        >
+                                          Trạng thái
+                                        </th>
                                       </tr>
                                     </thead>
                                     <tbody>
-                                      {item.listService.map((item, index) => (
-                                        <tr key={item.updatedAt + index}>
+                                      {item.listService.map((ele, index) => (
+                                        <tr key={ele.updatedAt + index}>
                                           <th
                                             scope="row"
                                             className="align-middle"
@@ -348,26 +346,35 @@ function DetailCustomer(props) {
                                           </th>
                                           <td className="align-middle">
                                             <LazyLoadImage
-                                              src={item.image}
-                                              alt={item.name}
+                                              src={ele.image}
+                                              alt={ele.name}
                                               width={50}
                                               height={50}
                                             />
                                           </td>
                                           <td className="align-middle">
-                                            {item.name}
+                                            {ele.name}
                                           </td>
                                           <td className="align-middle">
-                                            {item.numbersesion} buổi
+                                            {ele.numbersesion} buổi
                                           </td>
                                           <td className="align-middle">
-                                            {formatCurrency(item.price)}
+                                            {formatCurrency(ele.price)}
                                           </td>
                                           <td className="align-middle">
-                                            {item.time}
+                                            {ele.time}
                                           </td>
                                           <td className="align-middle">
-                                            {TYPE_LABEL[item.category]}
+                                            {TYPE_LABEL[ele.category]}
+                                          </td>
+                                          <td className="align-middle">
+                                            <Badge
+                                              className="py-2 px-3"
+                                              pill
+                                              bg={STATUS_LABEL[item.status].bg}
+                                            >
+                                              {STATUS_LABEL[item.status].name}
+                                            </Badge>
                                           </td>
                                         </tr>
                                       ))}

@@ -38,7 +38,7 @@ const Login = () => {
     if (isSuccess) {
       navigate(EnumHome[user.roleid]);
     }
-  }, [navigate, isSuccess]);
+  }, [navigate, isSuccess, user.roleid]);
 
   // function local
   const handleChange = (e) => {
