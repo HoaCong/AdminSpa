@@ -36,9 +36,9 @@ const Login = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      navigate(EnumHome[user.roleid]);
+      navigate(EnumHome[user?.roleid]);
     }
-  }, [navigate, isSuccess, user.roleid]);
+  }, [navigate, isSuccess]);
 
   // function local
   const handleChange = (e) => {
