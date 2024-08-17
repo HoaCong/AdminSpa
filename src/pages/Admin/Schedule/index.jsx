@@ -340,16 +340,27 @@ function Schedule(props) {
   return (
     <div className="mb-5">
       <TemplateContent title="Danh sách lịch hẹn">
-        <Tabs
-          activeKey={currentTab}
-          id="uncontrolled-tab-example"
-          className="mb-3"
-          onSelect={handleSelect}
-        >
-          <Tab eventKey="today" title="Hôm nay"></Tab>
-          <Tab eventKey="reminder" title="Ngày tái hẹn"></Tab>
-          <Tab eventKey="remindercare" title="Chăm sóc khách hàng"></Tab>
-        </Tabs>
+        <div className="position-relative">
+          <Tabs
+            activeKey={currentTab}
+            id="uncontrolled-tab-example"
+            className="mb-3"
+            onSelect={handleSelect}
+          >
+            <Tab eventKey="today" title="Hôm nay"></Tab>
+            <Tab eventKey="reminder" title="Ngày tái hẹn"></Tab>
+            <Tab eventKey="remindercare" title="Chăm sóc khách hàng"></Tab>
+          </Tabs>
+          {!isLoading && !!list?.length && (
+            <Badge
+              className="py-2 px-3 text-dark position-absolute top-0 end-0  mt-2"
+              pill
+              bg="light"
+            >
+              Tất cả ({list?.length})
+            </Badge>
+          )}
+        </div>
         {ContentTab}
       </TemplateContent>
       <FormConfirm

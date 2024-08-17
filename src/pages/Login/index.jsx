@@ -63,10 +63,7 @@ const Login = () => {
     });
     if (validates) {
       // dispatch
-      onLogin(
-        { email: formdata.username, password: formdata.password },
-        isRemember
-      );
+      onLogin({ email: formdata.username, password: formdata.password }, true);
     }
   };
 
