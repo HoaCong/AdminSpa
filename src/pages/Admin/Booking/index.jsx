@@ -31,6 +31,7 @@ function Booking(props) {
     list,
     params,
     meta,
+    statistics,
   } = useSelector((state) => state.bookingReducer);
 
   const navigate = useNavigate();
@@ -220,6 +221,27 @@ function Booking(props) {
                 </div>
               </div>
             </div>
+          </div>
+        }
+        subInfo={
+          <div className="text-end mb-2">
+            <Badge className="py-2 px-3 text-dark" pill bg="light">
+              Tất cả ({meta.total})
+            </Badge>
+            <Badge
+              className="py-2 px-3"
+              pill
+              bg={STATUS_LABEL["IN_PROCCESS"].bg}
+            >
+              {STATUS_LABEL["IN_PROCCESS"].name} (
+              {statistics["IN_PROCCESS"] || 0})
+            </Badge>
+            <Badge className="py-2 px-3" pill bg={STATUS_LABEL["CONFIRMED"].bg}>
+              {STATUS_LABEL["CONFIRMED"].name} ({statistics["CONFIRMED"] || 0})
+            </Badge>
+            <Badge className="py-2 px-3" pill bg={STATUS_LABEL["DESTROYED"].bg}>
+              {STATUS_LABEL["DESTROYED"].name} ({statistics["DESTROYED"] || 0})
+            </Badge>
           </div>
         }
       >

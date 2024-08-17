@@ -11,6 +11,7 @@ function TemplateContent({
   cardProps,
   btnProps,
   filterProps,
+  subInfo,
 }) {
   return (
     <div className="d-grid gap-3" id="template">
@@ -28,9 +29,11 @@ function TemplateContent({
           <div className="card-body">{filter}</div>
         </div>
       )}
-
-      <div className="col-12 card" {...cardProps}>
-        <div className="card-body">{children}</div>
+      <div>
+        {subInfo}
+        <div className="col-12 card" {...cardProps}>
+          <div className="card-body">{children}</div>
+        </div>
       </div>
     </div>
   );

@@ -26,6 +26,7 @@ function BookingDetailList(props) {
     list,
     params,
     meta,
+    statistics,
   } = useSelector((state) => state.bookingDetailReducer);
 
   const navigate = useNavigate();
@@ -202,6 +203,27 @@ function BookingDetailList(props) {
                 </div>
               </div>
             </div>
+          </div>
+        }
+        subInfo={
+          <div className="text-end mb-2">
+            <Badge className="py-2 px-3 text-dark" pill bg="light">
+              Tất cả ({meta.total})
+            </Badge>
+            <Badge
+              className="py-2 px-3"
+              pill
+              bg={STATUS_LABEL["IN_PROCCESS"].bg}
+            >
+              {STATUS_LABEL["IN_PROCCESS"].name} (
+              {statistics["IN_PROCCESS"] || 0})
+            </Badge>
+            <Badge className="py-2 px-3" pill bg={STATUS_LABEL["SUCCESS"].bg}>
+              {STATUS_LABEL["SUCCESS"].name} ({statistics["SUCCESS"] || 0})
+            </Badge>
+            <Badge className="py-2 px-3" pill bg={STATUS_LABEL["DESTROYED"].bg}>
+              {STATUS_LABEL["DESTROYED"].name} ({statistics["DESTROYED"] || 0})
+            </Badge>
           </div>
         }
       >

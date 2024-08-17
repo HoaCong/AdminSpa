@@ -15,6 +15,11 @@ const initialState = {
   meta: {
     total: 0,
   },
+  statistics: {
+    IN_PROCCESS: 0,
+    SUCCESS: 0,
+    DESTROYED: 0,
+  },
 };
 
 const bookingDetailReducer = (state = initialState, action) => {
@@ -24,7 +29,7 @@ const bookingDetailReducer = (state = initialState, action) => {
         draft.listStatus.isLoading = true;
         draft.listStatus.isSuccess = false;
         draft.listStatus.isFailure = false;
-        draft.params.page = action.params.page;
+        draft.params = action.params;
         break;
 
       case ActionTypes.LIST_SUCCESS:
@@ -32,12 +37,18 @@ const bookingDetailReducer = (state = initialState, action) => {
         draft.listStatus.isSuccess = true;
         draft.list = action.payload.data;
         draft.meta.total = action.payload.total;
+        draft.statistics = action.payload.statistics;
         break;
 
       case ActionTypes.LIST_FAILED:
         draft.listStatus.isLoading = false;
         draft.listStatus.isFailure = true;
         draft.list = [];
+        draft.statistics = {
+          IN_PROCCESS: 0,
+          SUCCESS: 0,
+          DESTROYED: 0,
+        };
         break;
 
       case ActionTypes.CONFIRM_BOOKINGDETAIL:

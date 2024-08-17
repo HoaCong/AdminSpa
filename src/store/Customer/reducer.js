@@ -21,7 +21,7 @@ const customerReducer = (state = initialState, action) => {
         draft.listStatus.isLoading = true;
         draft.listStatus.isSuccess = false;
         draft.listStatus.isFailure = false;
-        draft.params.page = action.params.page;
+        draft.params = action.params;
         break;
 
       case ActionTypes.LIST_SUCCESS:
