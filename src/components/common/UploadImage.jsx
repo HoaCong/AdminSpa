@@ -11,6 +11,12 @@ const EnumGeometry = {
   radius: "rounded",
   circle: "rounded-circle",
 };
+
+const checkTimeExpired = (timeExpired) => {
+  const now = new Date().getTime();
+  return now > timeExpired;
+};
+
 function UploadImage({
   image,
   callback,
@@ -27,34 +33,64 @@ function UploadImage({
     setFile(image);
   }, [image]);
 
-  const handleUploadImage = (event) => {
+  const handleUploadImage = async (event) => {
     const selectedFile = event.target.files[0];
-
+    let accessToken = localStorage.getItem("token_upload");
+    let exprired = localStorage.getItem("expired_upload");
     if (selectedFile) {
-      const formData = new FormData();
-      formData.append("image", selectedFile);
-      setIsUploading(true);
-      axios
-        .post("https://kubtool.000webhostapp.com/upload.php", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((response) => {
-          const url = response.data.url;
+      try {
+        // Step 1: Call the login API to get the access_token
+        if (!accessToken || checkTimeExpired(exprired)) {
+          const loginResponse = await axios.post(
+            "https://app.mento.vn/api/v1/guest/sessions",
+            {
+              email: process.env.REACT_APP_USERNAME,
+              password: process.env.REACT_APP_PASSWORD,
+            }
+          );
+
+          accessToken = loginResponse.data.token;
+          localStorage.setItem("token_upload", accessToken);
+          localStorage.setItem(
+            "expired_upload",
+            new Date().getTime() + 3600 * 1000 * 24 * 30 // 30 day
+          );
+        }
+
+        if (accessToken) {
+          // Step 2: Prepare the image for upload
+          const formData = new FormData();
+          formData.append("images[]", selectedFile);
+          setIsUploading(true);
+
+          // Step 3: Call the image upload API with the access_token in the headers
+          const uploadResponse = await axios.post(
+            "https://app.mento.vn/api/v1/images",
+            formData,
+            {
+              headers: {
+                "Content-Type": "image/jpeg",
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+
+          const url = uploadResponse?.data[0].photo?.url;
           setFile(url);
           callback(url);
-        })
-        .catch((error) => {
-          onAddToast({
-            text: "Upload image failed",
-            type: "danger",
-            title: "",
-          });
-        })
-        .finally(() => {
-          setIsUploading(false);
+        }
+      } catch (error) {
+        localStorage.removeItem("token_upload");
+        localStorage.removeItem("expired_upload");
+        event.target.value = "";
+        onAddToast({
+          text: "Upload image failed",
+          type: "danger",
+          title: "",
         });
+      } finally {
+        setIsUploading(false);
+      }
     }
   };
 
@@ -120,6 +156,7 @@ function UploadImage({
         id="uploadImage"
         type="file"
         accept="image/*"
+        multiple
         onChange={handleUploadImage}
         hidden
         disabled={isUploading}

@@ -357,7 +357,7 @@ function Schedule(props) {
               pill
               bg="light"
             >
-              Tất cả ({list?.length})
+              Đang xử lý ({list?.length})
             </Badge>
           )}
         </div>
