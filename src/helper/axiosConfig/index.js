@@ -2,7 +2,7 @@ import axios from "axios";
 import store from "store"; // Thay yourStore bằng đường dẫn đến nơi bạn lưu trữ reducer hoặc trạng thái
 
 const axiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL || "https://systemsapa.onrender.com",
+  baseURL: process.env.REACT_APP_BASE_URL,
   headers: { "Content-Type": "application/json" },
 });
 
