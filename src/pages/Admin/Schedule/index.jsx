@@ -348,27 +348,39 @@ function Schedule(props) {
         >
           <Tab
             eventKey="today"
-            title={`Hôm nay ${
-              currentTab === "today" && list?.length && !isLoading
-                ? `(${list?.length})`
-                : ""
-            }`}
+            title={
+              <b>
+                {`Hôm nay ${
+                  currentTab === "today" && list?.length && !isLoading
+                    ? `(${list?.length})`
+                    : ""
+                }`}
+              </b>
+            }
           ></Tab>
           <Tab
             eventKey="reminder"
-            title={`Ngày tái hẹn ${
-              currentTab === "reminder" && list?.length && !isLoading
-                ? `(${list?.length})`
-                : ""
-            }`}
+            title={
+              <b>
+                {`Ngày tái hẹn ${
+                  currentTab === "reminder" && list?.length && !isLoading
+                    ? `(${list?.length})`
+                    : ""
+                }`}
+              </b>
+            }
           ></Tab>
           <Tab
             eventKey="remindercare"
-            title={`Chăm sóc khách hàng ${
-              currentTab === "remindercare" && list?.length && !isLoading
-                ? `(${list?.length})`
-                : ""
-            }`}
+            title={
+              <b>
+                {`Chăm sóc khách hàng ${
+                  currentTab === "remindercare" && list?.length && !isLoading
+                    ? `(${list?.length})`
+                    : ""
+                }`}
+              </b>
+            }
           ></Tab>
         </Tabs>
         {ContentTab}
